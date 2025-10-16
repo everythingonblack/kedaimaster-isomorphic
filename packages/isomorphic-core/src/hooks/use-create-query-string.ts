@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'react-router-dom';
 
 export function useCreateQueryString() {
   const searchParams = useSearchParams();

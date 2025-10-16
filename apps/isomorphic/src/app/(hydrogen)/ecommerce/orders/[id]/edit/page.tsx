@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Metadata } from 'next';
+import { Helmet } from 'react-helmet-async';
 import { routes } from '@/config/routes';
 import { Button } from 'rizzui/button';
 import { metaObject } from '@/config/site.config';

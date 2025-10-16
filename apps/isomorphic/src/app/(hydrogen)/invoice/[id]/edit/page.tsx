@@ -3,7 +3,7 @@ import PageHeader from '@/app/shared/page-header';
 import CreateInvoice from '@/app/shared/invoice/create-invoice';
 import ImportButton from '@/app/shared/import-button';
 import { metaObject } from '@/config/site.config';
-import { Metadata } from 'next';
+import { Helmet } from 'react-helmet-async';
 
 type Props = {
   params: Promise<{ id: string }>;

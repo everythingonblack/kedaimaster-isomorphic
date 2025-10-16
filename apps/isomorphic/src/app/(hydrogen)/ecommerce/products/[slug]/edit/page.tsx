@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Metadata } from 'next';
+import { Helmet } from 'react-helmet-async';
 import { PiPlusBold } from 'react-icons/pi';
 import { productData } from '@/app/shared/ecommerce/product/create-edit/form-utils';
 import CreateEditProduct from '@/app/shared/ecommerce/product/create-edit';

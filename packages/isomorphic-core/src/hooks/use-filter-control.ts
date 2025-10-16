@@ -1,7 +1,7 @@
 'use client';
 
 import isEqual from 'lodash/isEqual';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useCallback } from 'react';
 
 //TODO: proper typescript support fix
@@ -18,7 +18,7 @@ export function useFilterControls<StateType, ActionType>(
   initialState: State<StateType>
 ) {
   const router = useNavigate();
-  const pathname = usePathname();
+  const pathname = useLocation();
   const searchParams = useSearchParams();
 
   const createQueryString = useCallback(

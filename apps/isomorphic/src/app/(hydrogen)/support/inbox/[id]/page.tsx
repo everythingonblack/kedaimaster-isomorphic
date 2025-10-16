@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+import { Helmet } from 'react-helmet-async';
 import { metaObject } from '@/config/site.config';
 import BackButton from '@/app/shared/support/inbox/back-button';
 import MessageList from '@/app/shared/support/inbox/message-list';

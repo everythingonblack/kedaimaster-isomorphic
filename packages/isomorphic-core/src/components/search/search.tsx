@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { useLocation } from "react-router-dom";
 import SearchTrigger from "./search-trigger";
 import SearchList from "./search-list";
 import { Modal } from "@core/modal-views/modal";
@@ -28,7 +28,7 @@ export default function SearchWidget({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [open]);
 
-  const pathname = usePathname();
+  const pathname = useLocation();
   useEffect(() => {
     setOpen(() => false);
     return () => setOpen(() => false);

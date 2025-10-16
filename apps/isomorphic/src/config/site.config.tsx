@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+import { Helmet } from 'react-helmet-async';
 import logoImg from '@public/logo.svg';
 import { LAYOUT_OPTIONS } from '@/config/enums';
 import logoIconImg from '@public/logo-short.svg';

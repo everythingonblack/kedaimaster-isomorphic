@@ -4,7 +4,7 @@ import ShippingInfo from '@/app/shared/logistics/tracking/shipping-info';
 import TrackingOverview from '@/app/shared/logistics/tracking/tracking-overview';
 import TrackingHistory from '@/app/shared/logistics/tracking/tracking-history';
 import { metaObject } from '@/config/site.config';
-import { Metadata } from 'next';
+import { Helmet } from 'react-helmet-async';
 
 type Props = {
   params: Promise<{ id: string }>;

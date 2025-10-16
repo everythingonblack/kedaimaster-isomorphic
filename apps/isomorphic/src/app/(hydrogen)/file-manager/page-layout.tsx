@@ -1,6 +1,6 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'react-router-dom';
 import FileGrid from '@/app/shared/file/manager/file-grid';
 import FileListTable from '@/app/shared/file/manager/file-list/table';
 

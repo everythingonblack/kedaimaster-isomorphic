@@ -3,12 +3,12 @@
 import { Drawer } from 'rizzui';
 import { useEffect } from 'react';
 import cn from '@core/utils/class-names';
-import { usePathname } from 'next/navigation';
+import { useLocation } from 'react-router-dom';
 import { useDrawer } from './use-drawer';
 
 export function DrawerViews() {
   const { isOpen, view, placement, closeDrawer, containerClassName } = useDrawer();
-  const pathname = usePathname();
+  const pathname = useLocation();
   useEffect(() => {
     closeDrawer();
     // eslint-disable-next-line react-hooks/exhaustive-deps

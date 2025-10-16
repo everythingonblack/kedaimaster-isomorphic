@@ -1,6 +1,6 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'react-router-dom';
 
 export default function hasSearchedParams() {
   // eslint-disable-next-line react-hooks/rules-of-hooks

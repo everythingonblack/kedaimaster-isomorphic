@@ -4,7 +4,7 @@ import PageHeader from '@/app/shared/page-header';
 import CreateCategory from '@/app/shared/ecommerce/category/create-category';
 import { Link } from "react-router-dom";
 import { metaObject } from '@/config/site.config';
-import { Metadata } from 'next';
+import { Helmet } from 'react-helmet-async';
 
 type Props = {
   params: Promise<{ id: string }>;

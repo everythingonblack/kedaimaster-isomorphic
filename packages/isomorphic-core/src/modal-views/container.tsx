@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { useLocation } from "react-router-dom";
 import { useModal } from "./use-modal";
 import { Modal } from "./modal";
 
 export function ModalViews() {
   const { isOpen, view, closeModal, customSize, size } = useModal();
-  const pathname = usePathname();
+  const pathname = useLocation();
   useEffect(() => {
     closeModal();
     // eslint-disable-next-line react-hooks/exhaustive-deps

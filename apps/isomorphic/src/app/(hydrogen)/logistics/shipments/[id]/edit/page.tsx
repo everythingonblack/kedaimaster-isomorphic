@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+import { Helmet } from 'react-helmet-async';
 import { routes } from '@/config/routes';
 import { metaObject } from '@/config/site.config';
 import PageHeader from '@/app/shared/page-header';
