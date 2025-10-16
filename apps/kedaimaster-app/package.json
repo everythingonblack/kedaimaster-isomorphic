@@ -10,15 +10,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@floating-ui/react": "^0.27.5",
+    "@headlessui/react": "^1.7.19",
+    "react": "^18.2.0",
+    "react-calendar": "^5.1.0",
+    "react-dom": "^18.2.0",
     "react-helmet-async": "^2.0.5",
+    "react-is": "^18.2.0",
     "react-router-dom": "^7.9.4",
     "recharts": "^3.2.1",
-    "rizzui": "^1.0.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-is": "^18.2.0",
-    "@headlessui/react": "^1.7.19",
-    "@floating-ui/react": "^0.27.5"
+    "rizzui": "^1.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
