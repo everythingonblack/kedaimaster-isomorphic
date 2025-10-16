@@ -7,7 +7,7 @@ import { PiPauseFill, PiPlayFill } from 'react-icons/pi';
 import { Box } from 'rizzui/box';
 import { Flex } from 'rizzui/flex';
 import { Grid } from 'rizzui/grid';
-import { Text, Title } from 'rizzui/typography';
+import { Text, Title } from 'rizzui';
 import { useAudioPlayerContext } from './music-player/audio-player-context';
 import { atom, useAtom } from 'jotai';
 import { currentPlayerAtom } from './music-player/music-player';

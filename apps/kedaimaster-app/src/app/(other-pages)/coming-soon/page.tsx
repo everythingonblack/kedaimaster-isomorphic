@@ -1,5 +1,5 @@
 
-import { Title } from 'rizzui/typography';
+import { Title } from 'rizzui';
 import CountdownTimer from '@/app/(other-pages)/coming-soon/countdown-timer';
 import SubscriptionForm from '@/app/shared/subscription-form';
 import { PiPlusBold } from 'react-icons/pi';

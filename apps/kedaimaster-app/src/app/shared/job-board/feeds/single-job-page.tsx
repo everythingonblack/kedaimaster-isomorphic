@@ -9,7 +9,7 @@ import { Badge, Button, Text, Title } from 'rizzui';
 import { JobType, socialInfos } from '@/data/job-feed-data';
 import { useCopyToClipboard } from '@core/hooks/use-copy-to-clipboard';
 import {
-  PiCaretLeftBold,
+  PiCaretRightBold,
   PiLinkSimpleBold,
   PiBookmarkSimpleThin,
   PiBookmarkSimpleFill,
@@ -43,7 +43,7 @@ export default function SingleJob({ data }: { data: JobType }) {
             onClick={() => closeDrawer()}
             className="gap-x-2 p-0"
           >
-            <PiCaretLeftBold className="size-4 rtl:rotate-180" />
+            <PiCaretRightBold className="size-4 rtl:rotate-180" />
             <Text className="text-sm font-normal">Back to jobs</Text>
           </Button>
 

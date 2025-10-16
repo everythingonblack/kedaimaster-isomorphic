@@ -1,4 +1,4 @@
-import { Title } from "rizzui/typography";
+import { Title } from "rizzui";
 import cn from "../../utils/class-names";
 import { RefObject } from "react";
 

@@ -13,7 +13,7 @@ import {
 } from 'react-icons/pi';
 import { Box } from 'rizzui/box';
 import { Flex } from 'rizzui/flex';
-import { Text, Title } from 'rizzui/typography';
+import { Text, Title } from 'rizzui';
 import { useAudioPlayerContext } from './audio-player-context';
 import { useColorPresets } from '@/layouts/settings/use-theme-color';
 import { useTheme } from 'next-themes';

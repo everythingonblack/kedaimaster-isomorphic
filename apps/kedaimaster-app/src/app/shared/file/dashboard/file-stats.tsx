@@ -3,7 +3,7 @@
 import { Button, Text } from 'rizzui';
 import cn from '@core/utils/class-names';
 import { useScrollableSlider } from '@core/hooks/use-scrollable-slider';
-import { PiCaretLeftBold, PiCaretRightBold } from 'react-icons/pi';
+import { PiCaretRightBold, PiCaretLeftBold } from 'react-icons/pi';
 import MetricCard from '@core/components/cards/metric-card';
 import CircleProgressBar from '@core/components/charts/circle-progressbar';
 import TrendingUpIcon from '@core/components/icons/trending-up';
@@ -134,7 +134,7 @@ export default function FileStats({ className }: FileStatsType) {
         onClick={() => scrollToTheLeft()}
         className="!absolute -left-1 top-0 z-10 !h-full w-20 !justify-start rounded-none bg-gradient-to-r from-gray-0 via-gray-0/70 to-transparent px-0 ps-1 text-gray-500 hover:text-gray-900 dark:from-gray-50 dark:via-gray-50/70 3xl:hidden"
       >
-        <PiCaretLeftBold className="h-5 w-5" />
+        <PiCaretRightBold className="h-5 w-5" />
       </Button>
       <div className="w-full overflow-hidden">
         <div
@@ -151,7 +151,7 @@ export default function FileStats({ className }: FileStatsType) {
         onClick={() => scrollToTheRight()}
         className="!absolute right-0 top-0 z-10 !h-full w-20 !justify-end rounded-none bg-gradient-to-l from-gray-0 via-gray-0/70 to-transparent px-0 text-gray-500 hover:text-gray-900 dark:from-gray-50 dark:via-gray-50/70 3xl:hidden"
       >
-        <PiCaretRightBold className="h-5 w-5" />
+        <PiCaretLeftBold className="h-5 w-5" />
       </Button>
     </div>
   );

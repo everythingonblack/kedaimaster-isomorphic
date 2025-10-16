@@ -5,7 +5,7 @@ import cn from '@core/utils/class-names';
 import { Box } from 'rizzui/box';
 import { Button } from 'rizzui/button';
 import { Flex } from 'rizzui/flex';
-import { Text, Title } from 'rizzui/typography';
+import { Text, Title } from 'rizzui';
 
 type PodcasterType = (typeof topPodcasters)[0];
 

@@ -9,7 +9,7 @@ import { toCurrency } from '@core/utils/to-currency';
 
 import { Link } from "react-router-dom";
 import { PiMinus, PiPlus, PiTrash } from 'react-icons/pi';
-import { Title } from 'rizzui/typography';
+import { Title } from 'rizzui';
 
 export default function POSOrderProductsTwo({
   className,

@@ -1,5 +1,5 @@
 
-import { Title, Text } from 'rizzui/typography';
+import { Title, Text } from 'rizzui';
 import SubscriptionForm from '@/app/shared/subscription-form';
 import MaintananceImg from '@public/maintanance.png';
 

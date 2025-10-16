@@ -3,7 +3,7 @@
 import { Link } from "react-router-dom";
 import { Fragment } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Title } from 'rizzui/typography';
+import { Title } from 'rizzui';
 import { Collapse } from 'rizzui/collapse';
 import cn from '@core/utils/class-names';
 import { PiCaretDownBold } from 'react-icons/pi';

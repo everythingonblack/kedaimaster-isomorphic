@@ -1,6 +1,6 @@
 
 import { Button } from 'rizzui/button';
-import { Title } from 'rizzui/typography';
+import { Title } from 'rizzui';
 import ForbiddenImg from '@public/403img.svg';
 import ForbiddenTwoImg from '@public/forbidden-two.png';
 import { PiHouseLineBold } from 'react-icons/pi';

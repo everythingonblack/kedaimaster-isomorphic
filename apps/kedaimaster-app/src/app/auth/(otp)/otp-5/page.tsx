@@ -1,5 +1,5 @@
 
-import { Text } from 'rizzui/typography';
+import { Text } from 'rizzui';
 import OtpForm from '@/app/auth/(otp)/otp-5/otp-form';
 import AuthWrapperFive from '@/app/shared/auth-layout/auth-wrapper-five';
 import WaveLongShape from '@core/components/shape/wave-long';

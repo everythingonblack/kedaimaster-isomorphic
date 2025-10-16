@@ -11,8 +11,8 @@ import {
   Text,
 } from "rizzui";
 import {
-  PiCaretLeftBold,
   PiCaretRightBold,
+  PiCaretLeftBold,
   PiCaretDoubleLeftBold,
   PiCaretDoubleRightBold,
 } from "react-icons/pi";
@@ -94,7 +94,7 @@ export default function TablePagination<TData extends Record<string, any>>({
             disabled={!table.getCanPreviousPage()}
             className="text-gray-900 shadow-sm disabled:text-gray-400 disabled:shadow-none"
           >
-            <PiCaretLeftBold className="size-3.5" />
+            <PiCaretRightBold className="size-3.5" />
           </ActionIcon>
           <ActionIcon
             size="sm"
@@ -105,7 +105,7 @@ export default function TablePagination<TData extends Record<string, any>>({
             disabled={!table.getCanNextPage()}
             className="text-gray-900 shadow-sm disabled:text-gray-400 disabled:shadow-none"
           >
-            <PiCaretRightBold className="size-3.5" />
+            <PiCaretLeftBold className="size-3.5" />
           </ActionIcon>
           <ActionIcon
             size="sm"

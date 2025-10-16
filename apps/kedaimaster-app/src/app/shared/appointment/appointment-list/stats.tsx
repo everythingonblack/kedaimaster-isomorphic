@@ -6,8 +6,8 @@ import { useScrollableSlider } from '@core/hooks/use-scrollable-slider';
 import { IconType } from 'react-icons/lib';
 import {
   PiCalendarCheck,
-  PiCaretLeftBold,
   PiCaretRightBold,
+  PiCaretLeftBold,
   PiCheckCircle,
   PiClock,
   PiPhoneSlash,
@@ -171,7 +171,7 @@ export default function AppointmentListStats({
         onClick={() => scrollToTheLeft()}
         className="!absolute -left-1 top-0 z-10 !h-full w-20 !justify-start rounded-none bg-gradient-to-r from-gray-0 via-gray-0/70 to-transparent px-0 ps-1 text-gray-500 hover:text-gray-900 dark:from-gray-50 dark:via-gray-50/70 3xl:hidden"
       >
-        <PiCaretLeftBold className="h-5 w-5" />
+        <PiCaretRightBold className="h-5 w-5" />
       </Button>
       <div className="w-full overflow-hidden">
         <div
@@ -188,7 +188,7 @@ export default function AppointmentListStats({
         onClick={() => scrollToTheRight()}
         className="dark: !absolute -right-2 top-0 z-10 !h-full w-20 !justify-end rounded-none bg-gradient-to-l from-gray-0 via-gray-0/70 to-transparent px-0 pe-2 text-gray-500 hover:text-gray-900 dark:from-gray-50 dark:via-gray-50/70 3xl:hidden"
       >
-        <PiCaretRightBold className="h-5 w-5" />
+        <PiCaretLeftBold className="h-5 w-5" />
       </Button>
     </div>
   );

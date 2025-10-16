@@ -1,4 +1,4 @@
-import { Title, Text } from 'rizzui/typography';
+import { Title, Text } from 'rizzui';
 import cn from '@core/utils/class-names';
 export default function HorizontalFormBlockWrapper({
   title,

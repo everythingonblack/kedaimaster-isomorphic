@@ -1,7 +1,7 @@
 
 import { Box } from 'rizzui/box';
 import { Flex } from 'rizzui/flex';
-import { Text, Title } from 'rizzui/typography';
+import { Text, Title } from 'rizzui';
 
 const counterData = [
   {

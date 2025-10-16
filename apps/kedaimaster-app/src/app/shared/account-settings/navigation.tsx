@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Button, Text } from 'rizzui';
 import cn from '@core/utils/class-names';
 import { useScrollableSlider } from '@core/hooks/use-scrollable-slider';
-import { PiCaretLeftBold, PiCaretRightBold } from 'react-icons/pi';
+import { PiCaretRightBold, PiCaretLeftBold } from 'react-icons/pi';
 import { useLocation } from 'react-router-dom';
 import { useLayout } from '@/layouts/use-layout';
 import { LAYOUT_OPTIONS } from '@/config/enums';
@@ -74,7 +74,7 @@ export default function ProfileSettingsNav() {
           onClick={() => scrollToTheLeft()}
           className="!absolute left-0 top-0.5 z-10 !h-[calc(100%-4px)] w-8 !justify-start bg-gradient-to-r from-white via-white to-transparent px-0 text-gray-500 hover:text-black dark:from-gray-50 dark:via-gray-50 lg:hidden"
         >
-          <PiCaretLeftBold className="w-5" />
+          <PiCaretRightBold className="w-5" />
         </Button>
         <div className="flex h-[52px] items-start overflow-hidden">
           <div
@@ -108,7 +108,7 @@ export default function ProfileSettingsNav() {
           onClick={() => scrollToTheRight()}
           className="!absolute right-0 top-0.5 z-10 !h-[calc(100%-4px)] w-8 !justify-end bg-gradient-to-l from-white via-white to-transparent px-0 text-gray-500 hover:text-black dark:from-gray-50 dark:via-gray-50 lg:hidden"
         >
-          <PiCaretRightBold className="w-5" />
+          <PiCaretLeftBold className="w-5" />
         </Button>
       </div>
     </div>

@@ -17,7 +17,7 @@ import {
 } from 'recharts';
 import { Box } from 'rizzui/box';
 import { Flex } from 'rizzui/flex';
-import { Text } from 'rizzui/typography';
+import { Text } from 'rizzui';
 
 const data = [
   {

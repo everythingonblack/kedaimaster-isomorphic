@@ -6,7 +6,7 @@ import { Box } from 'rizzui/box';
 import { Button } from 'rizzui/button';
 import { Flex } from 'rizzui/flex';
 import { Grid } from 'rizzui/grid';
-import { Text, Title } from 'rizzui/typography';
+import { Text, Title } from 'rizzui';
 // import CountdownTimer from './countdown-timer';
 import cn from '@core/utils/class-names';
 

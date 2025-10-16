@@ -1,4 +1,4 @@
-import { Text } from 'rizzui/typography';
+import { Text } from 'rizzui';
 import OtpForm from '@/app/auth/(otp)/otp-3/otp-form';
 import AuthWrapperThree from '@/app/shared/auth-layout/auth-wrapper-three';
 

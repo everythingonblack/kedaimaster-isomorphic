@@ -6,8 +6,8 @@ import { useLocation } from 'react-router-dom';
 import { Button } from 'rizzui';
 import { Modal } from '@core/modal-views/modal';
 import {
-  PiCaretLeftBold,
   PiCaretRightBold,
+  PiCaretLeftBold,
   PiArrowsClockwiseFill,
 } from 'react-icons/pi';
 import PostCard from './post-card';
@@ -85,7 +85,7 @@ export default function PostFeed() {
             className="absolute -left-12 top-1/2 -mt-4 hidden p-0 text-gray-50 dark:text-white lg:inline-block"
             onClick={() => setCurrentPostID(currentPostID - 1)}
           >
-            <PiCaretLeftBold className="text-3xl" />
+            <PiCaretRightBold className="text-3xl" />
           </Button>
         )}
 
@@ -95,7 +95,7 @@ export default function PostFeed() {
             className="absolute -right-12 top-1/2 -mt-4 hidden p-0 text-gray-50 dark:text-white lg:inline-block"
             onClick={() => setCurrentPostID(currentPostID + 1)}
           >
-            <PiCaretRightBold className="text-3xl" />
+            <PiCaretLeftBold className="text-3xl" />
           </Button>
         )}
 

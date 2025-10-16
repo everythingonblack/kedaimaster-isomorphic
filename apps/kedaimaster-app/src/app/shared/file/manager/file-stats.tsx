@@ -8,7 +8,7 @@ import MusicIcon from '@core/components/icons/music-solid';
 import VideoIcon from '@core/components/icons/video-solid';
 import DriveIcon from '@core/components/icons/drive-solid';
 import { useScrollableSlider } from '@core/hooks/use-scrollable-slider';
-import { PiCaretLeftBold, PiCaretRightBold } from 'react-icons/pi';
+import { PiCaretRightBold, PiCaretLeftBold } from 'react-icons/pi';
 import MetricCard from '@core/components/cards/metric-card';
 import CircleProgressBar from '@core/components/charts/circle-progressbar';
 
@@ -82,7 +82,7 @@ export default function FileStats({ className }: FileStatsType) {
         onClick={() => scrollToTheLeft()}
         className="!absolute left-0 top-0 z-10 !h-full w-8 !justify-start rounded-none bg-gradient-to-r from-white via-white to-transparent px-0 text-gray-500 hover:text-black dark:from-gray-50/80 dark:via-gray-50/80 3xl:hidden"
       >
-        <PiCaretLeftBold className="h-5 w-5" />
+        <PiCaretRightBold className="h-5 w-5" />
       </Button>
       <div className="w-full overflow-hidden">
         <div
@@ -137,7 +137,7 @@ export default function FileStats({ className }: FileStatsType) {
         onClick={() => scrollToTheRight()}
         className="!absolute right-0 top-0 z-10 !h-full w-8 !justify-end rounded-none bg-gradient-to-l from-white via-white to-transparent px-0 text-gray-500 hover:text-black dark:from-gray-50/80 dark:via-gray-50/80 3xl:hidden"
       >
-        <PiCaretRightBold className="h-5 w-5" />
+        <PiCaretLeftBold className="h-5 w-5" />
       </Button>
     </div>
   );

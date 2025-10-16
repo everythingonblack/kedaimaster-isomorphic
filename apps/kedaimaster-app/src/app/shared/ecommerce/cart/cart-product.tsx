@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { CartItem } from '@/types';
 import isEmpty from 'lodash/isEmpty';
 import { toCurrency } from '@core/utils/to-currency';
-import { Title, Text } from 'rizzui/typography';
+import { Title, Text } from 'rizzui';
 import { AddToWishList } from '@core/components/wishlist-button';
 import RemoveItem from '@/app/shared/ecommerce/cart/remove-item';
 import QuantityInput from '@/app/shared/ecommerce/cart/quantity-input';

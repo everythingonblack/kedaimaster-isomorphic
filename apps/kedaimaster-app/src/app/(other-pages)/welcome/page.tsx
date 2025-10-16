@@ -1,6 +1,6 @@
 
 import { Button } from 'rizzui/button';
-import { Title, Text } from 'rizzui/typography';
+import { Title, Text } from 'rizzui';
 import LaptopImg from '@public/welcome-laptop.png';
 import MobileImg from '@public/welcome-mobile.png';
 

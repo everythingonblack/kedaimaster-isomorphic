@@ -16,7 +16,7 @@ import { Grid } from 'rizzui/grid';
 import { Input } from 'rizzui/input';
 import { Modal } from '@core/modal-views/modal';
 import { Textarea } from 'rizzui/textarea';
-import { Text, Title } from 'rizzui/typography';
+import { Text, Title } from 'rizzui';
 import cn from '@core/utils/class-names';
 
 type PodcastScheduleType = (typeof podcastScheduleData)[0];

@@ -12,7 +12,7 @@ import {
 } from 'react-icons/pi';
 import { Box } from 'rizzui/box';
 import { Flex } from 'rizzui/flex';
-import { Text, Title } from 'rizzui/typography';
+import { Text, Title } from 'rizzui';
 import { useAudioPlayerContext } from './audio-player-context';
 import MusicPlayer, { currentPlayerAtom } from './music-player';
 import { Modal } from '@core/modal-views/modal';

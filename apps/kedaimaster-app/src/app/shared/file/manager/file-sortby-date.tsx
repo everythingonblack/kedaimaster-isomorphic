@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { PiCaretDownBold, PiCaretRightBold } from 'react-icons/pi';
+import { PiCaretDownBold, PiCaretLeftBold } from 'react-icons/pi';
 import { Popover, Button, Text } from 'rizzui';
 import cn from '@core/utils/class-names';
 import { useMedia } from '@core/hooks/use-media';
@@ -36,7 +36,7 @@ const modifiedOptions = [
   {
     value: 'customDateRange',
     name: 'Custom date ranger',
-    icon: <PiCaretRightBold className="h-4 w-4 text-gray-500 rtl:rotate-180" />,
+    icon: <PiCaretLeftBold className="h-4 w-4 text-gray-500 rtl:rotate-180" />,
     id: 6,
   },
 ];

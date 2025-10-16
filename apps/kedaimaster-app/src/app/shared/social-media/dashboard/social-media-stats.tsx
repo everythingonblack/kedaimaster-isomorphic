@@ -1,6 +1,6 @@
 'use client';
 
-import { Text } from 'rizzui/typography';
+import { Text } from 'rizzui';
 import cn from '@core/utils/class-names';
 import { formatNumber } from '@core/utils/format-number';
 import { PiCaretDoubleUpBold, PiTrendUpBold } from 'react-icons/pi';

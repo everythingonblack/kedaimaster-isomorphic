@@ -1,6 +1,6 @@
 'use client';
 
-import { PiCaretLeftBold, PiCaretRightBold } from 'react-icons/pi';
+import { PiCaretRightBold, PiCaretLeftBold } from 'react-icons/pi';
 import { ActionIcon, Title } from 'rizzui';
 import cn from '@core/utils/class-names';
 import { useDirection } from '@core/hooks/use-direction';
@@ -41,7 +41,7 @@ export default function ProductCarousel({
               prevButtonClassName
             )}
           >
-            <PiCaretLeftBold className="h-auto w-5 rtl:rotate-180" />
+            <PiCaretRightBold className="h-auto w-5 rtl:rotate-180" />
           </ActionIcon>
           <ActionIcon
             rounded="full"
@@ -51,7 +51,7 @@ export default function ProductCarousel({
               nextButtonClassName
             )}
           >
-            <PiCaretRightBold className="h-auto w-5 rtl:rotate-180" />
+            <PiCaretLeftBold className="h-auto w-5 rtl:rotate-180" />
           </ActionIcon>
         </div>
       </div>

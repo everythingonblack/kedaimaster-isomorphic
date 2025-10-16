@@ -8,7 +8,7 @@ import PDFIcon from '@core/components/icons/pdf-solid';
 import DocIcon from '@core/components/icons/doc-solid';
 import ImageIcon from '@core/components/icons/image-solid';
 import FolderIcon from '@core/components/icons/folder-solid';
-import { PiCaretLeftBold, PiCaretRightBold } from 'react-icons/pi';
+import { PiCaretRightBold, PiCaretLeftBold } from 'react-icons/pi';
 import { useScrollableSlider } from '@core/hooks/use-scrollable-slider';
 
 const mockData = [
@@ -78,7 +78,7 @@ export default function QuickAccess({ className }: { className?: string }) {
           onClick={() => scrollToTheLeft()}
           className="!absolute left-0 top-0 z-10 !h-full w-14 !justify-start rounded-none bg-gradient-to-r from-gray-0 via-gray-0/70 to-transparent px-0 text-gray-500 hover:text-gray-900 dark:from-gray-50 dark:via-gray-50/70 3xl:hidden"
         >
-          <PiCaretLeftBold className="size-5" />
+          <PiCaretRightBold className="size-5" />
         </Button>
         <div className="w-full overflow-hidden">
           <div
@@ -97,7 +97,7 @@ export default function QuickAccess({ className }: { className?: string }) {
           onClick={() => scrollToTheRight()}
           className="!absolute right-0 top-0 z-10 !h-full w-14 !justify-end rounded-none bg-gradient-to-l from-white via-white to-transparent px-0 text-gray-500 hover:text-gray-900 dark:from-gray-50 dark:via-gray-50/70 3xl:hidden"
         >
-          <PiCaretRightBold className="size-5" />
+          <PiCaretLeftBold className="size-5" />
         </Button>
       </div>
     </div>

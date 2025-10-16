@@ -7,7 +7,7 @@ import { PiPlayCircleFill, PiPlayFill } from 'react-icons/pi';
 import { Box } from 'rizzui/box';
 import { Flex } from 'rizzui/flex';
 import { Grid } from 'rizzui/grid';
-import { Title } from 'rizzui/typography';
+import { Title } from 'rizzui';
 
 type FeaturedPodcastType = (typeof featuredCreatorsPodcasts)[0];
 
