@@ -18,6 +18,15 @@ export default function DashboardPage() {
     endDate: new Date(),
   });
 
+  // Handler functions untuk DatePicker
+  const handleStartDateChange = (date: any) => {
+    setCustomDateRange({ ...customDateRange, startDate: date });
+  };
+
+  const handleEndDateChange = (date: any) => {
+    setCustomDateRange({ ...customDateRange, endDate: date });
+  };
+
   // Hanya daftar tombol non-custom, karena custom akan ditangani secara khusus
   const timeFilters = [
     { id: 'hariIni', label: 'Hari ini' },
@@ -28,6 +37,22 @@ export default function DashboardPage() {
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-6">
+      <style dangerouslySetInnerHTML={{__html: `
+        .custom-datepicker,
+        .custom-datepicker *:not(.react-datepicker):not(.react-datepicker *) {
+          background: transparent !important;
+          border: none !important;
+          box-shadow: none !important;
+        }
+        .custom-datepicker input {
+          outline: none !important;
+          height: 20px !important;
+          font-size: 0.875rem !important;
+          width: 100% !important;
+          padding: 0 0.5rem !important;
+        }
+      `}} />
+      
       {/* Bagian Header dan Navigasi Kafe (tidak berubah) */}
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">DASHBOARD</h1>
@@ -59,22 +84,23 @@ export default function DashboardPage() {
         {/* Render DatePicker atau Tombol "Custom" secara kondisional */}
         {activeFilter === 'custom' ? (
           // Tampilan Expanded: Saat 'custom' aktif
-          <div className="flex items-center gap-2 p-1 bg-gray-200 rounded-full">
-            <span className="pl-3 text-sm font-medium text-gray-600">Start:</span>
-            <DatePicker
-              selected={customDateRange.startDate}
-              onChange={(date: Date) => setCustomDateRange({ ...customDateRange, startDate: date })}
-              dateFormat="dd/MM/yy"
-              // Styling agar inputnya kecil dan menyatu
-              inputClassName="h-8 text-sm w-24 rounded-full border-gray-300 focus:ring-gray-800"
-            />
-            <span className="text-sm font-medium text-gray-600">End:</span>
-            <DatePicker
-              selected={customDateRange.endDate}
-              onChange={(date: Date) => setCustomDateRange({ ...customDateRange, endDate: date })}
-              dateFormat="dd/MM/yy"
-              inputClassName="h-8 text-sm w-24 rounded-full border-gray-300 focus:ring-gray-800"
-            />
+          <div className="flex items-center px-4 py-1.5 bg-gray-200 rounded-full gap-4 h-[32px]" >
+            <span className="text-sm text-gray-600">Start:</span>
+            <div className="w-48 custom-datepicker">
+              <DatePicker
+                selected={customDateRange.startDate}
+                onChange={handleStartDateChange}
+                dateFormat="dd/MM/yy"
+              />
+            </div>
+            <span className="text-sm text-gray-600">End:</span>
+            <div className="w-48 custom-datepicker">
+              <DatePicker
+                selected={customDateRange.endDate}
+                onChange={handleEndDateChange}
+                dateFormat="dd/MM/yy"
+              />
+            </div>
           </div>
         ) : (
           // Tampilan Tombol: Saat 'custom' tidak aktif
