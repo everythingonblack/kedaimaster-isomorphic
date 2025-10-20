@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './App.css'
-import FileDashboardPage from '@/app/shared/file/dashboard/index'
+import FileDashboardPage from '@/kedaimaster-dashboard/page'
 
 function App() {
   return (
