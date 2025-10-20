@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { DatePicker } from 'rizzui';
+import { DatePicker } from '@core/ui/datepicker';
 import RingkasanBisnis from './RingkasanBisnis';
 import LaporanPenjualan from './LaporanPenjualan';
 import GrafikPemasukan from './GrafikPemasukan';
