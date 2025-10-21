@@ -1,13 +1,13 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // import './App.css'
-
+import Layout from '@/app/layout';
 import AppointmentDashboard from '@/app/shared/appointment/dashboard/index';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<AppointmentDashboard />} />
+        <Route path="/" element={<AppointmentDashboard/>} />
       </Routes>
     </BrowserRouter>
   );

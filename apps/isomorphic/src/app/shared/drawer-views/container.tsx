@@ -1,15 +1,17 @@
 'use client';
 
 import { useEffect } from 'react';
-import { usePathname } from 'next/navigation';
+import { useLocation } from 'react-router-dom'; // Ganti dari next/navigation
 import { Drawer } from 'rizzui';
 import { useDrawer } from '@/app/shared/drawer-views/use-drawer';
 import cn from '@core/utils/class-names';
 
 export default function GlobalDrawer() {
-  const { isOpen, view, placement, containerClassName, closeDrawer } =
-    useDrawer();
-  const pathname = usePathname();
+  const { isOpen, view, placement, containerClassName, closeDrawer } = useDrawer();
+
+  const location = useLocation(); // Ganti usePathname
+  const pathname = location.pathname;
+
   useEffect(() => {
     closeDrawer();
     // eslint-disable-next-line react-hooks/exhaustive-deps

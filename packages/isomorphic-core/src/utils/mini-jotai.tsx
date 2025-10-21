@@ -1,6 +1,13 @@
-import React, { createContext, useContext, useState, useCallback, useReducer, useEffect } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useReducer,
+  useEffect,
+} from 'react';
 
-// Type untuk atom
+// Tipe Atom
 export type Atom<T> = {
   key: string;
   default: T;
@@ -9,12 +16,12 @@ export type Atom<T> = {
 // Store context
 const AtomStoreContext = createContext<Map<string, any> | null>(null);
 
-// Fungsi buat bikin atom
+// Buat atom baru
 export function atom<T>(key: string, defaultValue: T): Atom<T> {
   return { key, default: defaultValue };
 }
 
-// Provider, export dengan nama Provider supaya import sesuai
+// Provider context
 export function AtomProvider({ children }: { children: React.ReactNode }) {
   const [store] = useState(() => new Map<string, any>());
   return (
@@ -24,18 +31,18 @@ export function AtomProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-// export dengan alias 'Provider' supaya bisa import { Provider } from ...
+// Alias Provider
 export const Provider = AtomProvider;
 
-// useAtom hook
-export function useAtom<T>(atom: Atom<T>): [T, React.Dispatch<React.SetStateAction<T>>] {
+// useAtom = [value, setValue]
+export function useAtom<T>(
+  atom: Atom<T>
+): [T, React.Dispatch<React.SetStateAction<T>>] {
   const store = useContext(AtomStoreContext);
   if (!store) throw new Error('useAtom must be used inside <Provider>');
 
-  // Force update untuk re-render saat atom berubah
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
 
-  // Inisialisasi nilai atom sekali saja
   useEffect(() => {
     if (!store.has(atom.key)) {
       store.set(atom.key, atom.default);
@@ -47,14 +54,31 @@ export function useAtom<T>(atom: Atom<T>): [T, React.Dispatch<React.SetStateActi
   const setValue = useCallback(
     (newVal: React.SetStateAction<T>) => {
       const currentVal = store.get(atom.key) as T;
-      const nextVal = typeof newVal === 'function' ? (newVal as (prev: T) => T)(currentVal) : newVal;
+      const nextVal =
+        typeof newVal === 'function'
+          ? (newVal as (prev: T) => T)(currentVal)
+          : newVal;
       if (nextVal !== currentVal) {
         store.set(atom.key, nextVal);
-        forceUpdate(); // re-render component yang pakai useAtom ini
+        forceUpdate();
       }
     },
     [atom.key, store]
   );
 
   return [value, setValue];
+}
+
+// ✅ useAtomValue: hanya baca nilai atom
+export function useAtomValue<T>(atom: Atom<T>): T {
+  const [value] = useAtom(atom);
+  return value;
+}
+
+// ✅ useSetAtom: hanya setter atom
+export function useSetAtom<T>(
+  atom: Atom<T>
+): React.Dispatch<React.SetStateAction<T>> {
+  const [, setValue] = useAtom(atom);
+  return setValue;
 }
