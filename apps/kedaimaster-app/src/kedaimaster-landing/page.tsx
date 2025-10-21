@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import "./LandingPage.css";
+import React, { useState, useEffect } from "react";
+import "./page.css";
 import PricingModal from "./PricingModal";
 
 const link = document.createElement("link");
@@ -7,19 +7,201 @@ link.rel = "stylesheet";
 link.href =
   "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css";
 document.head.appendChild(link);
+// Mengimpor fungsi otentikasi dari file API (mock)
+import { authenticate, registerUser } from '@/kedaimaster-api/authApi';
 
-const KedaiMasterPage: React.FC = () => {
-  const [showModal, setShowModal] = useState(false);
+// --- Komponen Modal Otentikasi ---
+const AuthModal = ({ show, onClose, initialMode }) => {
+  const [mode, setMode] = useState(initialMode); // 'login' or 'register'
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+
+  useEffect(() => {
+    setMode(initialMode);
+    setError('');
+    setSuccessMessage('');
+    setEmail('');
+    setPassword('');
+    setName('');
+  }, [show, initialMode]);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccessMessage('');
+    setIsLoading(true);
+    try {
+      const user = await authenticate({ email, password });
+      console.log('Login berhasil:', user);
+      setSuccessMessage('Login berhasil! Menutup modal...');
+      setTimeout(() => {
+        onClose();
+      }, 2000);
+    } catch (err) {
+      setError(err.message || 'Email atau password salah.');
+      console.error('Login gagal:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccessMessage('');
+    setIsLoading(true);
+    try {
+      const newUser = await registerUser({ name, email, password });
+      console.log('Registrasi berhasil:', newUser);
+      setSuccessMessage('Registrasi berhasil! Silakan login.');
+      setMode('login'); // Ganti mode ke login setelah berhasil registrasi
+    } catch (err) {
+      setError(err.message || 'Gagal melakukan registrasi.');
+      console.error('Registrasi gagal:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (!show) {
+    return null;
+  }
+
+  const isLoginMode = mode === 'login';
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 transition-opacity" onClick={onClose}>
+      <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-md m-4 transform transition-all" onClick={(e) => e.stopPropagation()}>
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold">{isLoginMode ? 'Masuk' : 'Daftar Akun Baru'}</h2>
+          <button onClick={onClose} className="text-slate-500 hover:text-slate-800 text-2xl">&times;</button>
+        </div>
+
+        {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-md mb-4" role="alert">{error}</div>}
+        {successMessage && <div className="bg-emerald-100 border border-emerald-400 text-emerald-700 px-4 py-3 rounded-md mb-4" role="alert">{successMessage}</div>}
+
+        <form onSubmit={isLoginMode ? handleLogin : handleRegister}>
+          {!isLoginMode && (
+            <div className="mb-4">
+              <label className="block text-slate-700 text-sm font-bold mb-2" htmlFor="name">
+                Nama Lengkap
+              </label>
+              <input
+                className="shadow-sm appearance-none border rounded-md w-full py-2 px-3 text-slate-700 leading-tight focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                id="name"
+                type="text"
+                placeholder="Nama Anda"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </div>
+          )}
+          <div className="mb-4">
+            <label className="block text-slate-700 text-sm font-bold mb-2" htmlFor="email">
+              Email
+            </label>
+            <input
+              className="shadow-sm appearance-none border rounded-md w-full py-2 px-3 text-slate-700 leading-tight focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              id="email"
+              type="email"
+              placeholder="email@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-6">
+            <label className="block text-slate-700 text-sm font-bold mb-2" htmlFor="password">
+              Password
+            </label>
+            <input
+              className="shadow-sm appearance-none border rounded-md w-full py-2 px-3 text-slate-700 mb-3 leading-tight focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              id="password"
+              type="password"
+              placeholder="******************"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <div className="flex items-center justify-between flex-col">
+            <button
+              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline transition-colors disabled:bg-slate-400"
+              type="submit"
+              disabled={isLoading}
+            >
+              {isLoading ? 'Memproses...' : (isLoginMode ? 'Masuk' : 'Daftar')}
+            </button>
+            <button
+              type="button"
+              onClick={() => setMode(isLoginMode ? 'register' : 'login')}
+              className="inline-block align-baseline font-bold text-sm text-emerald-600 hover:text-emerald-800 mt-4"
+            >
+              {isLoginMode ? 'Belum punya akun? Daftar di sini' : 'Sudah punya akun? Masuk'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+
+// --- Komponen Placeholder untuk PricingModal ---
+const PricingModal = ({ show, onClose, packageType }) => {
+  if (!show) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50" onClick={onClose}>
+        <div className="bg-white p-8 rounded-lg shadow-lg text-center" onClick={e => e.stopPropagation()}>
+            <h2 className="text-2xl font-bold mb-4">Pesan Paket {packageType.charAt(0).toUpperCase() + packageType.slice(1)}</h2>
+            <p className="mb-6">Anda akan segera dihubungi oleh tim kami untuk proses selanjutnya.</p>
+            <button onClick={onClose} className="bg-emerald-600 text-white font-semibold px-6 py-2 rounded-lg">Tutup</button>
+        </div>
+    </div>
+  );
+};
+
+// --- Komponen Halaman Utama ---
+const KedaiMasterPage = () => {
+  const [showPricingModal, setShowPricingModal] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState("");
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authMode, setAuthMode] = useState('login'); // 'login' or 'register'
 
-  const showPricingModal = (packageType: string) => {
+  useEffect(() => {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css";
+    document.head.appendChild(link);
+    return () => {
+        document.head.removeChild(link);
+    }
+  }, []);
+
+  const openPricingModal = (packageType) => {
     setSelectedPackage(packageType);
-    setShowModal(true);
+    setShowPricingModal(true);
   };
 
   const closePricingModal = () => {
-    setShowModal(false);
+    setShowPricingModal(false);
   };
+
+  const openAuthModal = (mode) => {
+    setAuthMode(mode);
+    setShowAuthModal(true);
+  };
+
+  const closeAuthModal = () => {
+    setShowAuthModal(false);
+  };
+
 
   return (
     <div className="bg-slate-50 text-slate-800 font-inter">
@@ -36,12 +218,12 @@ const KedaiMasterPage: React.FC = () => {
               Kedai Master
             </span>
           </div>
-          <a
-            href="#"
+          <button
+            onClick={() => openAuthModal('login')}
             className="bg-slate-200 text-slate-700 font-semibold px-4 py-2 rounded-lg hover:bg-slate-300 transition-colors text-sm"
           >
             Masuk
-          </a>
+          </button>
         </div>
       </header>
 
@@ -89,12 +271,12 @@ const KedaiMasterPage: React.FC = () => {
                 >
                   Lihat Menu
                 </a>
-                <a
-                  href="#"
-                  className="bg-white brand-green-border border font-semibold px-8 py-3 rounded-lg hover:bg-slate-100 transition-colors"
+                <button
+                  onClick={() => openAuthModal('register')}
+                  className="bg-emerald-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-emerald-700 transition-colors shadow-md"
                 >
                   Daftar Sekarang
-                </a>
+                </button>
               </div>
             </div>
 
@@ -369,83 +551,83 @@ const KedaiMasterPage: React.FC = () => {
                             />
                           </div>
                         </div>
-                      </div>
-                      <div
-                        style={{
-                          position: "absolute",
-                          width: "100%",
-                          top: "86%",
-                          animation: "cartbuttonscaleAnimation 20s infinite",
-                        }}
-                      >
-                        <img
+                        <div
+                          style={{
+                            position: "absolute",
+                            width: "100%",
+                            top: "86%",
+                            animation: "cartbuttonscaleAnimation 20s infinite",
+                          }}
+                        >
+                          <img
                           src="https://i.ibb.co.com/zVrfGjZw/New-Project.png"
-                          alt="Cart Button"
-                          style={{
-                            width: "100%",
-                            position: "absolute",
-                            animation:
-                              "cartbuttonchildOpacityAnimation 20s infinite",
-                          }}
-                        />
-                        <img
+                            alt="Cart Button"
+                            style={{
+                              width: "100%",
+                              position: "absolute",
+                              animation:
+                                "cartbuttonchildOpacityAnimation 20s infinite",
+                            }}
+                          />
+                          <img
                           src="https://i.ibb.co.com/Y7wbjGDz/cart-2.png"
-                          alt="Cart 2"
+                            alt="Cart 2"
+                            style={{
+                              width: "100%",
+                              animation:
+                                "cartbuttonchildOpacityAnimation2 20s infinite",
+                            }}
+                          />
+                        </div>
+                        <div
                           style={{
-                            width: "100%",
-                            animation:
-                              "cartbuttonchildOpacityAnimation2 20s infinite",
-                          }}
-                        />
-                      </div>
-                      <div
-                        style={{
-                          position: "absolute",
-                          width: "100%",
-                          height: "100%",
-                          left: "100%",
-                          animation: "cartslideinAnimation 20s infinite",
-                        }}
-                      >
-                        <img
-                          src="https://i.ibb.co.com/F4Hb7Tqg/cart.jpg"
-                          alt="Cart"
-                          style={{ width: "100%", height: "100%" }}
-                        />
-                        <img
-                          src="https://i.ibb.co.com/Mxrjc9Dc/checkout.png"
-                          alt="Checkout"
-                          style={{
-                            width: "100%",
                             position: "absolute",
-                            top: "90.7%",
-                            left: 0,
-                            animation:
-                              "checkoutbuttonscaleAnimation 20s infinite",
+                            width: "100%",
+                            height: "100%",
+                            left: "100%",
+                            animation: "cartslideinAnimation 20s infinite",
                           }}
-                        />
-                      </div>
-                      <div
-                        style={{
-                          position: "absolute",
-                          width: "100%",
-                          height: "100%",
-                          animation: "transactionAnimation 20s infinite",
-                          backgroundColor: "#0000006b",
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                        }}
-                      >
-                        <img
-                          src="https://i.ibb.co.com/1p7pnnD/transaction.png"
-                          alt="Transaction"
+                        >
+                          <img
+                          src="https://i.ibb.co.com/F4Hb7Tqg/cart.jpg"
+                            alt="Cart"
+                            style={{ width: "100%", height: "100%" }}
+                          />
+                          <img
+                          src="https://i.ibb.co.com/Mxrjc9Dc/checkout.png"
+                            alt="Checkout"
+                            style={{
+                              width: "100%",
+                              position: "absolute",
+                              top: "90.7%",
+                              left: 0,
+                              animation:
+                                "checkoutbuttonscaleAnimation 20s infinite",
+                            }}
+                          />
+                        </div>
+                        <div
                           style={{
-                            width: "80%",
-                            animation:
-                              "transactionElementAnimation 20s infinite",
+                            position: "absolute",
+                            width: "100%",
+                            height: "100%",
+                            animation: "transactionAnimation 20s infinite",
+                            backgroundColor: "#0000006b",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
                           }}
-                        />
+                        >
+                          <img
+                          src="https://i.ibb.co.com/1p7pnnD/transaction.png"
+                            alt="Transaction"
+                            style={{
+                              width: "80%",
+                              animation:
+                                "transactionElementAnimation 20s infinite",
+                            }}
+                          />
+                        </div>
                       </div>
                     </div>
                     {/* Layar Belakang */}
@@ -597,7 +779,7 @@ const KedaiMasterPage: React.FC = () => {
                   </div>
                   <button
                     className="select-btn"
-                    onClick={() => showPricingModal("starter")}
+                    onClick={() => openPricingModal("starter")}
                   >
                     Choose Plan
                   </button>
@@ -661,7 +843,7 @@ const KedaiMasterPage: React.FC = () => {
                   </div>
                   <button
                     className="select-btn"
-                    onClick={() => showPricingModal("professional")}
+                    onClick={() => openPricingModal("professional")}
                   >
                     Choose Plan
                   </button>
@@ -734,7 +916,7 @@ const KedaiMasterPage: React.FC = () => {
                   </div>
                   <button
                     className="select-btn"
-                    onClick={() => showPricingModal("business")}
+                    onClick={() => openPricingModal("business")}
                   >
                     Choose Plan
                   </button>
@@ -771,12 +953,12 @@ const KedaiMasterPage: React.FC = () => {
             <h2 className="text-3xl font-bold text-slate-800">
               Siap Tingkatkan Bisnis Anda?
             </h2>
-            <a
-              href="#"
+            <button
+              onClick={() => openAuthModal('register')}
               className="mt-6 inline-block bg-emerald-600 text-white font-semibold px-8 py-3 rounded-lg shadow-lg hover:bg-emerald-700 hover:shadow-xl transition-all duration-300"
             >
               Coba KedaiMaster Sekarang
-            </a>
+            </button>
           </div>
         </section>
       </main>
@@ -793,7 +975,7 @@ const KedaiMasterPage: React.FC = () => {
               </h3>
 
               <img
-                src="/logo-white.png"
+                src="https://placehold.co/120x40/ffffff/253142?text=KTP"
                 alt="Kediri Technopark Logo"
                 className="my-2 rounded-lg"
                 style={{ width: "120px", height: "auto" }}
@@ -898,10 +1080,17 @@ const KedaiMasterPage: React.FC = () => {
           </div>
         </div>
       </footer>
+
       <PricingModal
-        show={showModal}
+        show={showPricingModal}
         onClose={closePricingModal}
         packageType={selectedPackage}
+      />
+
+      <AuthModal 
+        show={showAuthModal}
+        onClose={closeAuthModal}
+        initialMode={authMode}
       />
     </div>
   );
