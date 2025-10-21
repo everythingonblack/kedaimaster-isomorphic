@@ -1,6 +1,6 @@
 'use client';
 
-import { atom, useAtomValue, useSetAtom } from '@core/utils/mini-jotai';
+import { atom, useAtomValue, useSetAtom } from 'jotai';
 
 export type DrawerPlacements = 'left' | 'right' | 'top' | 'bottom';
 
@@ -11,13 +11,12 @@ type DrawerTypes = {
   containerClassName?: string;
 };
 
-const drawerAtom = atom<DrawerTypes>('drawer', {
+const drawerAtom = atom<DrawerTypes>({
   isOpen: false,
   view: null,
   placement: 'right',
   containerClassName: '',
 });
-
 
 export function useDrawer() {
   const state = useAtomValue(drawerAtom);

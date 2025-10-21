@@ -71,6 +71,7 @@ export default function SearchList({ onClose }: { onClose?: () => void }) {
               </Button>
             )
           }
+  inputClassName="bg-[#dddddd] border-0 focus:outline-none focus:ring-0"
         />
         <ActionIcon
           variant="text"
