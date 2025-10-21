@@ -12,7 +12,7 @@ export default function AppointmentDashboard() {
     <div className="grid grid-cols-12 gap-6 @container @[59rem]:gap-7 3xl:gap-8">
       <AppointmentStats className="col-span-full" />
       <TotalAppointment className="col-span-full @[90rem]:col-span-7" />
-      <ScheduleList className="col-span-full @[59rem]:col-span-6 @[90rem]:col-span-5" />
+      {/* <ScheduleList className="col-span-full @[59rem]:col-span-6 @[90rem]:col-span-5" /> */}
       <AppointmentTodo className="col-span-full @[59rem]:col-span-6 @[90rem]:col-span-4" />
       <Patients className="col-span-full @[59rem]:col-span-6 @[90rem]:col-span-4" />
       <Department className="col-span-full @[59rem]:col-span-6 @[90rem]:col-span-4" />
