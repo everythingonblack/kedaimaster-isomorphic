@@ -8,7 +8,7 @@ export default function PodcastIcon({
       height={24}
       viewBox="0 0 24 24"
       fill="none"
-      {...props}
+      className="w-5 h-auto"
     >
       <path
         fill="#FFD88F"

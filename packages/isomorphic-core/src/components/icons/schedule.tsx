@@ -2,7 +2,7 @@ export default function ScheduleIcon({
   ...props
 }: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg" className="w-5 h-auto">
       <g>
         <g>
           <g>

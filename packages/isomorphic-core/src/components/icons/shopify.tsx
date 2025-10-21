@@ -3,7 +3,7 @@ export default function ShopifyIcon({ ...props }: React.SVGProps<SVGSVGElement>)
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 256 292"
-      {...props}
+      className="w-5 h-auto"
     >
       <path
         fill="#95BF46"

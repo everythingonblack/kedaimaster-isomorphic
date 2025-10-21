@@ -5,7 +5,7 @@ export default function SalesIcon({ ...props }: React.SVGProps<SVGSVGElement>) {
       width="512"
       height="512"
       viewBox="0 0 256 256"
-      {...props}
+      className="w-5 h-auto"
     >
       <path fill="#cecece" d="M62.6 32.23h89.63v155.95H62.6z" />
       <path fill="#afafaf" d="M62.6 32.23h14.68v155.95H62.6z" />

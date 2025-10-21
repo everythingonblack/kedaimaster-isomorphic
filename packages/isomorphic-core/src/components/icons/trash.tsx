@@ -9,7 +9,7 @@ export default function TrashIcon({
       viewBox="0 0 24 24"
       strokeWidth={strokeWidth ?? 1.5}
       stroke="currentColor"
-      {...props}
+      className="w-5 h-auto"
     >
       <path
         strokeLinecap="round"

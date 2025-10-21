@@ -4,7 +4,7 @@ export default function VisaIcon({ ...props }: React.SVGProps<SVGSVGElement>) {
       xmlns="http://www.w3.org/2000/svg"
       xmlSpace="preserve"
       viewBox="0 0 504 504"
-      {...props}
+      className="w-5 h-auto"
     >
       <path
         d="m184.8 324.4 25.6-144h40l-24.8 144z"

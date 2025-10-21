@@ -2,7 +2,7 @@ export default function HouseBoatIcon({
   ...props
 }: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" {...props}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="w-5 h-auto">
       <path
         fill="#e3a76f"
         d="M395.43 288.2H99.04v-52.65c0-16.27-5.15-30.39-16.85-41.69a6.58 6.58 0 0 1 4.58-11.31l19.6-1.45h310.86c5.91 0 8.82 7.2 4.57 11.31a60 60 0 0 0-18.3 43.14v26.55z"

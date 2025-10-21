@@ -2,7 +2,7 @@ export default function HourGlassIcon({
   ...props
 }: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" {...props}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" className="w-5 h-auto">
       <path
         fill="#f2f2f2"
         d="M15.2 6.5v10c0 7.3 5 12.5 9.6 15.4-4.6 3-9.6 8.2-9.6 15.4v10h33.6v-10c0-7.3-5-12.5-9.6-15.4 4.6-3 9.6-8.2 9.6-15.4v-10z"

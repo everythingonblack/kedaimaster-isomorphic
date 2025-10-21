@@ -6,7 +6,7 @@ export default function UsersColorIcon({
       xmlns="http://www.w3.org/2000/svg"
       xmlSpace="preserve"
       viewBox="0 0 512 512"
-      {...props}
+      className="w-5 h-auto"
     >
       <path
         fill="#694b4b"

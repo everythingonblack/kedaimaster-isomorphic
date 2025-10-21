@@ -2,7 +2,7 @@ export default function MobileHomeIcon({
   ...props
 }: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" {...props}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="w-5 h-auto">
       <path
         fill="#4e372b"
         d="M448 344v16h-64v32h80c8.8 0 16-7.2 16-16v-32c0-8.8-7.2-16-16-16s-16 7.2-16 16z"

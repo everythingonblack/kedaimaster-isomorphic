@@ -1,6 +1,6 @@
 export default function CabinIcon({ ...props }: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" {...props}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="w-5 h-auto">
       <path
         fill="#ae6834"
         d="M499.75 458.16H12.25a4.75 4.75 0 0 1-4.75-4.75v-28.1a4.75 4.75 0 0 1 4.75-4.76h487.5a4.75 4.75 0 0 1 4.75 4.75v28.11a4.75 4.75 0 0 1-4.75 4.75z"

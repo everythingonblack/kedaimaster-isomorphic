@@ -1,6 +1,6 @@
 export default function BeefIcon({ ...props }: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" {...props}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className="w-5 h-auto">
       <path
         fill="#F2F2F2"
         d="M12.833 14.184a1.865 1.865 0 1 0 0-3.729 1.865 1.865 0 0 0 0 3.73Z"

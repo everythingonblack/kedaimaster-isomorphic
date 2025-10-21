@@ -6,7 +6,7 @@ export default function TeslaIcon({ ...props }: React.SVGProps<SVGSVGElement>) {
         height={20}
         viewBox="0 0 14 20"
         fill="none"
-        {...props}
+        className="w-5 h-auto"
       >
         <g clipPath="url(#tesla-icon-def-a)">
           <path fill="#E31937" d="M0 .002h13.75v19.997H0V.002Z" />

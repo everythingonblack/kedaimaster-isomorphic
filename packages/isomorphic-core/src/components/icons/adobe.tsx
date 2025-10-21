@@ -6,7 +6,7 @@ export default function AdobeIcon({ ...props }: React.SVGProps<SVGSVGElement>) {
       height={20}
       viewBox="0 0 15 20"
       fill="none"
-      {...props}
+      className="w-5 h-auto"
     >
       <path
         fill="#000"

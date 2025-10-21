@@ -2,7 +2,7 @@ export default function AirtableIcon({
   ...props
 }: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 215" {...props}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 215" className="w-5 h-auto">
       <path
         fill="#FFBF00"
         d="M114.259 2.701 18.86 42.176c-5.305 2.195-5.25 9.73.089 11.847l95.797 37.989a35.544 35.544 0 0 0 26.208 0l95.799-37.99c5.337-2.115 5.393-9.65.086-11.846L141.442 2.7a35.549 35.549 0 0 0-27.183 0"

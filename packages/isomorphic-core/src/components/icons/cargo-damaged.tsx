@@ -6,7 +6,7 @@ export default function CargoDamaged({
       xmlns="http://www.w3.org/2000/svg"
       data-name="Layer 3"
       viewBox="0 0 64 64"
-      {...props}
+      className="w-5 h-auto"
     >
       <path fill="#e5a87f" d="M56 54V18l-4 2-3-2 1-4-2-3 1-3H8v46z" />
       <path

@@ -8,7 +8,7 @@ export default function MusicIcon({
       xmlnsXlink="http://www.w3.org/1999/xlink"
       viewBox="0 0 26 26"
       fill="none"
-      {...props}
+      className="w-5 h-auto"
     >
       <path fill="url(#aa)" d="M0 0h26v26H0z" />
       <defs>

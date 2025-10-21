@@ -5,7 +5,7 @@ export default function TurtleIcon({
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 510.53 510.53"
-      {...props}
+      className="w-5 h-auto"
     >
       <path
         fill="#f7d8a4"

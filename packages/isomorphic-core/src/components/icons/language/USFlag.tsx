@@ -4,7 +4,7 @@ export default function USFlagIcon({ ...props }: React.SVGProps<SVGSVGElement>) 
       xmlns="http://www.w3.org/2000/svg"
       id="flag-icon-css-us"
       viewBox="0 0 640 480"
-      {...props}
+      className="w-5 h-auto"
     >
       <g fillRule="evenodd">
         <g strokeWidth="1pt">

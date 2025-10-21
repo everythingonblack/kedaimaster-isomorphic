@@ -1,6 +1,6 @@
 export default function PastaIcon({ ...props }: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" {...props}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className="w-5 h-auto">
       <path
         fill="#D7E6F0"
         d="M10 19.375a9.375 9.375 0 1 0 0-18.75 9.375 9.375 0 1 0 0 18.75Z"

@@ -2,7 +2,7 @@ export default function CookiesIcon({
   ...props
 }: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" {...props}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className="w-5 h-auto">
       <path
         fill="#FECE85"
         d="M10 0C4.477 0 0 4.477 0 10s4.477 10 10 10 10-4.477 10-10S15.523 0 10 0Zm0 12.757A2.76 2.76 0 0 1 7.243 10 2.76 2.76 0 0 1 10 7.243 2.76 2.76 0 0 1 12.756 10 2.76 2.76 0 0 1 10 12.756Z"

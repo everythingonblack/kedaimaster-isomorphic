@@ -4,7 +4,7 @@ export default function NftIcon({ ...props }: React.SVGProps<SVGSVGElement>) {
       xmlns="http://www.w3.org/2000/svg"
       version="1.1"
       viewBox="0 0 682.667 682.667"
-      {...props}
+      className="w-5 h-auto"
     >
       <defs>
         <clipPath id="clipPath5186" clipPathUnits="userSpaceOnUse">

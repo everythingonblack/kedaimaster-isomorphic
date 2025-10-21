@@ -6,7 +6,7 @@ export default function InvoicePrint({
       xmlns="http://www.w3.org/2000/svg"
       xmlSpace="preserve"
       viewBox="0 0 512 512"
-      {...props}
+      className="w-5 h-auto"
     >
       <path
         fill="#f8d77e"

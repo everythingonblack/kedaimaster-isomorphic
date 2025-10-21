@@ -2,7 +2,7 @@ export default function WeighingScale({
   ...props
 }: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" {...props}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="w-5 h-auto">
       <path
         fill="#9bb9c3"
         d="M444.96 502.04H67.04a15 15 0 0 1-15-15v-32.86h407.92v32.86a15 15 0 0 1-15 15z"

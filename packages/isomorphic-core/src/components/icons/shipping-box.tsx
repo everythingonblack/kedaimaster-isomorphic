@@ -6,7 +6,7 @@ export default function ShippingBox({
       xmlns="http://www.w3.org/2000/svg"
       data-name="Layer 3"
       viewBox="0 0 64 64"
-      {...props}
+      className="w-5 h-auto"
     >
       <circle cx="17" cy="17" r="15" fill="#78a0d4" />
       <path

@@ -1,5 +1,4 @@
 import AppointmentStats from '@/app/shared/appointment/dashboard/appointment-stats';
-import UpcomingAppointmentTable from '@/app/shared/appointment/dashboard/upcoming-appointment-table';
 import AppointmentDiseases from '@/app/shared/appointment/dashboard/appointment-diseases';
 import Department from '@/app/shared/appointment/dashboard/department';
 import TotalAppointment from '@/app/shared/appointment/dashboard/total-appointment';

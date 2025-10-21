@@ -4,7 +4,7 @@ export default function PlaneIcon({ ...props }: React.SVGProps<SVGSVGElement>) {
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 12 12"
       fill="none"
-      {...props}
+      className="w-5 h-auto"
     >
       <g clipPath="url(#clip0_4008_27956)">
         <path

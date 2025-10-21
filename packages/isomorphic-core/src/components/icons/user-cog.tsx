@@ -4,7 +4,7 @@ export default function UserCog({ ...props }: React.SVGProps<SVGSVGElement>) {
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 21 20"
-      {...props}
+      className="w-5 h-auto"
     >
       <path
         fill="currentColor"

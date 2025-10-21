@@ -6,7 +6,7 @@ export default function FlightIcon({
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
       viewBox="0 0 510 510"
-      {...props}
+      className="w-5 h-auto"
     >
       <linearGradient
         id="SVGID_1_"

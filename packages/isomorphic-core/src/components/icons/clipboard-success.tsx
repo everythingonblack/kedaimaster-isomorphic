@@ -8,7 +8,7 @@ export default function ClipboardSuccessIcon({
       height={32}
       viewBox="0 0 32 32"
       fill="none"
-      {...props}
+      className="w-5 h-auto"
     >
       <path
         stroke="currentColor"

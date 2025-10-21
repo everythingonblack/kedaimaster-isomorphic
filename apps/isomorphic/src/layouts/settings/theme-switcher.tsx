@@ -1,7 +1,6 @@
 'use client';
 
 import { useTheme } from '@core/utils/next-themes';
-import { siteConfig } from '@/config/site.config';
 import { RadioGroup } from 'rizzui/radio-group';
 import { updateThemeColor } from '@core/utils/update-theme-color';
 import { presetDark, presetLight } from '@/config/color-presets';
@@ -42,7 +41,7 @@ export default function ThemeSwitcher() {
   return (
     <DrawerBlock title="Appearance">
       <RadioGroup
-        value={theme ?? siteConfig.mode}
+        value={'light'}
         setValue={(selectedTheme: any) => {
           setTheme(selectedTheme);
         }}

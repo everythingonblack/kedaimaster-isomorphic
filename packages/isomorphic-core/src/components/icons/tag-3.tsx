@@ -6,7 +6,7 @@ export default function TagIcon3({ ...props }: React.SVGProps<SVGSVGElement>) {
       height="44"
       viewBox="0 0 45 44"
       fill="none"
-      {...props}
+      className="w-5 h-auto"
     >
       <path
         d="M10.5334 5.09016C18.9875 5.09016 24.793 0.710938 28.8667 0.710938C32.9404 0.710938 41.4959 3.05272 41.4959 21.793C41.4959 40.5334 29.9863 43.2834 25.5056 43.2834C4.5237 43.2846 -4.43886 5.09016 10.5334 5.09016Z"

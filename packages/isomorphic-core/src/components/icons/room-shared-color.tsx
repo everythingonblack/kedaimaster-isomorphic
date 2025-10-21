@@ -2,7 +2,7 @@ export default function RoomSharedIconColor({
   ...props
 }: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 66 66" {...props}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 66 66" className="w-5 h-auto">
       <path
         fill="#ef6561"
         stroke="#101f2d"

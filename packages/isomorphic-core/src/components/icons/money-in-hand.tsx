@@ -2,7 +2,7 @@ export default function MoneyInHand({
   ...props
 }: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -2 512 512" {...props}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -2 512 512" className="w-5 h-auto">
       <path
         fill="#f3a334"
         d="M360.32 7.65a98.15 98.15 0 0 0-87.28 53.22 98.12 98.12 0 0 1 28.26-4.14c54.21 0 98.16 43.95 98.16 98.16 0 16.2-3.92 31.48-10.87 44.95 40.43-12.14 69.89-49.64 69.89-94.03 0-54.2-43.94-98.16-98.16-98.16zm0 0"

@@ -3,7 +3,7 @@ export default function BlenderIcon({ ...props }: React.SVGProps<SVGSVGElement>)
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0.1 16.7 2472.8 1996.5"
-      {...props}
+      className="w-5 h-auto"
     >
       <path
         fill="#fff"
