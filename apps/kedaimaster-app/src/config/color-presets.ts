@@ -1,4 +1,4 @@
-import { useTheme } from 'next-themes';
+import { useTheme } from '@core/utils/next-themes';
 
 export const presetLight = {
   lighter: '#f1f1f1',

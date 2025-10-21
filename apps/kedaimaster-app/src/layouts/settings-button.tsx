@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-// import { useTheme } from "next-themes";
+// import { useTheme } from "@core/utils/next-themes";
 import dynamic from 'next/dynamic';
 import { useDirection } from '@core/hooks/use-direction';
 import CogSolidIcon from '@core/components/icons/cog-solid';

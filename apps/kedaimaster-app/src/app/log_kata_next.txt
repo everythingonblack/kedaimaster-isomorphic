@@ -30,7 +30,7 @@ File: layout.tsx
   → Ditemukan kata: @/app/api/auth/[...nextauth]/auth-provider
   → Ditemukan kata: NextProgress
   → Ditemukan kata: @core/components/next-progress
-  → Ditemukan kata: next-themes,
+  → Ditemukan kata: @core/utils/next-themes,
   → Ditemukan kata: next-theme
   → Ditemukan kata: <NextProgress
 
@@ -307,7 +307,7 @@ File: shared/product-carousel.tsx
 
 File: shared/theme-provider.tsx
   → Ditemukan kata: NextThemeProvider
-  → Ditemukan kata: next-themes
+  → Ditemukan kata: @core/utils/next-themes
   → Ditemukan kata: <NextThemeProvider
   → Ditemukan kata: </NextThemeProvider>
 
@@ -443,19 +443,19 @@ File: shared/appointment/dashboard/appointment-stats.tsx
   → Ditemukan kata: ref={sliderNextBtn}
 
 File: shared/appointment/dashboard/patient-appointment.tsx
-  → Ditemukan kata: next-themes
+  → Ditemukan kata: @core/utils/next-themes
 
 File: shared/appointment/dashboard/schedule-list.tsx
   → Ditemukan kata: next2Label={false}
 
 File: shared/appointment/dashboard/total-appointment.tsx
-  → Ditemukan kata: next-themes
+  → Ditemukan kata: @core/utils/next-themes
 
 File: shared/crm/dashboard/customer-growth-summary.tsx
-  → Ditemukan kata: next-themes
+  → Ditemukan kata: @core/utils/next-themes
 
 File: shared/crm/dashboard/sales-performance.tsx
-  → Ditemukan kata: next-themes
+  → Ditemukan kata: @core/utils/next-themes
 
 File: shared/ecommerce/cart/cart-drawer.tsx
   → Ditemukan kata: next/dynamic
@@ -508,7 +508,7 @@ File: shared/file/manager/file-stats.tsx
   → Ditemukan kata: ref={sliderNextBtn}
 
 File: shared/financial/dashboard/income-statement.tsx
-  → Ditemukan kata: next-themes
+  → Ditemukan kata: @core/utils/next-themes
 
 File: shared/financial/dashboard/transaction-states.tsx
   → Ditemukan kata: sliderNextBtn,
@@ -601,7 +601,7 @@ File: shared/multi-step/multi-step-2/step-6.tsx
   → Ditemukan kata: gotoNextStep();
 
 File: shared/social-media/dashboard/profile-visits.tsx
-  → Ditemukan kata: next-themes
+  → Ditemukan kata: @core/utils/next-themes
 
 File: shared/support/inbox/inbox-tabs.tsx
   → Ditemukan kata: selectTab(nextTab:
@@ -668,7 +668,7 @@ File: shared/podcast/dashboard/music-player/mini-music-player.tsx
   → Ditemukan kata: eslint-disable-next-line
 
 File: shared/podcast/dashboard/music-player/music-player.tsx
-  → Ditemukan kata: next-themes
+  → Ditemukan kata: @core/utils/next-themes
   → Ditemukan kata: seekNext,
   → Ditemukan kata: eslint-disable-next-line
   → Ditemukan kata: handleNextPrev

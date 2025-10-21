@@ -17,7 +17,7 @@ import DropdownAction from '@core/components/charts/dropdown-action';
 import TrendingUpIcon from '@core/components/icons/trending-up';
 import cn from '@core/utils/class-names';
 import { formatNumber } from '@core/utils/format-number';
-import { useTheme } from 'next-themes';
+import { useTheme } from '@core/utils/next-themes';
 import { Title } from 'rizzui';
 
 const data = [

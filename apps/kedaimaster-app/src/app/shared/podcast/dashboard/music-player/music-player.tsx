@@ -16,7 +16,7 @@ import { Flex } from 'rizzui/flex';
 import { Text, Title } from 'rizzui';
 import { useAudioPlayerContext } from './audio-player-context';
 import { useColorPresets } from '@/layouts/settings/use-theme-color';
-import { useTheme } from 'next-themes';
+import { useTheme } from '@core/utils/next-themes';
 import { atom, useAtomValue } from 'jotai';
 import { recentlyPlayedPodcasts } from '@/data/podcasts-data';
 import { AudioVisualizer } from './audio-visualizer';

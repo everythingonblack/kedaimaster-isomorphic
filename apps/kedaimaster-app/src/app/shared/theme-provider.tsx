@@ -3,7 +3,7 @@
 import { Provider } from 'jotai';
 import { siteConfig } from '@/config/site.config';
 // import hideRechartsConsoleError from '@core/utils/recharts-console-error';
-import { ThemeProvider as NextThemeProvider } from 'next-themes';
+import { ThemeProvider as NextThemeProvider } from '@core/utils/@core/utils/next-themes';
 
 // hideRechartsConsoleError();
 

@@ -2,7 +2,7 @@
 
 import WidgetCard from '@core/components/cards/widget-card';
 import { CustomTooltip } from '@core/components/charts/custom-tooltip';
-import { useTheme } from 'next-themes';
+import { useTheme } from '@core/utils/next-themes';
 import {
   Bar,
   BarChart,

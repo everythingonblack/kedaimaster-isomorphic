@@ -30,7 +30,7 @@ export default async function RootLayout({
     <html
       lang="en"
       dir="ltr"
-      // required this one for next-themes, remove it if you are not using next-theme
+      // required this one for @core/utils/next-themes, remove it if you are not using next-theme
       suppressHydrationWarning
     >
       <body

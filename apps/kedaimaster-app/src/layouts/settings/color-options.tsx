@@ -1,6 +1,6 @@
 'use client';
 
-import { useTheme } from 'next-themes';
+import { useTheme } from '@core/utils/next-themes';
 import { PiCheckBold } from 'react-icons/pi';
 import cn from '@core/utils/class-names';
 import { usePresets } from '@/config/color-presets';

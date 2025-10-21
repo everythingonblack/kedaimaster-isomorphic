@@ -9,7 +9,7 @@ import { PiCaretDownBold, PiCommand } from 'react-icons/pi';
 import { menuItems } from '@/layouts/boron/boron-menu-items';
 import { useBoronKbdShortcuts } from '@/layouts/boron/boron-utils';
 import { useColorPresetName } from '@/layouts/settings/use-theme-color';
-import { useTheme } from 'next-themes';
+import { useTheme } from '@core/utils/next-themes';
 
 export function BoronSidebarMenu() {
   const pathname = useLocation();

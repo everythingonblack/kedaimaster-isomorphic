@@ -1,7 +1,7 @@
 "use client";
 
 import { useAtomValue } from "jotai";
-import { useTheme } from "next-themes";
+import { useTheme } from "@core/utils/next-themes";
 import { Loader } from "@googlemaps/js-api-loader";
 import { useEffect, useRef, useState } from "react";
 import { atomWithReset, useResetAtom } from "jotai/utils";

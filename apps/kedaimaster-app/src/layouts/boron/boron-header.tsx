@@ -9,7 +9,7 @@ import HeaderMenuRight from '@/layouts/boron/boron-header-menu-right';
 import StickyHeader from '@/layouts/sticky-header';
 import cn from '@core/utils/class-names';
 import { useColorPresetName } from '@/layouts/settings/use-theme-color';
-import { useTheme } from 'next-themes';
+import { useTheme } from '@core/utils/next-themes';
 
 export default function BoronHeader() {
   const { theme } = useTheme();
