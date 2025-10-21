@@ -57,7 +57,6 @@
     "motion": "12.5.0",
     "next": "15.2.4",
     "next-auth": "^4.24.11",
-    "@core/utils/next-themes": "^0.4.6",
     "nextjs-toploader": "^3.8.15",
     "nodemailer": "^6.10.0",
     "pretty-bytes": "^6.1.1",
