@@ -1,0 +1,680 @@
+File: find.js
+  → Ditemukan kata: cariKataNext(direktori,
+  → Ditemukan kata: next/dynamic
+  → Ditemukan kata: next-link
+  → Ditemukan kata: regexNext
+  → Ditemukan kata: ]*next[^\s
+  → Ditemukan kata: Array.from(isiFile.matchAll(regexNext));
+  → Ditemukan kata: next
+  → Ditemukan kata: log_kata_next.txt
+  → Ditemukan kata: cariKataNext(direktori,
+
+File: fonts.ts
+  → Ditemukan kata: next/font/google
+
+File: globals.css
+  → Ditemukan kata: next
+  → Ditemukan kata: .react-datepicker__navigation--next
+  → Ditemukan kata: next
+  → Ditemukan kata: .react-datepicker__navigation-icon--next
+  → Ditemukan kata: .react-datepicker__navigation.react-datepicker__navigation--next.react-datepicker__navigation--next--with-time
+  → Ditemukan kata: .rc-pagination-next:not(.rc-pagination-disabled)
+  → Ditemukan kata: .rc-pagination-jump-next:not(.rc-pagination-disabled)
+  → Ditemukan kata: .react-calendar__navigation__next2-button
+  → Ditemukan kata: .react-calendar__navigation__next-button
+  → Ditemukan kata: .react-calendar__navigation__next2-button,
+
+File: layout.tsx
+  → Ditemukan kata: next-auth/next
+  → Ditemukan kata: @/app/api/auth/[...nextauth]/auth-options
+  → Ditemukan kata: @/app/api/auth/[...nextauth]/auth-provider
+  → Ditemukan kata: NextProgress
+  → Ditemukan kata: @core/components/next-progress
+  → Ditemukan kata: @core/utils/next-themes,
+  → Ditemukan kata: next-theme
+  → Ditemukan kata: <NextProgress
+
+File: log_kata_next.txt
+  → Ditemukan kata: next
+  → Ditemukan kata: cariKataNext
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: log_kata_next
+  → Ditemukan kata: cariKataNext
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: calendar__navigation__next2
+  → Ditemukan kata: calendar__navigation__next
+  → Ditemukan kata: calendar__navigation__next2
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: nextauth
+  → Ditemukan kata: nextauth
+  → Ditemukan kata: NextProgress
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: NextProgress
+  → Ditemukan kata: Next
+  → Ditemukan kata: next
+  → Ditemukan kata: Next
+  → Ditemukan kata: next
+  → Ditemukan kata: Next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: nextButtonClassName
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: nextButtonClassName
+  → Ditemukan kata: nextEl
+  → Ditemukan kata: nextButtonClassName
+  → Ditemukan kata: NextThemeProvider
+  → Ditemukan kata: next
+  → Ditemukan kata: NextThemeProvider
+  → Ditemukan kata: NextThemeProvider
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: nextauth
+  → Ditemukan kata: next
+  → Ditemukan kata: Next
+  → Ditemukan kata: sliderNextBtn
+  → Ditemukan kata: Next
+  → Ditemukan kata: sliderNextBtn
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: NEXT
+  → Ditemukan kata: NEXT
+  → Ditemukan kata: nextPage
+  → Ditemukan kata: setNextPage
+  → Ditemukan kata: setNextPage
+  → Ditemukan kata: nextPage
+  → Ditemukan kata: nextPage
+  → Ditemukan kata: nextPage
+  → Ditemukan kata: nextPage
+  → Ditemukan kata: setNextPage
+  → Ditemukan kata: setNextPage
+  → Ditemukan kata: nextPage
+  → Ditemukan kata: nextPage
+  → Ditemukan kata: nextPage
+  → Ditemukan kata: nextPage
+  → Ditemukan kata: setNextPage
+  → Ditemukan kata: setNextPage
+  → Ditemukan kata: nextPage
+  → Ditemukan kata: nextPage
+  → Ditemukan kata: nextPage
+  → Ditemukan kata: next
+  → Ditemukan kata: Next
+  → Ditemukan kata: Next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: nextPage
+  → Ditemukan kata: setNextPage
+  → Ditemukan kata: setNextPage
+  → Ditemukan kata: nextPage
+  → Ditemukan kata: nextPage
+  → Ditemukan kata: nextPage
+  → Ditemukan kata: NextBtn
+  → Ditemukan kata: next
+  → Ditemukan kata: NextBtn
+  → Ditemukan kata: next2Label
+  → Ditemukan kata: nextLabel
+  → Ditemukan kata: next
+  → Ditemukan kata: api/auth/[...nextauth]/auth-options.ts
+  → Ditemukan kata: NextAuthOptions
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: NextAuthOptions
+  → Ditemukan kata: api/auth/[...nextauth]/auth-provider.tsx
+  → Ditemukan kata: next
+  → Ditemukan kata: api/auth/[...nextauth]/pages-options.ts
+  → Ditemukan kata: next
+  → Ditemukan kata: api/auth/[...nextauth]/route.ts
+  → Ditemukan kata: NextAuth
+  → Ditemukan kata: next
+  → Ditemukan kata: NextAuth
+  → Ditemukan kata: next
+  → Ditemukan kata: sliderNextBtn
+  → Ditemukan kata: Next
+  → Ditemukan kata: sliderNextBtn
+  → Ditemukan kata: sliderNextBtn
+  → Ditemukan kata: Next
+  → Ditemukan kata: sliderNextBtn
+  → Ditemukan kata: next
+  → Ditemukan kata: next2Label
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: nextPage
+  → Ditemukan kata: setNextPage
+  → Ditemukan kata: setNextPage
+  → Ditemukan kata: nextPage
+  → Ditemukan kata: nextPage
+  → Ditemukan kata: nextPage
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: NEXT_PUBLIC_GOOGLE_MAP_API_KEY
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: sliderNextBtn
+  → Ditemukan kata: Next
+  → Ditemukan kata: sliderNextBtn
+  → Ditemukan kata: sliderNextBtn
+  → Ditemukan kata: Next
+  → Ditemukan kata: sliderNextBtn
+  → Ditemukan kata: sliderNextBtn
+  → Ditemukan kata: Next
+  → Ditemukan kata: sliderNextBtn
+  → Ditemukan kata: next
+  → Ditemukan kata: sliderNextBtn
+  → Ditemukan kata: Next
+  → Ditemukan kata: sliderNextBtn
+  → Ditemukan kata: next2Label
+  → Ditemukan kata: nextLabel
+  → Ditemukan kata: next2Label
+  → Ditemukan kata: nextLabel
+  → Ditemukan kata: nextPage
+  → Ditemukan kata: setNextPage
+  → Ditemukan kata: nextPage
+  → Ditemukan kata: setNextPage
+  → Ditemukan kata: nextPage
+  → Ditemukan kata: nextPage
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: next
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: NEXT_PUBLIC_GOOGLE_MAP_API_KEY
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: next
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: next
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: next
+  → Ditemukan kata: nextTab
+  → Ditemukan kata: nextTab
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: next2Label
+  → Ditemukan kata: Next
+  → Ditemukan kata: next
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: next
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: next_day
+  → Ditemukan kata: Next
+  → Ditemukan kata: next_flight
+  → Ditemukan kata: Next
+  → Ditemukan kata: next_day
+  → Ditemukan kata: Next
+  → Ditemukan kata: seekNext
+  → Ditemukan kata: seekNext
+  → Ditemukan kata: seekNext
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: next
+  → Ditemukan kata: seekNext
+  → Ditemukan kata: next
+  → Ditemukan kata: handleNextPrev
+  → Ditemukan kata: handleNextPrev
+  → Ditemukan kata: seekNext
+  → Ditemukan kata: handleNextPrev
+  → Ditemukan kata: next
+
+File: multi-step/footer.tsx
+  → Ditemukan kata: Next
+  → Ditemukan kata: eslint-disable-next-line
+
+File: multi-step-2/footer.tsx
+  → Ditemukan kata: Next
+  → Ditemukan kata: eslint-disable-next-line
+
+File: multi-step-2/navigator.tsx
+  → Ditemukan kata: Next
+  → Ditemukan kata: eslint-disable-next-line
+
+File: shared/floating-cart.tsx
+  → Ditemukan kata: next/dynamic
+
+File: shared/import-button.tsx
+  → Ditemukan kata: next/dynamic
+
+File: shared/product-carousel.tsx
+  → Ditemukan kata: nextButtonClassName
+  → Ditemukan kata: `${generateSlug(title)}-next-button`;
+  → Ditemukan kata: recently-viewed-next-item
+  → Ditemukan kata: nextButtonClassName
+  → Ditemukan kata: nextEl:
+  → Ditemukan kata: `.${nextButtonClassName}`,
+
+File: shared/theme-provider.tsx
+  → Ditemukan kata: NextThemeProvider
+  → Ditemukan kata: @core/utils/next-themes
+  → Ditemukan kata: <NextThemeProvider
+  → Ditemukan kata: </NextThemeProvider>
+
+File: signin/sign-in-form.tsx
+  → Ditemukan kata: next-auth/react
+
+File: api/uploadthing/core.ts
+  → Ditemukan kata: next-auth/next
+  → Ditemukan kata: uploadthing/next
+  → Ditemukan kata: @/app/api/auth/[...nextauth]/auth-options
+
+File: api/uploadthing/route.ts
+  → Ditemukan kata: uploadthing/next
+  → Ditemukan kata: Next
+
+File: shared/account-settings/navigation.tsx
+  → Ditemukan kata: sliderNextBtn,
+  → Ditemukan kata: Next
+  → Ditemukan kata: ref={sliderNextBtn}
+
+File: shared/account-settings/personal-info.tsx
+  → Ditemukan kata: next/dynamic
+
+File: shared/account-settings/profile-settings.tsx
+  → Ditemukan kata: next/dynamic
+
+File: shared/drawer-views/container.tsx
+  → Ditemukan kata: eslint-disable-next-line
+
+File: shared/email-templates/template-preview.tsx
+  → Ditemukan kata: next/dist/shared/lib/get-img-props
+
+File: shared/event-calendar/constants.ts
+  → Ditemukan kata: NEXT:
+  → Ditemukan kata: NEXT
+
+File: shared/explore-flight/flight-feed.tsx
+  → Ditemukan kata: [nextPage,
+  → Ditemukan kata: setNextPage]
+  → Ditemukan kata: setNextPage(nextPage
+  → Ditemukan kata: nextPage)
+  → Ditemukan kata: {nextPage
+
+File: shared/explore-listing/index.tsx
+  → Ditemukan kata: [nextPage,
+  → Ditemukan kata: setNextPage]
+  → Ditemukan kata: setNextPage(nextPage
+  → Ditemukan kata: nextPage)
+  → Ditemukan kata: {nextPage
+
+File: shared/explore-nft/nft-grid.tsx
+  → Ditemukan kata: [nextPage,
+  → Ditemukan kata: setNextPage]
+  → Ditemukan kata: setNextPage(nextPage
+  → Ditemukan kata: nextPage)
+  → Ditemukan kata: {nextPage
+
+File: shared/invoice/add-invoice-items.tsx
+  → Ditemukan kata: eslint-disable-next-line
+
+File: shared/invoice/invoice-details.tsx
+  → Ditemukan kata: Next
+  → Ditemukan kata: Next
+
+File: shared/legacy-table-demo/index.tsx
+  → Ditemukan kata: next/dynamic
+  → Ditemukan kata: eslint-disable-next-line
+  → Ditemukan kata: eslint-disable-next-line
+
+File: shared/modal-views/container.tsx
+  → Ditemukan kata: eslint-disable-next-line
+
+File: shared/multi-step/basic-info.tsx
+  → Ditemukan kata: next/dynamic
+
+File: shared/multi-step/counter.tsx
+  → Ditemukan kata: eslint-disable-next-line
+
+File: shared/multi-step/quantity-input.tsx
+  → Ditemukan kata: eslint-disable-next-line
+
+File: shared/point-of-sale/pos-drawer.tsx
+  → Ditemukan kata: next/dynamic
+
+File: shared/point-of-sale/pos-product-feed.tsx
+  → Ditemukan kata: [nextPage,
+  → Ditemukan kata: setNextPage]
+  → Ditemukan kata: setNextPage(nextPage
+  → Ditemukan kata: nextPage)
+  → Ditemukan kata: {nextPage
+
+File: shared/profile/posts-modal.tsx
+  → Ditemukan kata: NextBtn
+  → Ditemukan kata: @core/ui/carousel/next-btn
+  → Ditemukan kata: <NextBtn
+
+File: shared/project-dashboard/task-list.tsx
+  → Ditemukan kata: next2Label={false}
+  → Ditemukan kata: nextLabel={<PiArrowRight
+
+File: shared/support/create-snippet-template-from.tsx
+  → Ditemukan kata: next/dynamic
+
+File: api/auth/[...nextauth]/auth-options.ts
+  → Ditemukan kata: NextAuthOptions
+  → Ditemukan kata: next-auth
+  → Ditemukan kata: next-auth/providers/credentials
+  → Ditemukan kata: next-auth/providers/google
+  → Ditemukan kata: NextAuthOptions
+
+File: api/auth/[...nextauth]/auth-provider.tsx
+  → Ditemukan kata: next-auth/react
+
+File: api/auth/[...nextauth]/pages-options.ts
+  → Ditemukan kata: next-auth
+
+File: api/auth/[...nextauth]/route.ts
+  → Ditemukan kata: NextAuth
+  → Ditemukan kata: next-auth
+  → Ditemukan kata: NextAuth(authOptions);
+
+File: auth/(sign-in)/sign-in-1/sign-in-form.tsx
+  → Ditemukan kata: next-auth/react
+
+File: shared/appointment/appointment-list/stats.tsx
+  → Ditemukan kata: sliderNextBtn,
+  → Ditemukan kata: Next
+  → Ditemukan kata: ref={sliderNextBtn}
+
+File: shared/appointment/dashboard/appointment-stats.tsx
+  → Ditemukan kata: sliderNextBtn,
+  → Ditemukan kata: Next
+  → Ditemukan kata: ref={sliderNextBtn}
+
+File: shared/appointment/dashboard/patient-appointment.tsx
+  → Ditemukan kata: @core/utils/next-themes
+
+File: shared/appointment/dashboard/schedule-list.tsx
+  → Ditemukan kata: next2Label={false}
+
+File: shared/appointment/dashboard/total-appointment.tsx
+  → Ditemukan kata: @core/utils/next-themes
+
+File: shared/crm/dashboard/customer-growth-summary.tsx
+  → Ditemukan kata: @core/utils/next-themes
+
+File: shared/crm/dashboard/sales-performance.tsx
+  → Ditemukan kata: @core/utils/next-themes
+
+File: shared/ecommerce/cart/cart-drawer.tsx
+  → Ditemukan kata: next/dynamic
+
+File: shared/ecommerce/category/create-category.tsx
+  → Ditemukan kata: next/dynamic
+
+File: shared/ecommerce/shop/product-feed.tsx
+  → Ditemukan kata: [nextPage,
+  → Ditemukan kata: setNextPage]
+  → Ditemukan kata: setNextPage(nextPage
+  → Ditemukan kata: nextPage)
+  → Ditemukan kata: {nextPage
+
+File: shared/explore-flight/listing-filters/find-flight.tsx
+  → Ditemukan kata: next/dynamic
+
+File: shared/explore-flight/listing-filters/our-advice.tsx
+  → Ditemukan kata: next
+
+File: shared/explore-flight/listing-filters/quantity-input.tsx
+  → Ditemukan kata: eslint-disable-next-line
+
+File: shared/explore-listing/listing-filters/hometype-filter.tsx
+  → Ditemukan kata: eslint-disable-next-line
+
+File: shared/explore-listing/listing-filters/index.tsx
+  → Ditemukan kata: next/dynamic
+  → Ditemukan kata: apiKey={env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}
+
+File: shared/explore-listing/listing-filters/listing-type-filter.tsx
+  → Ditemukan kata: eslint-disable-next-line
+
+File: shared/explore-listing/listing-filters/price-filter.tsx
+  → Ditemukan kata: eslint-disable-next-line
+
+File: shared/file/dashboard/file-stats.tsx
+  → Ditemukan kata: sliderNextBtn,
+  → Ditemukan kata: Next
+  → Ditemukan kata: ref={sliderNextBtn}
+
+File: shared/file/dashboard/quick-access.tsx
+  → Ditemukan kata: sliderNextBtn,
+  → Ditemukan kata: Next
+  → Ditemukan kata: ref={sliderNextBtn}
+
+File: shared/file/manager/file-stats.tsx
+  → Ditemukan kata: sliderNextBtn,
+  → Ditemukan kata: Next
+  → Ditemukan kata: ref={sliderNextBtn}
+
+File: shared/financial/dashboard/income-statement.tsx
+  → Ditemukan kata: @core/utils/next-themes
+
+File: shared/financial/dashboard/transaction-states.tsx
+  → Ditemukan kata: sliderNextBtn,
+  → Ditemukan kata: Next
+  → Ditemukan kata: ref={sliderNextBtn}
+
+File: shared/job-board/dashboard/schedule-list.tsx
+  → Ditemukan kata: next2Label={false}
+  → Ditemukan kata: nextLabel={<PiArrowRight
+
+File: shared/job-board/dashboard/schedule-modal.tsx
+  → Ditemukan kata: next2Label={false}
+  → Ditemukan kata: nextLabel={<PiArrowRight
+
+File: shared/job-board/feeds/job-feed.tsx
+  → Ditemukan kata: [nextPage,
+  → Ditemukan kata: setNextPage]
+  → Ditemukan kata: nextPage
+  → Ditemukan kata: setNextPage(nextPage
+  → Ditemukan kata: nextPage).map((job,
+
+File: shared/logistics/tracking/tracking-history.tsx
+  → Ditemukan kata: next
+
+File: shared/logistics/tracking/tracking-overview.tsx
+  → Ditemukan kata: next
+
+File: shared/multi-step/multi-step-1/index.tsx
+  → Ditemukan kata: gotoNextStep()
+  → Ditemukan kata: gotoNextStep,
+
+File: shared/multi-step/multi-step-1/step-1.tsx
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep();
+
+File: shared/multi-step/multi-step-1/step-2.tsx
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep();
+
+File: shared/multi-step/multi-step-1/step-3.tsx
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep();
+
+File: shared/multi-step/multi-step-1/step-4.tsx
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: eslint-disable-next-line
+  → Ditemukan kata: gotoNextStep();
+  → Ditemukan kata: apiKey={env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}
+
+File: shared/multi-step/multi-step-1/step-5.tsx
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep();
+
+File: shared/multi-step/multi-step-1/step-6.tsx
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep();
+
+File: shared/multi-step/multi-step-1/step-7.tsx
+  → Ditemukan kata: next/dynamic
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep();
+
+File: shared/multi-step/multi-step-2/index.tsx
+  → Ditemukan kata: gotoNextStep()
+  → Ditemukan kata: gotoNextStep,
+
+File: shared/multi-step/multi-step-2/step-1.tsx
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep();
+
+File: shared/multi-step/multi-step-2/step-2.tsx
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep();
+
+File: shared/multi-step/multi-step-2/step-3.tsx
+  → Ditemukan kata: next/dynamic
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep();
+
+File: shared/multi-step/multi-step-2/step-4.tsx
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep();
+
+File: shared/multi-step/multi-step-2/step-5.tsx
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep();
+
+File: shared/multi-step/multi-step-2/step-6.tsx
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep();
+
+File: shared/social-media/dashboard/profile-visits.tsx
+  → Ditemukan kata: @core/utils/next-themes
+
+File: shared/support/inbox/inbox-tabs.tsx
+  → Ditemukan kata: selectTab(nextTab:
+  → Ditemukan kata: setTab(nextTab);
+
+File: shared/support/inbox/message-details.tsx
+  → Ditemukan kata: next/dynamic
+
+File: shared/support/inbox/message-list.tsx
+  → Ditemukan kata: eslint-disable-next-line
+  → Ditemukan kata: eslint-disable-next-line
+
+File: shared/appointment/appointment-list/appointment-form/data-time.tsx
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep();
+  → Ditemukan kata: next2Label={false}
+
+File: shared/appointment/appointment-list/appointment-form/footer.tsx
+  → Ditemukan kata: Next
+
+File: shared/appointment/appointment-list/appointment-form/index.tsx
+  → Ditemukan kata: next/dynamic
+  → Ditemukan kata: gotoNextStep()
+  → Ditemukan kata: gotoNextStep,
+  → Ditemukan kata: eslint-disable-next-line
+
+File: shared/appointment/appointment-list/appointment-form/services.tsx
+  → Ditemukan kata: gotoNextStep
+  → Ditemukan kata: gotoNextStep();
+
+File: shared/ecommerce/order/order-products/order-products.tsx
+  → Ditemukan kata: eslint-disable-next-line
+
+File: shared/ecommerce/product/create-edit/product-summary.tsx
+  → Ditemukan kata: next/dynamic
+
+File: shared/ecommerce/product/create-edit/product-variants.tsx
+  → Ditemukan kata: next/dynamic
+
+File: shared/ecommerce/shop/shop-filters/rating-filter.tsx
+  → Ditemukan kata: eslint-disable-next-line
+
+File: shared/logistics/shipment/create-edit/form-utils.ts
+  → Ditemukan kata: next_day
+
+File: shared/logistics/shipment/create-edit/select-options.ts
+  → Ditemukan kata: Next
+  → Ditemukan kata: next_flight
+  → Ditemukan kata: Next
+  → Ditemukan kata: next_day
+
+File: shared/logistics/shipment/details/invoice-details.tsx
+  → Ditemukan kata: Next
+
+File: shared/podcast/dashboard/music-player/audio-player-context.tsx
+  → Ditemukan kata: seekNext:
+  → Ditemukan kata: seekNext
+  → Ditemukan kata: seekNext,
+
+File: shared/podcast/dashboard/music-player/audio-visualizer.tsx
+  → Ditemukan kata: eslint-disable-next-line
+
+File: shared/podcast/dashboard/music-player/mini-music-player.tsx
+  → Ditemukan kata: eslint-disable-next-line
+
+File: shared/podcast/dashboard/music-player/music-player.tsx
+  → Ditemukan kata: @core/utils/next-themes
+  → Ditemukan kata: seekNext,
+  → Ditemukan kata: eslint-disable-next-line
+  → Ditemukan kata: handleNextPrev
+  → Ditemukan kata: onClick={handleNextPrev}
+  → Ditemukan kata: onClick={seekNext}
+  → Ditemukan kata: onClick={handleNextPrev}
+
+File: shared/store-analytics/dashboard/sales-analysis/index.tsx
+  → Ditemukan kata: next/dynamic

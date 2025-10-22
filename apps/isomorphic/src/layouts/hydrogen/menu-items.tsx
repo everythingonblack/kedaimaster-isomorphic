@@ -2,15 +2,11 @@ import { DUMMY_ID } from '@/config/constants';
 import { routes } from '@/config/routes';
 import {
   PiChartPieSliceDuotone,
-  PiChatCenteredDotsDuotone,
-  PiLockKeyDuotone,
   PiMapPinLineDuotone,
   PiPackageDuotone,
   PiPushPinDuotone,
-  PiShieldCheckDuotone,
   PiSquaresFourDuotone,
   PiUserDuotone,
-  PiUserPlusDuotone,
 } from 'react-icons/pi';
 
 // Note: do not add href in the label object, it is rendering as label
@@ -22,7 +18,7 @@ export const menuItems = [
   // label end
   {
     name: 'Dashboard',
-    href: '/',
+    href: '/dashboard',
     icon: <PiChartPieSliceDuotone />,
   },
   {
@@ -30,17 +26,17 @@ export const menuItems = [
   },
   {
     name: 'Material',
-    href: routes.logistics.dashboard,
+    href: routes.dashboard.material,
     icon: <PiPackageDuotone />,
   },
   {
     name: 'Produk',
-    href: routes.widgets.cards,
+    href: routes.dashboard.product,
     icon: <PiSquaresFourDuotone />,
   },
   {
-    name: 'Store',
-    href: routes.widgets.maps,
+    name: 'Toko',
+    href: routes.dashboard.store,
     icon: <PiMapPinLineDuotone />,
   },
   
@@ -51,12 +47,12 @@ export const menuItems = [
     dropdownItems: [
       {
         name: 'Satuan',
-        href: routes.eCommerce.products,
+        href: routes.dashboard.data,
         badge: '',
       },
       {
         name: 'Kategori Produk',
-        href: routes.eCommerce.productDetails(DUMMY_ID),
+        href: routes.dashboard.categories,
       },
     ],
   },
@@ -68,7 +64,7 @@ export const menuItems = [
   
   {
     name: 'Users',
-    href: routes.widgets.maps,
+    href: routes.dashboard.users,
     icon: <PiUserDuotone />,
   },
 ];
