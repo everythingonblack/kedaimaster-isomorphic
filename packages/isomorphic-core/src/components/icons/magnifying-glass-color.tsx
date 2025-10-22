@@ -2,7 +2,7 @@ export default function MagnifyingGlassIconColor({
   ...props
 }: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" {...props}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="w-5 h-auto">
       <path fill="#537983" d="m271 294.32 23.3-23.3 60.03 60.03-23.3 23.3z" />
       <path fill="#3e5959" d="m282 283.3 12.3-12.28 60.02 60.03-12.28 12.29z" />
       <path

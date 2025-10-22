@@ -8,7 +8,7 @@ export default function BiddingIcon({
       height={19}
       viewBox="0 0 22 19"
       fill="none"
-      {...props}
+      className="w-5 h-auto"
     >
       <path
         fill="#000"

@@ -1,6 +1,6 @@
 export default function BarnIcon({ ...props }: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" {...props}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" className="w-5 h-auto">
       <g data-name="06-barn">
         <path fill="#e9aa70" d="M32 35v24l-7.5-12zM47 35v24l-7.5-12z" />
         <g fill="#d99c64">

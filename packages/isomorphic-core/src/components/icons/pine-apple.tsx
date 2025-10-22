@@ -2,7 +2,7 @@ export default function PineAppleIcon({
   ...props
 }: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" {...props}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className="w-5 h-auto">
       <path
         fill="#5EC62E"
         d="M7.733 5.572a14.36 14.36 0 0 0-1.87-.63h-.009C4.528 5.139 3.4 6.06 2.76 7.469a.149.149 0 0 0 .038.175.138.138 0 0 0 .167.013 11.176 11.176 0 0 1 3.946-1.535l.004-.001.004-.003c.256-.195.53-.366.815-.51l.04-.019-.041-.017Z"

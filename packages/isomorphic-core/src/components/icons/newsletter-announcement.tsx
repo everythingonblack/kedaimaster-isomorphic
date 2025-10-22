@@ -7,7 +7,7 @@ export default function NewsletterAnnouncement({
       xmlns="http://www.w3.org/currentColor/svg"
       viewBox="0 0 20 20"
       fill="none"
-      {...props}
+      className="w-5 h-auto"
     >
       <path fill="#FFE082" d="M10 .441.312 8.098v7.5h19.375v-7.5L10 .44Z" />
       <path fill="#9FA8DA" d="M19.688 19.66H.313v-10l9.687 5 9.688-5v10Z" />

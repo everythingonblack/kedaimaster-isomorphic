@@ -2,7 +2,7 @@ export default function FolderLockIcon({
   ...props
 }: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" {...props}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className="w-5 h-auto">
       <path
         fill="#FFC250"
         d="M.293 11.239h18.085V2.872L1.341 2.867c-.579 0-1.048.47-1.048 1.048v7.324Z"

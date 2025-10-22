@@ -1,6 +1,6 @@
 export default function PlayStoreIcon({ ...props }: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" {...props}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" className="w-5 h-auto">
       <path
         fill="#47BCFF"
         d="m4.883 3.078 10.526 6.076 4.053 2.34a.59.59 0 0 1 .006 1.008l-.018.012-14.559 8.405-.012.006a.592.592 0 0 1-.88-.52V3.595a.591.591 0 0 1 .884-.517Z"

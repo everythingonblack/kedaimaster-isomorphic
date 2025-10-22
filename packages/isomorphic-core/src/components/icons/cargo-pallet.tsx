@@ -7,7 +7,7 @@ export default function CargoPallet({
       width="512"
       height="512"
       viewBox="0 0 512 512"
-      {...props}
+      className="w-5 h-auto"
     >
       <path fill="#e8834d" d="M8 439.95h62.36v33.84H8z" />
       <path fill="#d66e41" d="M8 439.95h62.36v18H8z" />

@@ -2,7 +2,7 @@ export default function ContainerHouseIcon({
   ...props
 }: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" {...props}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="w-5 h-auto">
       <path
         fill="#e8e8e8"
         d="M116.84 440h-64s-10.3-2.24-10.3-5l10.2-18.55 69.1 8.55v10a5 5 0 0 1-5 5z"

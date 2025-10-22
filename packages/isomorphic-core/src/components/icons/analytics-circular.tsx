@@ -6,7 +6,7 @@ export default function AnalyticsCircularIcon({
       viewBox="0 0 20 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      className="w-5 h-auto"
     >
       <path
         d="M15.7036 10.4021C15.7036 13.774 12.9702 16.5074 9.59839 16.5074C6.22656 16.5074 3.49316 13.774 3.49316 10.4021C3.49316 7.03031 6.2266 4.29688 9.59839 4.29688C12.9702 4.29688 15.7036 7.03031 15.7036 10.4021Z"

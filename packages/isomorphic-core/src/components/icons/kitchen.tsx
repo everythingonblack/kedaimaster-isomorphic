@@ -6,7 +6,7 @@ export default function KitchenIcon({
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
-      {...props}
+      className="w-5 h-auto"
     >
       <g fill="currentColor">
         <path d="M16.77 2.95c-.19 0-.35.16-.35.35v1.62a.35.35 0 1 0 .7 0V3.3c0-.19-.15-.35-.35-.35ZM19.6 2.95c-.19 0-.34.16-.34.35v1.62a.35.35 0 1 0 .7 0V3.3c0-.19-.16-.35-.35-.35ZM16.3 14.57h1.93a.35.35 0 0 0 0-.7H16.3a.35.35 0 1 0 0 .7ZM18.23 19.41H16.3a.35.35 0 1 0 0 .7h1.92a.35.35 0 1 0 0-.7Z" />

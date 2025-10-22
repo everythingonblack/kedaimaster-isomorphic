@@ -4,7 +4,7 @@ export default function ESFlagIcon({ ...props }: React.SVGProps<SVGSVGElement>) 
       xmlns="http://www.w3.org/2000/svg"
       id="flag-icon-css-es"
       viewBox="0 0 640 480"
-      {...props}
+      className="w-5 h-auto"
     >
       <path
         fill="#AA151B"

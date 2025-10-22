@@ -120,9 +120,9 @@ export function SidebarMenu() {
                       )}
                       <span className="truncate">{item.name}</span>
                     </div>
-                    {item?.badge?.length ? (
+                    {/* {item?.badge?.length ? (
                       <StatusBadge status={item.badge} />
-                    ) : null}
+                    ) : null} */}
                   </Link>
                 )}
               </>

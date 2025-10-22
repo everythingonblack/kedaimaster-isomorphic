@@ -4,7 +4,7 @@ export default function LinkedInSquareIcon({ ...props }: React.SVGProps<SVGSVGEl
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 32 32"
       fill="none"
-      {...props}
+      className="w-5 h-auto"
     >
       <g clipPath="url(#linkedSquare)">
         <path

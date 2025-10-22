@@ -69,6 +69,9 @@ importers:
       fs-extra:
         specifier: ^11.3.0
         version: 11.3.2
+      jotai:
+        specifier: 2.12.2
+        version: 2.12.2(@types/react@18.3.26)(react@18.3.1)
       react:
         specifier: ^18.2.0
         version: 18.3.1
@@ -9951,6 +9954,11 @@ snapshots:
   jiti@1.21.7: {}
 
   jose@4.15.9: {}
+
+  jotai@2.12.2(@types/react@18.3.26)(react@18.3.1):
+    optionalDependencies:
+      '@types/react': 18.3.26
+      react: 18.3.1
 
   jotai@2.12.2(@types/react@19.2.2)(react@19.2.0):
     optionalDependencies:

@@ -6,7 +6,7 @@ export default function MapMarkerWithPathIcon({
       xmlns="http://www.w3.org/currentColor/svg"
       viewBox="0 0 20 20"
       fill="none"
-      {...props}
+      className="w-5 h-auto"
     >
       <path
         fill="#FFDB56"

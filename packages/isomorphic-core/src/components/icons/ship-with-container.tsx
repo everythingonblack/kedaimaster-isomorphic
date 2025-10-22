@@ -2,7 +2,7 @@ export default function ShipWithContainer({
   ...props
 }: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" {...props}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="w-5 h-auto">
       <path
         fill="#ffd064"
         d="M367.34 144.65V81.64a3 3 0 0 1 3-3h53.37l21.24 2.8a3 3 0 0 1 3 3l-1.98 57.23-35.6 2.98h-16.65l-16.22 4.78z"

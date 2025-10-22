@@ -8,7 +8,7 @@ export default function RealEstateIcon({
       x="0px"
       y="0px"
       viewBox="0 0 512 512"
-      {...props}
+      className="w-5 h-auto"
     >
       <path
         fill="#FFB125"

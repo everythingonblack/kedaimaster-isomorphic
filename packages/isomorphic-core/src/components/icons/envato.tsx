@@ -6,7 +6,7 @@ export default function EnvatoIcon({
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 19 19"
       fill="none"
-      {...props}
+      className="w-5 h-auto"
     >
       <g clipPath="url(#clip0_10156_2589)">
         <path

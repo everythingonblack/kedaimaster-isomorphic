@@ -4,7 +4,7 @@ export default function LightMode({ ...props }: React.SVGProps<SVGSVGElement>) {
       viewBox="0 0 172 102"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      className="w-5 h-auto"
     >
       <rect x="0.5" y="0.5" width="171" height="101" rx="7.5" fill="#FAFAFA" />
       <rect

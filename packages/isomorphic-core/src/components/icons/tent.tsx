@@ -1,6 +1,6 @@
 export default function TentIcon({ ...props }: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="1 -25 512 511" {...props}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="1 -25 512 511" className="w-5 h-auto">
       <g fillRule="evenodd">
         <path fill="#ff6359" d="M256 50.5h78l-20-20 20-20h-78zm0 0" />
         <path

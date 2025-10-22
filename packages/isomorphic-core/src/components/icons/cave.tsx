@@ -1,6 +1,6 @@
 export default function CaveIcon({ ...props }: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" {...props}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="w-5 h-auto">
       <path fill="#785353" d="M111.71 348.19 87.66 179.85l64.13 112.22z" />
       <path
         fill="#d19a6e"

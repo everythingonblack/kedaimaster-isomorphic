@@ -8,8 +8,8 @@ export default function Logo({ iconOnly = false, ...props }: IconProps) {
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox={`0 0 ${iconOnly ? '48 26' : '155 28'}`}
-      {...props}
-    >
+      className="w-auto h-auto"
+>
       <rect
         width="10.16"
         height="19.93"

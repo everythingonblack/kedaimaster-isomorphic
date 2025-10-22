@@ -2,7 +2,7 @@ export default function FarmHouseIcon({
   ...props
 }: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -30 512 511" {...props}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -30 512 511" className="w-5 h-auto">
       <path
         fill="#db9970"
         d="M256.99 270.63c-4.4-.43-8.86-.66-13.38-.66-53.04 0-98.93 30.53-121.1 74.95a98.34 98.34 0 0 0-103.96 57.1H272.1"

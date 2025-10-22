@@ -4,7 +4,7 @@ export default function FigmaIcon({ ...props }: React.SVGProps<SVGSVGElement>) {
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
       fill="none"
-      {...props}
+      className="w-5 h-auto"
     >
       <path fill="#00BCFF" d="M12.028 12a4 4 0 1 1 8 0 4 4 0 0 1-8 0Z" />
       <path

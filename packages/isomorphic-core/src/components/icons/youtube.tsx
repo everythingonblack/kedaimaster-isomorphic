@@ -8,7 +8,7 @@ export default function YoutubeIcon({
       height="24"
       viewBox="0 0 24 24"
       fill="none"
-      {...props}
+      className="w-5 h-auto"
     >
       <g clipPath="url(#clip0_9761_38724)">
         <path

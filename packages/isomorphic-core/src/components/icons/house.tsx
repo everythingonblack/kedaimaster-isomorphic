@@ -1,6 +1,6 @@
 export default function HouseIcon({ ...props }: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" {...props}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="w-5 h-auto">
       <path
         fill="#dc8758"
         d="M256 64.63 38.56 224.93h31.07v248.5h372.74v-248.5h31.06z"

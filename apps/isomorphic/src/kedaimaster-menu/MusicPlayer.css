@@ -1,0 +1,371 @@
+    /* Header */
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+        flex-shrink: 0;
+        /* Mencegah header menyusut */
+    }
+
+    .header h1 {
+        font-size: 1.5em;
+        margin: 0;
+        color: #333;
+        font-weight: 700;
+    }
+
+    .header .logo {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    /* Konten Utama */
+    .main-content {
+        padding: 20px;
+        flex-grow: 1;
+        /* Membuat elemen ini membesar untuk mengisi ruang */
+        overflow-y: auto;
+        /* Memungkinkan scroll jika kontennya banyak */
+    }
+
+    /* Bar Musik - Container Utama */
+    .music-bar {
+        border-radius: 12px;
+        transition: all 0.4s ease-in-out;
+        overflow: hidden;
+        margin-bottom: 24px;
+        /* Agar konten di dalamnya mengikuti border-radius */
+    }
+
+    /* State 1: Menunggu Musik */
+    .music-bar .state-1 {
+        background-color: #e9f3e6;
+        color: #4b8333;
+        padding: 12px 24px;
+        text-align: left;
+        font-weight: 500;
+        cursor: pointer;
+        border-radius: 12px;
+    }
+
+    /* State 2: Pemutar Musik Aktif */
+    .music-bar .state-2 {
+        border-radius: 12px;
+    }
+
+    .music-bar .state-2 .player-header {
+        display: flex;
+        align-items: center;
+        padding: 20px;
+        min-height: 80px;
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://upload.wikimedia.org/wikipedia/en/8/82/Queen_Sheer_Heart_Attack.png');
+        background-size: cover;
+        background-position: center;
+        color: white;
+        cursor: pointer;
+        position: relative;
+        z-index: 2;
+        border-radius: 0px 0px 12px 12px;
+    }
+
+    .music-bar .state-2 .song-info {
+        line-height: 1.2;
+        color: white;
+    }
+
+    .music-bar .state-2 .song-title {
+        margin: 0;
+        font-size: 1.1em;
+        font-weight: 700;
+    }
+
+    .music-bar .state-2 .song-artist {
+        margin: 0;
+        font-size: 0.9em;
+        font-weight: 400;
+    }
+
+    /* Bagian Body yang akan di-expand */
+    .player-body {
+        max-height: 0;
+        /* Awalnya tinggi 0 */
+        overflow: hidden;
+        transition: max-height 0.5s ease-in-out;
+        /* Efek transisi */
+        background-color: white;
+        display: flex;
+        flex-direction: column;
+
+        border: 1px solid #f0f0f0;
+        border-top: 0;
+        border-bottom: 0;
+    }
+
+    .player-body.expanded {
+        max-height: 500px;
+        /* Tinggi maksimal saat expanded */
+    }
+
+    /* Bagian Pencarian */
+    .player-search {
+        padding: 15px;
+        border-bottom: 1px solid #f0f0f0;
+        flex-shrink: 0;
+    }
+
+    .player-search input {
+        width: 100%;
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        box-sizing: border-box;
+        outline: none;
+        font-size: 1em;
+    }
+
+    /* Bagian Playlist & Hasil Pencarian */
+    .player-playlist,
+    .search-results {
+        overflow-y: auto;
+        transition: max-height 0.3s ease-in-out;
+        max-height: 500px;
+        /* Cukup besar untuk tidak membatasi */
+
+        -ms-overflow-style: none;
+        /* Internet Explorer 10+ */
+        scrollbar-width: none;
+        /* Firefox, Safari 18.2+, Chromium 121+ */
+    }
+
+    /* Sembunyikan playlist saat mencari */
+    .player-body.searching .player-playlist {
+        max-height: 0;
+    }
+
+    /* Sembunyikan hasil pencarian saat tidak mencari */
+    .search-results {
+        max-height: 0;
+    }
+
+    .player-body.searching .search-results {
+        max-height: 500px;
+    }
+
+    .song-list {
+        list-style: none;
+        padding: 10px 0px;
+        margin: 0;
+    }
+
+    .song-item {
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        position: relative;
+        background-color: white;
+        /* Latar belakang dasar untuk transisi */
+        cursor: grab;
+    }
+
+    .album-art {
+        width: 45px;
+        height: 45px;
+        border-radius: 6px;
+        margin-right: 15px;
+        object-fit: cover;
+    }
+
+    .song-details {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        pointer-events: none;
+        /* Mencegah elemen anak mencuri event drag */
+    }
+
+    .swipe-right-bg,
+    .swipe-left-bg {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        z-index: 0;
+        /* di bawah isi konten */
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+    }
+
+    .swipe-right-bg {
+        right: 100%;
+        background-color: #b3d9b3;
+        /* Hijau */
+    }
+
+    .swipe-left-bg {
+        left: 100%;
+        background-color: #ffd1d1;
+        /* Merah */
+    }
+
+    .music-bar .state-2 .player-footer {
+        padding: 12px 24px;
+        text-align: center;
+        color: white;
+        font-weight: 500;
+        cursor: pointer;
+        background-color: #6a9c54;
+        position: relative;
+        margin-top: -12px;
+        padding-top: 20px;
+        z-index: 1;
+        transition: margin-top 0.5s ease-in-out, padding-top 0.5s ease-in-out;
+        /* Efek transisi */
+    }
+
+    .music-bar .state-2 .player-footer.expanded {
+        margin-top: 0px;
+        padding-top: 12px;
+    }
+
+    /* Swipe Indicator Styling */
+    .swipe-container {
+        position: relative;
+        height: 39px;
+        background-color: #e9ecef;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-sizing: border-box;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
+
+    .swipe-text {
+        color: #6c757d;
+        font-size: 12px;
+        font-weight: bold;
+        z-index: 1;
+        position: absolute;
+    }
+
+    .swipe-text.left {
+        right: 20px;
+        animation: swipeTextLeftAnimation 5s ease-in-out infinite;
+    }
+
+    .swipe-text.right {
+        left: 20px;
+        animation: swipeTextRightAnimation 5s ease-in-out infinite;
+    }
+
+    .swipe-indicator {
+        position: absolute;
+        height: 50px;
+        left: 0;
+        right: 55%;
+        background-color: #b3d9b3;
+        z-index: 2;
+        animation: swipeAnimation 5s ease-in-out infinite;
+    }
+
+    @keyframes swipeAnimation {
+
+        0%,
+        15% {
+            left: 0;
+            right: 55%;
+            background-color: #ffd1d1;
+        }
+        18%{left:0;}
+        25% {
+            right: 0;
+        }
+
+        35% {
+            background-color: #b3d9b3;
+        }
+
+        50%,
+        65% {
+            left: 55%;
+            right: 0;
+            background-color: #b3d9b3;
+        }
+
+        68%{right:0;}
+
+        75% {
+            left: 0;
+        }
+
+        85% {
+            background-color: #ffd1d1;
+            left: 0;
+        }
+
+        100% {
+            left: 0;
+            right: 55%;
+            background-color: #ffd1d1;
+        }
+    }
+
+    @keyframes swipeTextLeftAnimation {
+
+        0%,
+        18% {
+            visibility: visible;
+        }
+
+        24% {
+             visibility: visible;
+
+        }
+        25% {
+             visibility: hidden;
+
+        }
+
+        74% {
+            visibility: hidden;
+
+        }
+        
+        75% {
+            visibility: visible;
+
+        }
+    }
+    
+
+    @keyframes swipeTextRightAnimation {
+
+        0%,
+        17% {
+            visibility: hidden;
+        }
+
+        18% {
+             visibility: visible;
+
+        }
+
+        75% {
+            visibility: hidden;
+
+        }
+
+        100% {
+            visibility: hidden;
+        }
+    }

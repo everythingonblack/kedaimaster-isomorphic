@@ -7,7 +7,7 @@ export default function ExpressDeliveryIcon({
       width="512"
       height="512"
       viewBox="0 0 512 512"
-      {...props}
+      className="w-5 h-auto"
     >
       <path
         fill="#ffd064"

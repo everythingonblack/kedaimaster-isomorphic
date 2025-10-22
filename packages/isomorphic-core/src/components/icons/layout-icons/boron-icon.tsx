@@ -4,7 +4,7 @@ export default function BoronIcon({ ...props }: React.SVGProps<SVGSVGElement>) {
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 66 56"
       fill="none"
-      {...props}
+      className="w-5 h-auto"
     >
       <path
         fill="currentColor"

@@ -7,7 +7,7 @@ export default function DriveIcon({
       fill="none"
       viewBox="0 0 30 31"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      className="w-5 h-auto"
     >
       <path
         d="m27.825 22.574-.395 4.903a.668.668 0 0 1-.663.608h-1.302a.667.667 0 0 1-.664-.663v-4.469l1.516-.19 1.508-.189Z"

@@ -6,7 +6,7 @@ export default function RoomSingleIconColor({
       xmlns="http://www.w3.org/2000/svg"
       data-name="Layer 3"
       viewBox="0 0 64 64"
-      {...props}
+      className="w-5 h-auto"
     >
       <path fill="#914027" d="M8 7h48v22H8z" />
       <g fill="#b7533e">

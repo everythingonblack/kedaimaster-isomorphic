@@ -7,7 +7,7 @@ export default function ExpenseIcon({
       width="512"
       height="512"
       viewBox="0 0 60 60"
-      {...props}
+      className="w-5 h-auto"
     >
       <path
         fill="#d6dbe3"

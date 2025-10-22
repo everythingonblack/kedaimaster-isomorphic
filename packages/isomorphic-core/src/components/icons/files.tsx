@@ -4,7 +4,7 @@ export default function FilesIcon({ ...props }: React.SVGProps<SVGSVGElement>) {
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 20 20"
       fill="none"
-      {...props}
+      className="w-5 h-auto"
     >
       <g clipPath="url(#a)">
         <path fill="#F2F6FC" d="M1.563 14.688h5.625v1.874H1.563v-1.875Z" />

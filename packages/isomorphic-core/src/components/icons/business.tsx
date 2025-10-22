@@ -2,7 +2,7 @@ export default function BusinessIcon({
   ...props
 }: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" {...props}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="w-5 h-auto">
       <g fillRule="evenodd" clipRule="evenodd">
         <path
           fill="#837683"

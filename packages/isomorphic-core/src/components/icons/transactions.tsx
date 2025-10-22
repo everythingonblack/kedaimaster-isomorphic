@@ -2,7 +2,7 @@ export default function TransactionIcon({
   ...props
 }: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" {...props}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="w-5 h-auto">
       <path
         fill="#91def5"
         d="M458.07 141.3 443.01 65l-15.08 15.07A244.5 244.5 0 0 0 256 10c-65.7 0-127.48 25.59-173.95 72.05S10 190.3 10 256h44c0-111.38 90.62-202 202-202 52.96 0 102.9 20.3 140.81 57.19l-15.04 15.04z"

@@ -2,7 +2,7 @@ export default function CastleIcon({
   ...props
 }: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 496" {...props}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 496" className="w-5 h-auto">
       <path fill="#d3a06c" d="m248 64 64 72H184z" />
       <path
         fill="#cf9e76"

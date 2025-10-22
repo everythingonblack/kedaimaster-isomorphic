@@ -2,7 +2,7 @@ export default function ChickenIcon({
   ...props
 }: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" {...props}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className="w-5 h-auto">
       <path
         fill="#D87E35"
         d="M15.45 9.057c.517 1.586 2.912 1.132 2.912 2.657 0 1.393-4.298 2.257-5.694 2.33l-5.822.107c-3.729 0-6.431-1.017-6.431-4.073 0-3.056 2.757-6.365 6.699-6.365 3.723 0 7.386 2.425 8.336 5.344Z"

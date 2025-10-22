@@ -79,8 +79,7 @@ export function Modal({
         <DialogBackdrop
           transition
           className={cn(modalStyles.overlay, overlayClassName)}
-        />
-        <DialogPanel
+        /><DialogPanel
           transition
           className={cn(
             modalStyles.panel,
@@ -94,7 +93,7 @@ export function Modal({
             },
           })}
         >
-          {children}
+          {() => <>{children}</>}
         </DialogPanel>
       </div>
     </Dialog>

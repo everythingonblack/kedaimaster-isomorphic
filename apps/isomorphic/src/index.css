@@ -1,5 +1,5 @@
 @import './app/react-big-calendar.css';
-@import 'react-calendar/dist/Calendar.css';
+/* @import 'react-calendar/dist/Calendar.css'; */
 
 @tailwind base;
 @tailwind components;

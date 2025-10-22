@@ -6,7 +6,7 @@ export default function AirConditionerIcon({
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
-      {...props}
+      className="w-5 h-auto"
     >
       <path
         fill="currentColor"

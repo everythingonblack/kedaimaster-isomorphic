@@ -8,7 +8,7 @@ export default function PoolTableIcon({
       height="24"
       viewBox="0 0 24 24"
       fill="none"
-      {...props}
+      className="w-5 h-auto"
     >
       <g clipPath="url(#clip0_5588_10644)">
         <path

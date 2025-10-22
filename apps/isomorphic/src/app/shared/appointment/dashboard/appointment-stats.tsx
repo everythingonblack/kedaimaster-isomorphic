@@ -77,7 +77,7 @@ export default function AppointmentStats({ className }: AppointmentStatsType) {
   return (
     <div
       className={cn(
-        'relative flex w-auto items-center overflow-hidden',
+        'relative flex w-auto items-center',
         className
       )}
     >
