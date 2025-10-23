@@ -52,7 +52,7 @@ export const materialsListColumns = [
   }),
 
   // Kolom Satuan (UOM)
-  columnHelper.accessor('uom.name', {
+  columnHelper.accessor((row) => row.uom?.name, {
     id: 'uom',
     header: 'Unit',
     size: 100,

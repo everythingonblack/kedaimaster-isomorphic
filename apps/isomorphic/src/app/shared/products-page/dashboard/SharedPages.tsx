@@ -23,6 +23,9 @@ export default function StockReport({ className }: { className?: string }) {
         handleDeleteRow: (row: ProductType) => {
           setData((prev) => prev.filter((r) => r.id !== row.id));
         },
+        handleMultipleDelete: (rows: ProductType[]) => {
+          setData((prev) => prev.filter((r) => !rows.some((s) => s.id === r.id)));
+        },
       },
       enableColumnResizing: false,
     },
