@@ -7,5 +7,5 @@
       "@core/*": ["./src/*"]
     }
   },
-  "include": [".", "./types/**/*.ts", "../../apps/isomorphic/src/app/shared/table-meta.d.ts"]
+  "include": [".", "./types/**/*.ts", "./types/react-table.d.ts"]
 }

@@ -1,12 +1,22 @@
+interface AuthModalProps {
+  show: boolean;
+  onClose: (loginSuccess?: boolean) => void;
+  initialMode: 'login' | 'register';
+}
+
+interface PricingModalProps {
+  show: boolean;
+  onClose: () => void;
+  packageType: string;
+}
+
 import React, { useState, useEffect } from "react";
 import "./page.css";
 import { useNavigate  } from "react-router-dom";
 // Impor AuthModal yang sudah dipisah
-import AuthModal from "./src/components/AuthModal"; 
 // Impor fungsi API
 import { getTokens, clearTokens, getProfile } from "@/kedaimaster-api/authApi";
 
-import PricingModal from "./PricingModal";
 
 const link = document.createElement("link");
 link.rel = "stylesheet";
@@ -16,13 +26,21 @@ document.head.appendChild(link);
 // Mengimpor fungsi otentikasi dari file API (mock)
 import { authenticate, registerUser } from '@/kedaimaster-api/authApi';
 
+interface UserData {
+  id: string;
+  email: string;
+  name?: string; // Assuming name might be part of user data
+  role: string;
+}
+
 // --- Komponen Modal Otentikasi ---
-const AuthModal = ({ show, onClose, initialMode }) => {
+const AuthModal: React.FC<AuthModalProps> = ({ show, onClose, initialMode }) => {
   const navigate = useNavigate();
-  const [mode, setMode] = useState(initialMode); // 'login' or 'register'
+  const [mode, setMode] = useState<'login' | 'register'>(initialMode); // 'login' or 'register'
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState(''); // New state for password confirmation
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
@@ -34,9 +52,10 @@ const AuthModal = ({ show, onClose, initialMode }) => {
     setEmail('');
     setPassword('');
     setName('');
+    setPasswordConfirm(''); // Reset passwordConfirm
   }, [show, initialMode]);
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setSuccessMessage('');
@@ -48,7 +67,7 @@ const AuthModal = ({ show, onClose, initialMode }) => {
       setTimeout(() => {
         navigate('/dashboard');
       }, 2000);
-    } catch (err) {
+    } catch (err: any) {
       setError(err.message || 'Email atau password salah.');
       console.error('Login gagal:', err);
     } finally {
@@ -56,17 +75,20 @@ const AuthModal = ({ show, onClose, initialMode }) => {
     }
   };
 
-  const handleRegister = async (e) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setSuccessMessage('');
     setIsLoading(true);
     try {
-      const newUser = await registerUser({ name, email, password });
+      if (password !== passwordConfirm) {
+        throw new Error('Password dan konfirmasi password tidak cocok.');
+      }
+      const newUser = await registerUser({ email, password, passwordConfirm, role: 'user' });
       console.log('Registrasi berhasil:', newUser);
       setSuccessMessage('Registrasi berhasil! Silakan login.');
       setMode('login'); // Ganti mode ke login setelah berhasil registrasi
-    } catch (err) {
+    } catch (err: any) {
       setError(err.message || 'Gagal melakukan registrasi.');
       console.error('Registrasi gagal:', err);
     } finally {
@@ -81,11 +103,11 @@ const AuthModal = ({ show, onClose, initialMode }) => {
   const isLoginMode = mode === 'login';
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 transition-opacity" onClick={onClose}>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 transition-opacity" onClick={() => onClose()}>
       <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-md m-4 transform transition-all" onClick={(e) => e.stopPropagation()}>
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold">{isLoginMode ? 'Masuk' : 'Daftar Akun Baru'}</h2>
-          <button onClick={onClose} className="text-slate-500 hover:text-slate-800 text-2xl">&times;</button>
+          <button onClick={() => onClose()} className="text-slate-500 hover:text-slate-800 text-2xl">&times;</button>
         </div>
 
         {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-md mb-4" role="alert">{error}</div>}
@@ -160,7 +182,7 @@ const AuthModal = ({ show, onClose, initialMode }) => {
 
 
 // --- Komponen Placeholder untuk PricingModal ---
-const PricingModal = ({ show, onClose, packageType }) => {
+const PricingModal: React.FC<PricingModalProps> = ({ show, onClose, packageType }) => {
   if (!show) return null;
 
   return (
@@ -184,7 +206,7 @@ const KedaiMasterPage = () => {
   // State baru untuk status otentikasi
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAuthLoading, setIsAuthLoading] = useState(true); // Mulai dengan loading
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState<UserData | null>(null);
 
   // Cek token saat komponen dimuat
   useEffect(() => {
@@ -208,7 +230,7 @@ const KedaiMasterPage = () => {
         console.log("Token valid, pengguna login:", profile);
         setIsAuthenticated(true);
         setUserData(profile);
-      } catch (error) {
+      } catch (error: any) {
         console.error("Gagal memvalidasi token:", error.message);
         if (error.status === 401 || error.status === 403) {
           console.log("Token tidak valid atau expired, membersihkan token.");
@@ -234,7 +256,7 @@ const KedaiMasterPage = () => {
     }
   }, []);
 
-  const openPricingModal = (packageType) => {
+  const openPricingModal = (packageType: string) => {
     setSelectedPackage(packageType);
     setShowPricingModal(true);
   };
@@ -243,22 +265,24 @@ const KedaiMasterPage = () => {
     setShowPricingModal(false);
   };
 
-  const openAuthModal = (mode) => {
+  const openAuthModal = (mode: 'login' | 'register') => {
     setAuthMode(mode);
     setShowAuthModal(true);
   };
 
-  const closeAuthModal = (loginSuccess) => {
+  const closeAuthModal = (loginSuccess?: boolean) => {
     setShowAuthModal(false);
     // Jika login sukses, kita refresh status auth
     if (loginSuccess) {
       setIsAuthLoading(true);
       getProfile()
-        .then(profile => {
-          setIsAuthenticated(true);
-          setUserData(profile);
+        .then((profile: UserData | null) => {
+          if (profile) {
+            setIsAuthenticated(true);
+            setUserData(profile);
+          }
         })
-        .catch(err => console.error("Gagal fetch profil setelah login", err))
+        .catch((err: any) => console.error("Gagal fetch profil setelah login", err))
         .finally(() => setIsAuthLoading(false));
     }
   };
@@ -315,7 +339,7 @@ const KedaiMasterPage = () => {
               src="/kedaimaster.jpg"
               alt="Logo The Horee Cafe"
               className="w-10 h-10 rounded-full"
-              onError={(e) => { e.target.onerror = null; e.target.src="https://placehold.co/40x40/10b981/white?text=K"; }}
+              onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => { (e.target as HTMLImageElement).onerror = null; (e.target as HTMLImageElement).src="https://placehold.co/40x40/10b981/white?text=K"; }}
             />
             <span className="text-xl font-bold tracking-tight">
               Kedai Master
@@ -1190,10 +1214,10 @@ const KedaiMasterPage = () => {
         packageType={selectedPackage}
       />
 
-      <AuthModal 
+      <AuthModal
         show={showAuthModal}
         onClose={closeAuthModal}
-        initialMode={authMode}
+        initialMode={authMode as 'login' | 'register'}
       />
     </div>
   );

@@ -14,7 +14,7 @@ import { PiMagnifyingGlassBold } from 'react-icons/pi';
 export default function StockReport({ className }: { className?: string }) {
   const { table, setData } = useTanStackTable<ProductType>({
     tableData: [],
-    columnConfig: productsListColumns,
+    columnConfig: productsListColumns as any,
     options: {
       initialState: {
         pagination: { pageIndex: 0, pageSize: 10 },

@@ -23,6 +23,6 @@
       "@core/*": ["../../packages/isomorphic-core/src/*"]
     }
   },
-  "include": ["src", "vite-env.d.ts"],
+  "include": ["src", "vite-env.d.ts", "../../packages/isomorphic-core/types/**/*.ts"],
   "exclude": ["node_modules"]
 }
