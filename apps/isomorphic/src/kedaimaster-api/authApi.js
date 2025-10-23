@@ -37,21 +37,26 @@ export async function apiRequest(endpoint, method = 'POST', data = {}, retry = t
   const { accessToken } = getTokens();
 
   try {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    const options = {
       method,
       headers: {
         'Content-Type': 'application/json',
         ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
       },
-      body: JSON.stringify(data),
-    });
+    };
 
-    // coba parse JSON, fallback ke objek kosong
+    // ❗ hanya kirim body kalau bukan GET/HEAD
+    if (method !== 'GET' && method !== 'HEAD') {
+      options.body = JSON.stringify(data);
+    }
+
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
+
     const result = await response.json().catch(() => ({}));
 
     if (response.ok) return result;
 
-    // Jika token expired, coba refresh otomatis
+    // Token expired → refresh otomatis
     if (retry && (response.status === 401 || response.status === 403)) {
       const refreshed = await tryRefreshToken();
       if (refreshed) {
@@ -71,6 +76,7 @@ export async function apiRequest(endpoint, method = 'POST', data = {}, retry = t
     throw error;
   }
 }
+
 
 /**
  * Coba refresh token

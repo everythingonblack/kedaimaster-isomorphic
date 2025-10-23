@@ -1,1 +1,0 @@
-import {getAllProducts} from '@/kedaimaster-api/productsApi';

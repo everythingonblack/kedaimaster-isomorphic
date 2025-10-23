@@ -1,6 +1,7 @@
 'use client';
 
-import { productsData } from '@/data/products-data';
+import { useEffect } from 'react';
+import { fetchProducts, ProductType } from '@/kedaimaster-api-handlers/productApiHandlers';
 import { productsListColumns } from '@/app/shared/ecommerce/product/product-list/columns';
 import { useTanStackTable } from '@core/components/table/custom/use-TanStack-Table';
 import Table from '@core/components/table';
@@ -10,27 +11,31 @@ import TablePagination from '@core/components/table/pagination';
 import { Input } from 'rizzui';
 import { PiMagnifyingGlassBold } from 'react-icons/pi';
 
-export type ProductsDataType = (typeof productsData)[number];
-
 export default function StockReport({ className }: { className?: string }) {
-  const { table, setData } = useTanStackTable<ProductsDataType>({
-    tableData: productsData,
+  const { table, setData } = useTanStackTable<ProductType>({
+    tableData: [],
     columnConfig: productsListColumns,
     options: {
       initialState: {
-        pagination: {
-          pageIndex: 0,
-          pageSize: 10,
-        },
+        pagination: { pageIndex: 0, pageSize: 10 },
       },
       meta: {
-        handleDeleteRow: (row: ProductsDataType) => {
+        handleDeleteRow: (row: ProductType) => {
           setData((prev) => prev.filter((r) => r.id !== row.id));
         },
       },
       enableColumnResizing: false,
     },
   });
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      const data = await fetchProducts();
+      setData(data);
+    };
+    loadProducts();
+  }, [setData]);
+
   return (
     <WidgetCard
       title="Stock Report"
@@ -39,9 +44,9 @@ export default function StockReport({ className }: { className?: string }) {
       action={
         <Input
           type="search"
-          clearable={true}
+          clearable
           inputClassName="h-[36px]"
-          placeholder="Search by patient name..."
+          placeholder="Search product..."
           onClear={() => table.setGlobalFilter('')}
           value={table.getState().globalFilter ?? ''}
           prefix={<PiMagnifyingGlassBold className="size-4" />}
