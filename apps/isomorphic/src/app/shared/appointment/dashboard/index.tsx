@@ -15,10 +15,11 @@ export default function AppointmentDashboard() {
       {/* <ScheduleList className="col-span-full @[59rem]:col-span-6 @[90rem]:col-span-5" /> */}
       <AppointmentTodo className="col-span-full @[59rem]:col-span-6 @[90rem]:col-span-4" />
       <Patients className="col-span-full @[59rem]:col-span-6 @[90rem]:col-span-4" />
+            <PatientAppointment className="col-span-full @[90rem]:col-span-7" />
+
       <Department className="col-span-full @[59rem]:col-span-6 @[90rem]:col-span-4" />
       {/* <UpcomingAppointmentTable className="col-span-full" /> */}
-      <PatientAppointment className="col-span-full @[59rem]:col-span-6 @[90rem]:col-span-7 @[90rem]:col-start-auto @[90rem]:row-start-auto" />
-      <AppointmentDiseases className="col-span-full @[59rem]:col-span-6 @[90rem]:col-span-5" />
+      <AppointmentDiseases className="col-span-full @[59rem]:col-span-6 @[90rem]:col-span-5" />      
     </div>
   );
 }

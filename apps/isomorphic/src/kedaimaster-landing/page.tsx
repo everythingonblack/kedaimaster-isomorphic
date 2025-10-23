@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "./page.css";
+import { useNavigate  } from "react-router-dom";
+// Impor AuthModal yang sudah dipisah
+import AuthModal from "./src/components/AuthModal"; 
+// Impor fungsi API
+import { getTokens, clearTokens, getProfile } from "@/kedaimaster-api/authApi";
+
 import PricingModal from "./PricingModal";
 
 const link = document.createElement("link");
@@ -12,6 +18,7 @@ import { authenticate, registerUser } from '@/kedaimaster-api/authApi';
 
 // --- Komponen Modal Otentikasi ---
 const AuthModal = ({ show, onClose, initialMode }) => {
+  const navigate = useNavigate();
   const [mode, setMode] = useState(initialMode); // 'login' or 'register'
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -37,9 +44,9 @@ const AuthModal = ({ show, onClose, initialMode }) => {
     try {
       const user = await authenticate({ email, password });
       console.log('Login berhasil:', user);
-      setSuccessMessage('Login berhasil! Menutup modal...');
+      setSuccessMessage('Login berhasil!');
       setTimeout(() => {
-        onClose();
+        navigate('/dashboard');
       }, 2000);
     } catch (err) {
       setError(err.message || 'Email atau password salah.');
@@ -174,6 +181,49 @@ const KedaiMasterPage = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState('login'); // 'login' or 'register'
 
+  // State baru untuk status otentikasi
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthLoading, setIsAuthLoading] = useState(true); // Mulai dengan loading
+  const [userData, setUserData] = useState(null);
+
+  // Cek token saat komponen dimuat
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      setIsAuthLoading(true);
+      const { accessToken } = getTokens();
+
+      if (!accessToken) {
+        console.log("Tidak ada token, pengguna logout.");
+        setIsAuthenticated(false);
+        setIsAuthLoading(false);
+        setUserData(null);
+        return;
+      }
+
+      try {
+        // Coba ambil profil pengguna untuk memvalidasi token
+        console.log("Token ditemukan, memvalidasi...");
+        const profile = await getProfile(); // Menggunakan fungsi getProfile dari authApi.js
+        if(!profile) throw { status: 401, message: "Token tidak valid" };
+        console.log("Token valid, pengguna login:", profile);
+        setIsAuthenticated(true);
+        setUserData(profile);
+      } catch (error) {
+        console.error("Gagal memvalidasi token:", error.message);
+        if (error.status === 401 || error.status === 403) {
+          console.log("Token tidak valid atau expired, membersihkan token.");
+          clearTokens(); // Hapus token yang tidak valid
+        }
+        setIsAuthenticated(false);
+        setUserData(null);
+      } finally {
+        setIsAuthLoading(false);
+      }
+    };
+
+    checkAuthStatus();
+  }, []); // [] berarti hanya berjalan sekali saat mount
+
   useEffect(() => {
     const link = document.createElement("link");
     link.rel = "stylesheet";
@@ -198,8 +248,60 @@ const KedaiMasterPage = () => {
     setShowAuthModal(true);
   };
 
-  const closeAuthModal = () => {
+  const closeAuthModal = (loginSuccess) => {
     setShowAuthModal(false);
+    // Jika login sukses, kita refresh status auth
+    if (loginSuccess) {
+      setIsAuthLoading(true);
+      getProfile()
+        .then(profile => {
+          setIsAuthenticated(true);
+          setUserData(profile);
+        })
+        .catch(err => console.error("Gagal fetch profil setelah login", err))
+        .finally(() => setIsAuthLoading(false));
+    }
+  };
+
+  const handleLogout = () => {
+    clearTokens();
+    setIsAuthenticated(false);
+    setUserData(null);
+    console.log("Pengguna telah logout.");
+  };
+
+  // Render tombol di header berdasarkan status otentikasi
+  const renderAuthButton = () => {
+    if (isAuthLoading) {
+      return (
+        <span className="text-slate-700 text-sm px-4 py-2">Memeriksa...</span>
+      );
+    }
+
+    if (isAuthenticated) {
+      return (
+        <div className="flex items-center gap-4">
+           <span className="text-sm text-slate-600 hidden md:block">
+             Halo, {userData?.name || userData?.email || 'Pengguna'}!
+           </span>
+           <button
+             onClick={handleLogout}
+             className="bg-red-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-red-600 transition-colors text-sm"
+           >
+             Logout
+           </button>
+        </div>
+      );
+    }
+
+    return (
+      <button
+        onClick={() => openAuthModal('login')}
+        className="bg-slate-200 text-slate-700 font-semibold px-4 py-2 rounded-lg hover:bg-slate-300 transition-colors text-sm"
+      >
+        Masuk
+      </button>
+    );
   };
 
 
@@ -213,6 +315,7 @@ const KedaiMasterPage = () => {
               src="/kedaimaster.jpg"
               alt="Logo The Horee Cafe"
               className="w-10 h-10 rounded-full"
+              onError={(e) => { e.target.onerror = null; e.target.src="https://placehold.co/40x40/10b981/white?text=K"; }}
             />
             <span className="text-xl font-bold tracking-tight">
               Kedai Master

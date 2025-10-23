@@ -10,7 +10,7 @@ const isomorphicDirectionAtomWithPersistence = atom(
   (get) => get(isomorphicDirectionAtom),
   (get, set, newStorage: any) => {
     set(isomorphicDirectionAtom, newStorage);
-    localStorage.setItem('iso-direction', newStorage);
+    // localStorage.setItem('iso-direction', newStorage);
   }
 );
 

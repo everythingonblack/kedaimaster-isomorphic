@@ -3,7 +3,7 @@
 import { Title, Text, Avatar, Button, Popover } from 'rizzui';
 import cn from '@core/utils/class-names';
 import { routes } from '@/config/routes';
-// import { signOut } from 'next-auth/react';
+import { logOut } from '@/kedaimaster-api/authApi';
 import {Link} from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -108,7 +108,7 @@ function DropdownMenu() {
         <Button
           className="h-auto w-full justify-start p-0 font-medium text-gray-700 outline-none focus-within:text-gray-600 hover:text-gray-900 focus-visible:ring-0"
           variant="text"
-          // onClick={() => signOut()}
+          onClick={() => logOut()}
         >
           Sign Out
         </Button>

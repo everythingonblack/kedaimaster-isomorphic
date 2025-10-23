@@ -7,7 +7,7 @@ const REFRESH_TOKEN_KEY = 'refreshToken';
 /**
  * Ambil token dari localStorage
  */
-function getTokens() {
+export function getTokens() {
   return {
     accessToken: localStorage.getItem(ACCESS_TOKEN_KEY),
     refreshToken: localStorage.getItem(REFRESH_TOKEN_KEY),
@@ -33,7 +33,7 @@ export function clearTokens() {
 /**
  * Fungsi utama pemanggil API
  */
-async function apiRequest(endpoint, method = 'POST', data = {}, retry = true) {
+export async function apiRequest(endpoint, method = 'POST', data = {}, retry = true) {
   const { accessToken } = getTokens();
 
   try {
@@ -118,4 +118,14 @@ export async function refreshTokenManually() {
   const { refreshToken } = getTokens();
   if (!refreshToken) throw new Error('No refresh token found');
   return apiRequest('/refreshToken', 'POST', { refreshToken });
+}
+
+
+export function getProfile() {
+  return null;
+}
+
+export function logOut(){
+  clearTokens();
+  window.location.href = '/';
 }

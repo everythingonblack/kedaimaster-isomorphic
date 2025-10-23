@@ -14,7 +14,7 @@ const isomorphicLayoutAtomWithPersistence = atom(
   (get) => get(isomorphicLayoutAtom),
   (get, set, newStorage: any) => {
     set(isomorphicLayoutAtom, newStorage);
-    localStorage.setItem('isomorphic-layout', newStorage);
+    // localStorage.setItem('isomorphic-layout', newStorage);
   }
 );
 

@@ -27,7 +27,7 @@ const colorPresetsAtomWithPersistence = atom(
   (get) => get(colorPresetsAtom),
   (get, set, newStorage: any) => {
     set(colorPresetsAtom, newStorage);
-    localStorage.setItem('isomorphic-preset', JSON.stringify(newStorage));
+    // localStorage.setItem('isomorphic-preset', JSON.stringify(newStorage));
   }
 );
 
@@ -52,7 +52,7 @@ const colorPresetNameAtomWithPersistence = atom(
   (get) => get(colorPresetNameAtom),
   (get, set, newStorage: any) => {
     set(colorPresetNameAtom, newStorage);
-    localStorage.setItem('isomorphic-preset-name', newStorage);
+    // localStorage.setItem('isomorphic-preset-name', newStorage);
   }
 );
 

@@ -43,23 +43,22 @@ export default function TablePagination<TData extends Record<string, any>>({
       className={cn("@container", className)}
     >
       <Flex align="center" className="w-auto shrink-0">
-        <Text className="hidden font-normal text-gray-600 @md:block">
+        <Text className="font-normal text-gray-600 @md:block">
           Rows per page
         </Text>
-        <Select
-          size="sm"
-          variant="flat"
-          options={options}
-          className="w-12"
+        <select
+          className="pb-0 pt-0 w-12 font-semibold text-xs ring-0 shadow-sm h-7 px-1 rounded border border-gray-300"
           value={table.getState().pagination.pageSize}
-          onChange={(v: SelectOption) => {
-            table.setPageSize(Number(v.value));
-          }}
-          suffixClassName="[&>svg]:size-3"
-          selectClassName="font-semibold text-xs ring-0 shadow-sm h-7"
-          optionClassName="font-medium text-xs px-2 justify-center"
-        />
+          onChange={(e) => table.setPageSize(Number(e.target.value))}
+        >
+          {options.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
       </Flex>
+
       {showSelectedCount && (
         <Box className="hidden @2xl:block w-full">
           <Text>
@@ -94,7 +93,7 @@ export default function TablePagination<TData extends Record<string, any>>({
             disabled={!table.getCanPreviousPage()}
             className="text-gray-900 shadow-sm disabled:text-gray-400 disabled:shadow-none"
           >
-            <PiCaretRightBold className="size-3.5" />
+            <PiCaretLeftBold className="size-3.5" />
           </ActionIcon>
           <ActionIcon
             size="sm"
@@ -105,7 +104,7 @@ export default function TablePagination<TData extends Record<string, any>>({
             disabled={!table.getCanNextPage()}
             className="text-gray-900 shadow-sm disabled:text-gray-400 disabled:shadow-none"
           >
-            <PiCaretLeftBold className="size-3.5" />
+            <PiCaretRightBold className="size-3.5" />
           </ActionIcon>
           <ActionIcon
             size="sm"

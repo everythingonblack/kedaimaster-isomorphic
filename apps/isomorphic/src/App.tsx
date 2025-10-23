@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LandingPage from '@/kedaimaster-landing/page';
 import HydrogenLayout from '@/layouts/hydrogen/layout';
 import AppointmentDashboard from '@/app/shared/appointment/dashboard/index';
+import ProductDashboard from '@/app/shared/ecommerce/dashboard/index';
 
 // Dummy pages
 const MaterialPage = () => <div>Material Page</div>;
@@ -22,7 +23,7 @@ function App() {
         <Route path="/dashboard" element={<HydrogenLayout />}>
           <Route index element={<AppointmentDashboard />} />
           <Route path="material" element={<MaterialPage />} />
-          <Route path="product" element={<ProductPage />} />
+          <Route path="product" element={<ProductDashboard />} />
           <Route path="store" element={<StorePage />} />
           <Route path="data" element={<DataPage />} />
           <Route path="categories" element={<CategoriesPage />} />

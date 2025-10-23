@@ -8,7 +8,7 @@ import ProfitWidget from '@/app/shared/ecommerce/dashboard/profit-widget';
 import SalesReport from '@/app/shared/ecommerce/dashboard/sales-report';
 import BestSellers from '@/app/shared/ecommerce/dashboard/best-sellers';
 import RepeatCustomerRate from '@/app/shared/ecommerce/dashboard/repeat-customer-rate';
-import UserLocation from '@/app/shared/ecommerce/dashboard/user-location';
+// import UserLocation from '@/app/shared/ecommerce/dashboard/user-location';
 import PromotionalSales from '@/app/shared/ecommerce/dashboard/promotional-sales';
 import RecentOrder from '@/app/shared/ecommerce/dashboard/recent-order';
 import StockReport from '@/app/shared/ecommerce/dashboard/stock-report';
@@ -63,7 +63,7 @@ export default function EcommerceDashboard() {
 
         <BestSellers className="@7xl:col-span-6 @[90rem]:col-span-4" />
 
-        <UserLocation className="@7xl:col-span-6 @[90rem]:col-span-5 @[112rem]:col-span-4" />
+        {/* <UserLocation className="@7xl:col-span-6 @[90rem]:col-span-5 @[112rem]:col-span-4" /> */}
 
         <StockReport className="@4xl:col-span-2 @7xl:col-span-12 @[90rem]:col-span-7 @[112rem]:col-span-8" />
       </div>

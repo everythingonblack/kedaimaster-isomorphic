@@ -108,6 +108,8 @@ export default function UploadZone({
     accept: fileTypes ? generateClientDropzoneAccept(fileTypes) : undefined,
   });
 
+  const rootProps = getRootProps();
+
   return (
     <div className={cn("grid @container", className)}>
       {label && <span className="mb-1.5 block font-semibold text-gray-900">{label}</span>}
@@ -266,7 +268,7 @@ function MediaPreview({ name, url }: { name: string; url: string }) {
       </p>
     </object>
   ) : (
-    <img fill
+    <img
       src={url}
       alt={name}
       className="transform rounded-md object-contain"
