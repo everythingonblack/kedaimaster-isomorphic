@@ -1,11 +1,11 @@
-import AppointmentStats from '@/app/shared/appointment/dashboard/appointment-stats';
-import AppointmentDiseases from '@/app/shared/appointment/dashboard/appointment-diseases';
-import Department from '@/app/shared/appointment/dashboard/department';
-import TotalAppointment from '@/app/shared/appointment/dashboard/total-appointment';
-import Patients from '@/app/shared/appointment/dashboard/patients';
-import PatientAppointment from '@/app/shared/appointment/dashboard/patient-appointment';
-import ScheduleList from '@/app/shared/appointment/dashboard/schedule-list';
-import AppointmentTodo from '@/app/shared/appointment/dashboard/appointment-todo';
+import AppointmentStats from '@/app/shared/dashboard-page/dashboard/appointment-stats';
+import AppointmentDiseases from '@/app/shared/dashboard-page/dashboard/appointment-diseases';
+import Department from '@/app/shared/dashboard-page/dashboard/department';
+import TotalAppointment from '@/app/shared/dashboard-page/dashboard/total-appointment';
+import Patients from '@/app/shared/dashboard-page/dashboard/patients';
+import PatientAppointment from '@/app/shared/dashboard-page/dashboard/patient-appointment';
+import ScheduleList from '@/app/shared/dashboard-page/dashboard/schedule-list';
+import AppointmentTodo from '@/app/shared/dashboard-page/dashboard/appointment-todo';
 
 export default function AppointmentDashboard() {
   return (

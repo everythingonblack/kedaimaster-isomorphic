@@ -1,5 +1,5 @@
 
-import SharedPages from '@/app/shared/users-page/dashboard/SharedPages';
+import SharedPages from '@/app/shared/products-page/dashboard/SharedPages';
 
 export default function Page() {
   return (
