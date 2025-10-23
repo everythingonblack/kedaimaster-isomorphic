@@ -10,31 +10,31 @@ import { AdvancedCheckbox, Button } from 'rizzui';
 const data = [
   {
     id: 1,
-    patient: 'Martha Freese',
+    patient: 'Tepung',
     doctor: 'Dr. Cameron Will',
     date: '2022-11-10T06:22:01.621Z',
   },
   {
     id: 2,
-    patient: 'Gina Vanleuven',
+    patient: 'Es Batu',
     doctor: 'Dr. Inez Delima',
     date: '2022-11-10T06:22:01.621Z',
   },
   {
     id: 3,
-    patient: 'Pearl Torres',
+    patient: 'Tempe',
     doctor: 'Dr. Quinn Ellison',
     date: '2022-11-10T06:22:01.621Z',
   },
   {
     id: 4,
-    patient: 'Alice Hinson',
+    patient: 'Minyak Goreng',
     doctor: 'Dr. Cameron Will',
     date: '2022-11-10T06:22:01.621Z',
   },
   {
     id: 5,
-    patient: 'Torres Pearl',
+    patient: 'Singkong',
     doctor: 'Dr. Quinn Ellison',
     date: '2022-11-10T06:22:01.621Z',
   },
@@ -66,7 +66,7 @@ export default function AppointmentTodo({ className }: { className?: string }) {
 
   return (
     <WidgetCard
-      title="Today’s Appointment"
+      title="Riwayat Pembelian Bahan Baku"
       titleClassName="text-gray-800 sm:text-lg font-inter"
       headerClassName="items-center"
       className={cn('overflow-hidden bg-gray-50 @container', className)}
@@ -102,7 +102,7 @@ export default function AppointmentTodo({ className }: { className?: string }) {
                     <strong className="font-semibold text-gray-900">
                       {item.patient}
                     </strong>{' '}
-                    <span>appointed to</span>{' '}
+                    
                     <span className="inline-block rounded-2xl bg-[#2B7F75] px-2.5 font-medium text-white">
                       {item.doctor}
                     </span>
@@ -128,7 +128,7 @@ export default function AppointmentTodo({ className }: { className?: string }) {
             rounded="lg"
             className="bg-gray-0 text-gray-800 shadow-md transition-shadow hover:bg-gray-0 hover:shadow dark:hover:bg-gray-0"
           >
-            View All
+            Lihat Semua
           </Button>
         </div>
       </div>

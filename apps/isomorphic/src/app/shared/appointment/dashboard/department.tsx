@@ -17,32 +17,32 @@ import { Title } from 'rizzui';
 
 const data = [
   {
-    name: 'Dr. Consultant',
-    total: 530,
+    name: 'Tepung',
+    total: 1530,
     fill: '#2B7F75',
   },
   {
-    name: 'Therapy',
+    name: 'Es Batu',
     total: 915,
     fill: '#FFD66B',
   },
   {
-    name: 'Conference',
+    name: 'Minyak Goreng',
     total: 785,
     fill: '#04364A',
   },
   {
-    name: 'Training',
+    name: 'Singkong',
     total: 345,
     fill: '#176B87',
   },
   {
-    name: 'Marketing',
+    name: 'Gula',
     total: 915,
     fill: '#64CCC5',
   },
   {
-    name: 'Management',
+    name: 'Telur',
     total: 260,
     fill: '#F7B787',
   },
@@ -50,12 +50,12 @@ const data = [
 
 const viewOptions = [
   {
-    value: 'Daily',
-    label: 'Daily',
+    value: 'Harian',
+    label: 'Harian',
   },
   {
-    value: 'Monthly',
-    label: 'Monthly',
+    value: 'Bulanan',
+    label: 'Bulanan',
   },
 ];
 
@@ -66,7 +66,7 @@ export default function Department({ className }: { className?: string }) {
 
   return (
     <WidgetCard
-      title="Appointment by Department"
+      title="Bahan Baku"
       titleClassName="text-gray-700 font-normal sm:text-sm font-inter"
       headerClassName="items-center"
       className={cn('@container', className)}

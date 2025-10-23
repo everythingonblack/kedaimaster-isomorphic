@@ -8,21 +8,22 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Sector } from 'recharts';
 import DropdownAction from '@core/components/charts/dropdown-action';
 
 const data = [
-  { name: 'Dental Care', value: 45 },
-  { name: 'Neurology', value: 58 },
-  { name: 'Gynecology', value: 32 },
-  { name: 'Orthopedic', value: 16 },
+  { name: 'Kentang Goreng', value: 45 },
+  { name: 'Es Teh', value: 58 },
+  { name: 'Tempe Mendoan', value: 32 },
+  { name: 'Telo', value: 16 },
+  { name: 'Telo Goreng', value: 20 },
 ];
-const COLORS = ['#2B7F75', '#FFD66B', '#64CCC5', '#176B87'];
+const COLORS = ['#2B7F75', '#FFD66B', '#64CCC5', '#176B87', '#e6530fff'];
 
 const viewOptions = [
   {
-    value: 'Daily',
-    label: 'Daily',
+    value: 'Harian',
+    label: 'Harian',
   },
   {
-    value: 'Monthly',
-    label: 'Monthly',
+    value: 'Bulanan',
+    label: 'Bulanan',
   },
 ];
 
@@ -64,7 +65,7 @@ export default function Patients({ className }: { className?: string }) {
 
   return (
     <WidgetCard
-      title="Appointment by Patients"
+      title="Penjualan"
       titleClassName="text-gray-800 sm:text-lg font-inter"
       headerClassName="items-center"
       className={cn('@container', className)}
@@ -105,16 +106,17 @@ export default function Patients({ className }: { className?: string }) {
         </div>
         <div className="@sm:w-2/5 @sm:ps-2">
           <div className="mb-4 mt-1">
-            <div className="mb-1.5 text-gray-700">Visitors</div>
+            <div className="mb-1.5 text-gray-700">Penjualan Terbanyak</div>
             <Title as="h2" className="font-inter font-bold text-gray-900">
               10,587
             </Title>
           </div>
           <div className="">
-            <Detail color={COLORS[1]} value={58} text="Neurology" />
-            <Detail color={COLORS[0]} value={45} text="Dental Care" />
-            <Detail color={COLORS[2]} value={32} text="Gynecology" />
-            <Detail color={COLORS[3]} value={16} text="Orthopedic" />
+            <Detail color={COLORS[1]} value={58} text="Kentang Goreng" />
+            <Detail color={COLORS[0]} value={45} text="Es Teh" />
+            <Detail color={COLORS[2]} value={32} text="Tempe Mendoan" />
+            <Detail color={COLORS[3]} value={16} text="Telo" />
+            <Detail color={COLORS[4]} value={20} text="Telo Goreng" />
           </div>
         </div>
       </div>
@@ -137,11 +139,14 @@ function Detail({
         <span style={{ background: color }} className="block h-3 w-3 rounded" />
         <p className="text-gray-500">{text}</p>
       </div>
+      <span className='flex items-center'>
+
       <span
         style={{ borderColor: color }}
         className="rounded-full border-2 px-2 font-semibold text-gray-700"
       >
         {value}%
+      </span>
       </span>
     </div>
   );

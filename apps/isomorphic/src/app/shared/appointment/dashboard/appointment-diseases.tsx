@@ -11,12 +11,12 @@ import { Title } from 'rizzui';
 
 const data = [
   {
-    name: 'Pregnancy',
+    name: 'pesan Dari Meja',
     patients: 1000,
     fill: '#FFD66B',
   },
   {
-    name: 'Cancer',
+    name: 'Pesan Dari Kasir',
     patients: 900,
     fill: '#64CCC5',
   },
@@ -36,7 +36,7 @@ export default function AppointmentDiseases({
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   return (
     <WidgetCard
-      title="Appointment by Diseases"
+      title="Riwayat Pemesanan"
       titleClassName="text-gray-700 font-normal sm:text-sm font-inter"
       headerClassName="items-center"
       className={cn(

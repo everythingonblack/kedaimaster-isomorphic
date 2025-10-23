@@ -21,29 +21,29 @@ type AppointmentStatsType = {
 
 const statData: StatType[] = [
   {
-    title: 'Total Appointment',
-    amount: '26,085',
+    title: 'Jumlah Transaksi',
+    amount: '360',
     increased: true,
     percentage: '32.40',
     icon: PiCalendarCheck,
   },
   {
-    title: 'Scheduled Patients',
-    amount: '15,786',
+    title: 'Item Favorit',
+    amount: 'Kentang Goreng',
     increased: true,
     percentage: '32.40',
     icon: PiCheckCircle,
   },
   {
-    title: 'Waiting List',
-    amount: '8,503',
+    title: 'Pendapatan',
+    amount: 'Rp 12.060.000',
     increased: false,
     percentage: '32.40',
     icon: PiClock,
   },
   {
-    title: 'Cancelled',
-    amount: '2,430',
+    title: 'Pengeluaran',
+    amount: 'Rp 361.060',
     increased: true,
     percentage: '32.40',
     icon: PiPhoneSlash,
@@ -182,7 +182,7 @@ function StatCard({ className, transaction }: StatCardProps) {
           </span>
         </div>
         <span className="truncate leading-none text-gray-500 group-first:text-gray-100 dark:group-first:text-gray-800">
-          {increased ? 'Increased' : 'Decreased'}&nbsp;last month
+          {increased ? 'Meningkat' : 'Menurun'}&nbsp;Dari Bulan Lalu
         </span>
       </div>
     </div>

@@ -16,84 +16,106 @@ import {
   YAxis,
 } from 'recharts';
 import { Title } from 'rizzui';
+function formatRupiah(value: number): string {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0,
+  }).format(value);
+}
 
+function RupiahTooltip({ active, payload }: any) {
+  if (!active || !payload || !payload.length) return null;
+  return (
+    <div className="rounded-lg border border-gray-200 bg-white p-3 shadow-lg dark:bg-gray-800">
+      <p className="mb-2 text-sm font-medium">{payload[0]?.payload?.month}</p>
+      {payload.map((entry: any, index: number) => (
+        <div key={index} className="flex items-center gap-2 text-sm">
+          <span className="h-2 w-2 rounded-full" style={{ backgroundColor: entry.color }} />
+          <span>{entry.name}:</span>
+          <span className="font-semibold">{formatRupiah(entry.value)}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
 const data = [
   {
     month: 'Jan',
-    newPatients: 570,
-    returningPatients: 290,
+    Pendapatan: 570,
+    Pengeluaran: 290,
   },
   {
     month: 'Feb',
-    newPatients: 500,
-    returningPatients: 300,
+    Pendapatan: 500,
+    Pengeluaran: 300,
   },
   {
     month: 'Mar',
-    newPatients: 550,
-    returningPatients: 400,
+    Pendapatan: 550,
+    Pengeluaran: 400,
   },
   {
     month: 'Apr',
-    newPatients: 520,
-    returningPatients: 370,
+    Pendapatan: 520,
+    Pengeluaran: 370,
   },
   {
     month: 'May',
-    newPatients: 700,
-    returningPatients: 560,
+    Pendapatan: 700,
+    Pengeluaran: 560,
   },
   {
     month: 'Jun',
-    newPatients: 740,
-    returningPatients: 520,
+    Pendapatan: 740,
+    Pengeluaran: 520,
   },
   {
     month: 'Jul',
-    newPatients: 820,
-    returningPatients: 580,
+    Pendapatan: 820,
+    Pengeluaran: 580,
   },
   {
     month: 'Aug',
-    newPatients: 720,
-    returningPatients: 440,
+    Pendapatan: 720,
+    Pengeluaran: 440,
   },
   {
     month: 'Sep',
-    newPatients: 680,
-    returningPatients: 500,
+    Pendapatan: 680,
+    Pengeluaran: 500,
   },
   {
     month: 'Oct',
-    newPatients: 530,
-    returningPatients: 320,
+    Pendapatan: 530,
+    Pengeluaran: 320,
   },
   {
     month: 'Nov',
-    newPatients: 530,
-    returningPatients: 320,
+    Pendapatan: 530,
+    Pengeluaran: 320,
   },
   {
     month: 'Dec',
-    newPatients: 610,
-    returningPatients: 290,
+    Pendapatan: 610,
+    Pengeluaran: 290,
   },
 ];
 
 const viewOptions = [
   {
-    value: 'Daily',
-    label: 'Daily',
+    value: 'Harian',
+    label: 'Harian',
   },
   {
-    value: 'Monthly',
-    label: 'Monthly',
+    value: 'Bulanan',
+    label: 'Bulanan',
   },
 ];
 
 const patientLegend = [
-  { name: 'New Patients' },
-  { name: 'Returning Patients' },
+  { name: 'Pendapatan' },
+  { name: 'Pengeluaran' },
 ];
 interface ColorMap {
   dark: string;
@@ -117,7 +139,7 @@ export default function PatientAppointment({
 
   return (
     <WidgetCard
-      title="Appointment by Patients"
+      title="Grafik Pendapatan/Pengeluaran"
       titleClassName="text-gray-700 font-normal sm:text-sm font-inter"
       headerClassName="items-center"
       action={
@@ -162,10 +184,10 @@ export default function PatientAppointment({
                 tickLine={false}
                 tickMargin={20}
               />
-              <YAxis axisLine={false} tickLine={false} tickMargin={20} />
-              <Tooltip content={<CustomTooltip />} />
+              <YAxis axisLine={false} tickLine={false} tickMargin={20} tickFormatter={(value) => formatRupiah(value)} />
+<Tooltip content={<RupiahTooltip />} />
               <Area
-                dataKey="newPatients"
+                dataKey="Pendapatan"
                 {...(theme && {
                   stroke: COLORS[0][theme],
                 })}
@@ -176,7 +198,7 @@ export default function PatientAppointment({
                 activeDot={<CustomizedDot color={theme && COLORS[0][theme]} />}
               />
               <Area
-                dataKey="returningPatients"
+                dataKey="Pengeluaran"
                 {...(theme && {
                   stroke: COLORS[1][theme],
                 })}

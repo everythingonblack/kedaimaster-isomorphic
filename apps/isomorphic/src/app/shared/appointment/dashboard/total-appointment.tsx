@@ -22,44 +22,44 @@ import { Title } from 'rizzui';
 
 const data = [
   {
-    label: 'Sun',
-    booking: 806,
-    visitors: 584,
+    label: 'Senin',
+    MingguLalu: 806,
+    MingguIni: 584,
   },
   {
-    label: 'Mon',
-    booking: 740,
-    visitors: 923,
+    label: 'Selasa',
+    MingguLalu: 740,
+    MingguIni: 923,
   },
   {
-    label: 'Tue',
-    booking: 627,
-    visitors: 784,
+    label: 'Rabu',
+    MingguLalu: 627,
+    MingguIni: 784,
   },
   {
-    label: 'Wed',
-    booking: 915,
-    visitors: 759,
+    label: 'Kamis',
+    MingguLalu: 915,
+    MingguIni: 759,
   },
   {
-    label: 'Thu',
-    booking: 850,
-    visitors: 923,
+    label: 'Jumat',
+    MingguLalu: 850,
+    MingguIni: 923,
   },
 
   {
-    label: 'Fri',
-    booking: 703,
-    visitors: 587,
+    label: 'Sabtu',
+    MingguLalu: 703,
+    MingguIni: 587,
   },
   {
-    label: 'Sat',
-    booking: 923,
-    visitors: 805,
+    label: 'Minggu',
+    MingguLalu: 923,
+    MingguIni: 805,
   },
 ];
 
-const appointmentLegend = [{ name: 'Today’s Booking' }, { name: 'Visitors' }];
+const appointmentLegend = [{ name: 'Minggu Lalu' }, { name: 'Minggu Ini' }];
 
 interface ColorMap {
   dark: string;
@@ -95,7 +95,7 @@ export default function TotalAppointment({
 
   return (
     <WidgetCard
-      title="Total Appointment"
+      title="Grafik Transaksi"
       titleClassName="text-gray-700 font-normal sm:text-sm font-inter"
       headerClassName="items-center"
       action={
@@ -145,7 +145,7 @@ export default function TotalAppointment({
               />
               <Tooltip content={<CustomTooltip />} cursor={false} />
               <Bar
-                dataKey="booking"
+                dataKey="MingguLalu"
                 {...(theme && {
                   fill: COLORS[0][theme],
                   stroke: COLORS[0][theme],
@@ -153,11 +153,11 @@ export default function TotalAppointment({
                 barSize={40}
                 radius={10}
               >
-                <LabelList dataKey="booking" content={<CustomizedLabel />} />
+                <LabelList dataKey="MingguLalu" content={<CustomizedLabel />} />
               </Bar>
               <Bar
                 type="natural"
-                dataKey="visitors"
+                dataKey="MingguIni"
                 {...(theme && {
                   fill: COLORS[1][theme],
                   stroke: COLORS[1][theme],
@@ -165,7 +165,7 @@ export default function TotalAppointment({
                 barSize={40}
                 radius={10}
               >
-                <LabelList dataKey="visitors" content={<CustomizedLabel />} />
+                <LabelList dataKey="MingguIni" content={<CustomizedLabel />} />
               </Bar>
             </ComposedChart>
           </ResponsiveContainer>
