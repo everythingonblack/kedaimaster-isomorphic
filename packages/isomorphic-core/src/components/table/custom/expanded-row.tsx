@@ -29,7 +29,7 @@ export function CustomExpandedComponent<TData extends Record<string, any>>(
         >
           <div className="flex items-start">
             <div className="relative me-4 aspect-[80/60] w-20 flex-shrink-0 overflow-hidden rounded-md bg-gray-100">
-              <img fill
+              <img
                 className="object-cover"
                 src={product.image}
                 alt={product.name}

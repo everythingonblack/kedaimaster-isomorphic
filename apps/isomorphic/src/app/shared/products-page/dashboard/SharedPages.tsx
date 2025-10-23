@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { fetchProducts, ProductType } from '@/kedaimaster-api-handlers/productApiHandlers';
-import { productsListColumns } from '@/app/shared/products-page/product/product-list/columns';
+import { productsListColumns } from '@/app/shared/products-page/product/product-list/columns.tsx';
 import { useTanStackTable } from '@core/components/table/custom/use-TanStack-Table';
 import Table from '@core/components/table';
 import WidgetCard from '@core/components/cards/widget-card';
