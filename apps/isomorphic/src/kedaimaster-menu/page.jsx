@@ -1,6 +1,7 @@
 // src/App.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import './page.css';
+import { getAllProducts } from '../kedaimaster-api/productsApi.js';
 
 import Header from './Header';
 import Categories from './Categories';
@@ -9,26 +10,34 @@ import CartFAB from './CartFAB';
 import DeleteModal from './DeleteModal';
 import MusicPlayer from './MusicPlayer';
 
-// Data menu bisa dipindahkan ke file terpisah (misal: src/data/menu.js)
-const menuItemsData = [
-  { id: 'espresso-01', name: 'Espresso', price: 10000, image: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=500&q=80' },
-  { id: 'hormix-coffee-02', name: 'Hormix Coffe', price: 15000, image: 'https://i.ibb.co/23qrs29D/Gemini-Generated-Image-g164fkg164fkg164.png' },
-  { id: 'caramel-coffee-03', name: 'Caramel Coffe', price: 18000, description: 'Latte manis dengan sirup karamel dan whipped cream, cocok untuk bersantai.', image: 'https://i.ibb.co/23qrs29D/Gemini-Generated-Image-g164fkg164fkg164.png' },
-  { id: 'butterscotch-coffee-04', name: 'Butterschoth Coffe', price: 18000, description: 'Rasa manis gurih dari butterscotch yang berpadu sempurna dengan kopi pilihan.', image: 'https://i.ibb.co/23qrs29D/Gemini-Generated-Image-g164fkg164fkg164.png' },
-  { id: 'tubruk-robusta-05', name: 'Kopi Tubruk Robusta', price: 5000, image: 'https://i.ibb.co/23qrs29D/Gemini-Generated-Image-g164fkg164fkg164.png' },
-  { id: 'hazelnut-coffee-06', name: 'Hazelnut Coffe', price: 18000, description: 'Nikmati aroma kacang hazelnut yang khas dalam secangkir latte hangat.', image: 'https://i.ibb.co/23qrs29D/Gemini-Generated-Image-g164fkg164fkg164.png' },
-  { id: 'americano-07', name: 'Americano', price: 13000, description: 'Espresso yang diencerkan dengan air panas, menghasilkan kopi hitam ringan.', image: 'https://i.ibb.co/23qrs29D/Gemini-Generated-Image-g164fkg164fkg164.png' },
-  { id: 'tubruk-gayo-08', name: 'Kopi Tubruk Gayo', price: 7000, image: 'https://i.ibb.co/23qrs29D/Gemini-Generated-Image-g164fkg164fkg164.png' },
-];
-
 const App = () => {
-  // Semua state dan logika utama tetap di sini
   const [cart, setCart] = useState({});
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
+  const [menuItemsData, setMenuItemsData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Efek untuk localStorage
   useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const products = await getAllProducts();
+        setMenuItemsData(products.map(product => ({
+          id: product.id,
+          name: product.name,
+          price: product.price?.unitPrice || 0, // Default to 0 if unitPrice is undefined
+          image: product.imageUrl,
+          description: product.description || '',
+        })));
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+
     const savedCart = localStorage.getItem('cart');
     if (savedCart) {
       setCart(JSON.parse(savedCart));
@@ -79,6 +88,22 @@ const App = () => {
 
   const handleResetCart = () => {
     setCart({});
+  };
+
+  const handleTransactionComplete = () => {
+    // Optionally re-fetch products or perform other actions after a successful transaction
+    // For now, we'll just reset the cart and close the FAB
+    setCart({});
+    // If you want to re-fetch products after a transaction, you can call fetchProducts here
+    // fetchProducts();
+  };
+
+  if (loading) {
+    return <div className="mobile-container">Loading menu...</div>;
+  }
+
+  if (error) {
+    return <div className="mobile-container">Error: {error.message}</div>;
   }
 
   return (
@@ -104,6 +129,7 @@ const App = () => {
         onDecreaseQuantity={handleDecreaseQuantity}
         onResetCart={handleResetCart}
         isDeleteModalOpen={isDeleteModalOpen}
+        onTransactionComplete={handleTransactionComplete}
       />
 
       <DeleteModal

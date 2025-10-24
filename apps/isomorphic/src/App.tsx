@@ -6,6 +6,8 @@ import ProductsPage from '@/app/shared/products-page/dashboard/index';
 import MaterialsPage from '@/app/shared/materials-page/dashboard/index';
 import UsersPage from '@/app/shared/users-page/dashboard/index';
 
+import MenuPage from '@/kedaimaster-menu/page';
+
 // Dummy pages
 const StorePage = () => <div>Store Page</div>;
 const DataPage = () => <div>Data Page</div>;
@@ -16,7 +18,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* Landing Page */}
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<MenuPage />} />
 
         {/* Dashboard Layout */}
         <Route path="/dashboard" element={<HydrogenLayout />}>
