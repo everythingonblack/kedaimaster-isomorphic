@@ -1,8 +1,6 @@
 'use client';
 
 import WidgetCard from '@core/components/cards/widget-card';
-import { CustomTooltip } from '@core/components/charts/custom-tooltip';
-import DropdownAction from '@core/components/charts/dropdown-action';
 import TrendingUpIcon from '@core/components/icons/trending-up';
 import cn from '@core/utils/class-names';
 import { useTheme } from '@core/utils/next-themes';
@@ -102,16 +100,6 @@ const data = [
   },
 ];
 
-const viewOptions = [
-  {
-    value: 'Harian',
-    label: 'Harian',
-  },
-  {
-    value: 'Bulanan',
-    label: 'Bulanan',
-  },
-];
 
 const patientLegend = [
   { name: 'Pendapatan' },
@@ -133,10 +121,6 @@ export default function PatientAppointment({
   className?: string;
 }) {
   const { theme } = useTheme();
-  function handleChange(viewType: string) {
-    console.log('viewType', viewType);
-  }
-
   return (
     <WidgetCard
       title="Grafik Pendapatan/Pengeluaran"
@@ -145,12 +129,6 @@ export default function PatientAppointment({
       action={
         <div className="flex items-center gap-5">
           <CustomLegend className="hidden @[80rem]:mt-0 @[80rem]:inline-flex" />
-          <DropdownAction
-            className="rounded-lg border"
-            options={viewOptions}
-            onChange={handleChange}
-            dropdownClassName="!z-0"
-          />
         </div>
       }
       className={cn('min-h-[28rem]', className)}

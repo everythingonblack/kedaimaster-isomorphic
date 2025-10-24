@@ -3,7 +3,6 @@
 import WidgetCard from '@core/components/cards/widget-card';
 import TrendingUpIcon from '@core/components/icons/trending-up';
 import { useMedia } from '@core/hooks/use-media';
-import { DatePicker } from '@core/ui/datepicker';
 import cn from '@core/utils/class-names';
 import { useState } from 'react';
 import { RadialBar, RadialBarChart, ResponsiveContainer } from 'recharts';
@@ -33,7 +32,6 @@ export default function AppointmentDiseases({
   className?: string;
 }) {
   const isMobile = useMedia('(max-width: 480px)', false);
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
   return (
     <WidgetCard
       title="Riwayat Pemesanan"
@@ -43,21 +41,6 @@ export default function AppointmentDiseases({
         'flex h-full w-full flex-col justify-between @container',
         className
       )}
-      action={
-        <DatePicker
-          selected={startDate}
-          onChange={(date: Date | null) => setStartDate(date)}
-          dateFormat="MMM, yyyy"
-          placeholderText="Select Month"
-          showMonthYearPicker
-          popperPlacement="bottom-end"
-          inputProps={{
-            variant: 'text',
-            inputClassName: 'p-0 px-1 h-auto [&_input]:text-ellipsis',
-          }}
-          className="w-36"
-        />
-      }
     >
       <div className="mb-4 mt-1 flex items-center gap-2">
         <Title as="h2" className="font-inter font-bold">

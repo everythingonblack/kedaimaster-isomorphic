@@ -5,7 +5,6 @@ import { Title } from 'rizzui';
 import cn from '@core/utils/class-names';
 import { useCallback, useState } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Sector } from 'recharts';
-import DropdownAction from '@core/components/charts/dropdown-action';
 
 const data = [
   { name: 'Kentang Goreng', value: 45 },
@@ -16,16 +15,6 @@ const data = [
 ];
 const COLORS = ['#2B7F75', '#FFD66B', '#64CCC5', '#176B87', '#e6530fff'];
 
-const viewOptions = [
-  {
-    value: 'Harian',
-    label: 'Harian',
-  },
-  {
-    value: 'Bulanan',
-    label: 'Bulanan',
-  },
-];
 
 const renderActiveShape = (props: any) => {
   const RADIAN = Math.PI / 180;
@@ -59,23 +48,10 @@ export default function Patients({ className }: { className?: string }) {
     setActiveIndex(0);
   }, []);
 
-  function handleChange(viewType: string) {
-    console.log('viewType', viewType);
-  }
 
   return (
     <WidgetCard
-      title="Penjualan"
-      titleClassName="text-gray-800 sm:text-lg font-inter"
-      headerClassName="items-center"
       className={cn('@container', className)}
-      action={
-        <DropdownAction
-          className="rounded-lg border"
-          options={viewOptions}
-          onChange={handleChange}
-        />
-      }
     >
       <div className="h-full items-center gap-4 @sm:flex">
         <div className="relative h-[300px] w-full after:absolute after:inset-1/2 after:h-20 after:w-20 after:-translate-x-1/2 after:-translate-y-1/2 after:rounded-full after:border after:border-dashed after:border-gray-300 @sm:w-3/5 @sm:py-3 rtl:after:translate-x-1/2">

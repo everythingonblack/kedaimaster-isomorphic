@@ -1,7 +1,6 @@
 'use client';
 
 import WidgetCard from '@core/components/cards/widget-card';
-import DropdownAction from '@core/components/charts/dropdown-action';
 import TrendingUpIcon from '@core/components/icons/trending-up';
 import cn from '@core/utils/class-names';
 import { formatNumber } from '@core/utils/format-number';
@@ -48,35 +47,13 @@ const data = [
   },
 ];
 
-const viewOptions = [
-  {
-    value: 'Harian',
-    label: 'Harian',
-  },
-  {
-    value: 'Bulanan',
-    label: 'Bulanan',
-  },
-];
-
 export default function Department({ className }: { className?: string }) {
-  function handleChange(viewType: string) {
-    console.log('viewType', viewType);
-  }
-
   return (
     <WidgetCard
       title="Bahan Baku"
       titleClassName="text-gray-700 font-normal sm:text-sm font-inter"
       headerClassName="items-center"
       className={cn('@container', className)}
-      action={
-        <DropdownAction
-          className="rounded-lg border"
-          options={viewOptions}
-          onChange={handleChange}
-        />
-      }
     >
       <div className="mb-4 mt-2 flex items-center gap-2 @lg:mt-1">
         <Title as="h2" className="font-inter font-bold">
