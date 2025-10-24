@@ -12,6 +12,8 @@ import {
   handleDashboardAggregate,
 } from '@/kedaimaster-api-handlers/dashboardApiHandlers';
 
+import MenuPage from '@/kedaimaster-menu/page';
+
 // Dummy pages
 const StorePage = () => <div>Store Page</div>;
 const DataPage = () => <div>Data Page</div>;
@@ -69,7 +71,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* Landing Page */}
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<MenuPage />} />
 
         {/* Layout Route untuk semua halaman dashboard */}
         <Route element={<HydrogenLayout setDate={handleSetDate} />}>
