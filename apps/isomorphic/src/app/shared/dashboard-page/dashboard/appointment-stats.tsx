@@ -19,6 +19,22 @@ type AppointmentStatsType = {
   className?: string;
 };
 
+export type StatType = {
+  icon: IconType;
+  title: string;
+  amount: string;
+  increased: boolean;
+  percentage?: string;
+  lastMonth?: string;
+  iconWrapperFill?: string;
+  className?: string;
+};
+
+export type StatCardProps = {
+  className?: string;
+  transaction: StatType;
+};
+
 const statData: StatType[] = [
   {
     title: 'Jumlah Transaksi',
@@ -31,7 +47,7 @@ const statData: StatType[] = [
     title: 'Item Favorit',
     amount: 'Kentang Goreng',
     increased: true,
-    percentage: '32.40',
+    lastMonth: 'Nasi Goreng', // ✅ tambahan: item favorit bulan lalu
     icon: PiCheckCircle,
   },
   {
@@ -50,21 +66,6 @@ const statData: StatType[] = [
   },
 ];
 
-export type StatType = {
-  icon: IconType;
-  title: string;
-  amount: string;
-  increased: boolean;
-  percentage: string;
-  iconWrapperFill?: string;
-  className?: string;
-};
-
-export type StatCardProps = {
-  className?: string;
-  transaction: StatType;
-};
-
 export default function AppointmentStats({ className }: AppointmentStatsType) {
   const {
     sliderEl,
@@ -75,12 +76,7 @@ export default function AppointmentStats({ className }: AppointmentStatsType) {
   } = useScrollableSlider();
 
   return (
-    <div
-      className={cn(
-        'relative flex w-auto items-center',
-        className
-      )}
-    >
+    <div className={cn('relative flex w-auto items-center', className)}>
       <Button
         title="Prev"
         variant="text"
@@ -90,6 +86,7 @@ export default function AppointmentStats({ className }: AppointmentStatsType) {
       >
         <PiCaretLeftBold className="h-5 w-5" />
       </Button>
+
       <div className="w-full overflow-hidden">
         <div
           ref={sliderEl}
@@ -98,6 +95,7 @@ export default function AppointmentStats({ className }: AppointmentStatsType) {
           <StatGrid />
         </div>
       </div>
+
       <Button
         title="Next"
         variant="text"
@@ -114,23 +112,21 @@ export default function AppointmentStats({ className }: AppointmentStatsType) {
 export function StatGrid() {
   return (
     <>
-      {statData.map((stat: StatType, index: number) => {
-        return (
-          <StatCard
-            key={'stat-card-' + index}
-            transaction={stat}
-            className="min-w-[300px]"
-          />
-        );
-      })}
+      {statData.map((stat: StatType, index: number) => (
+        <StatCard
+          key={'stat-card-' + index}
+          transaction={stat}
+          className="min-w-[300px]"
+        />
+      ))}
     </>
   );
 }
 
 function StatCard({ className, transaction }: StatCardProps) {
-  const { icon, title, amount, increased, percentage, iconWrapperFill } =
-    transaction;
+  const { icon, title, amount, increased, percentage, lastMonth } = transaction;
   const Icon = icon;
+
   return (
     <div
       className={cn(
@@ -141,50 +137,58 @@ function StatCard({ className, transaction }: StatCardProps) {
       <div className="mb-4 flex items-center gap-5">
         <span
           className={cn(
-            'flex rounded-[14px] bg-[#2B7F75] p-2.5 text-gray-0 group-first:bg-gray-0 group-first:text-[#2B7F75] dark:text-gray-900 dark:group-first:bg-gray-900'
+            'flex rounded-[14px] bg-[#2B7F75] p-2.5 text-gray-0 group-first:bg-gray-0 group-first:text-[#2B7F75]'
           )}
         >
           <Icon className="h-auto w-[30px]" />
         </span>
         <div className="space-y-1.5">
-          <p className="font-medium text-gray-500 group-first:text-gray-100 dark:group-first:text-gray-800">
+          <p className="font-medium text-gray-500 group-first:text-gray-100">
             {title}
           </p>
-          <p className="text-lg font-bold text-gray-900 group-first:text-gray-0 dark:text-gray-700 dark:group-first:text-gray-900 2xl:text-[20px] 3xl:text-3xl">
+          <p className="text-lg font-bold text-gray-900 group-first:text-gray-0 2xl:text-[20px] 3xl:text-3xl">
             {amount}
           </p>
         </div>
       </div>
-      <div className="flex items-center gap-1.5">
-        <div
-          className={cn(
-            'flex items-center gap-1',
-            increased ? 'text-green-dark' : 'text-red-dark'
-          )}
-        >
-          <span
+
+      {/* ✅ Ubah bagian bawah: khusus untuk Item Favorit tampil beda */}
+      {title === 'Item Favorit' ? (
+        <div className="text-gray-500 group-first:text-gray-100">
+          Bulan lalu: <span className="font-semibold">{lastMonth}</span>
+        </div>
+      ) : (
+        <div className="flex items-center gap-1.5">
+          <div
             className={cn(
-              'flex rounded-full px-2.5 py-1.5 group-first:bg-gray-0 dark:group-first:bg-gray-900 dark:group-first:text-green-700',
-              increased
-                ? 'bg-green-lighter/70 dark:bg-green-dark/30'
-                : 'bg-red-lighter/70 dark:bg-red-dark/30'
+              'flex items-center gap-1',
+              increased ? 'text-green-dark' : 'text-red-dark'
             )}
           >
-            {increased ? (
-              <PiArrowUpRight className="h-auto w-4" />
-            ) : (
-              <PiArrowDownRight className="h-auto w-4" />
-            )}
-          </span>
-          <span className="font-semibold leading-none group-first:text-gray-0 dark:group-first:text-gray-900">
-            {increased ? '+' : '-'}
-            {percentage}%
+            <span
+              className={cn(
+                'flex rounded-full px-2.5 py-1.5 group-first:bg-gray-0',
+                increased
+                  ? 'bg-green-lighter/70'
+                  : 'bg-red-lighter/70'
+              )}
+            >
+              {increased ? (
+                <PiArrowUpRight className="h-auto w-4" />
+              ) : (
+                <PiArrowDownRight className="h-auto w-4" />
+              )}
+            </span>
+            <span className="font-semibold leading-none group-first:text-gray-0">
+              {increased ? '+' : '-'}
+              {percentage}%
+            </span>
+          </div>
+          <span className="truncate leading-none text-gray-500 group-first:text-gray-100">
+            {increased ? 'Meningkat' : 'Menurun'}&nbsp;Dari Bulan Lalu
           </span>
         </div>
-        <span className="truncate leading-none text-gray-500 group-first:text-gray-100 dark:group-first:text-gray-800">
-          {increased ? 'Meningkat' : 'Menurun'}&nbsp;Dari Bulan Lalu
-        </span>
-      </div>
+      )}
     </div>
   );
 }

@@ -95,7 +95,7 @@ export default function TotalAppointment({
 
   return (
     <WidgetCard
-      title="Grafik Transaksi"
+      title="Income"
       titleClassName="text-gray-700 font-normal sm:text-sm font-inter"
       headerClassName="items-center"
       action={
