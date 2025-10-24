@@ -88,7 +88,7 @@ export default function SmartDateSelector({
     console.log(selectedType)
     if (!selectedType) return;
     const selected = options.find((opt) => opt.value === selectedType);
-        if (prevSelected.getRange && selected?.getRange) return;
+    if (selected?.getRange) return;
 
     if (selected?.getRange) return;
 
@@ -96,30 +96,30 @@ export default function SmartDateSelector({
       const isSame =
         prevRange.current.start?.getTime() === startDate.getTime() &&
         prevRange.current.end?.getTime() === endDate.getTime();
-if (!isSame) {
-  const newLabel = `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`;
-  const newValue = `custom-${startDate.getTime()}-${endDate.getTime()}`;
+      if (!isSame) {
+        const newLabel = `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`;
+        const newValue = `custom-${startDate.getTime()}-${endDate.getTime()}`;
 
-  setOptions((prev) => {
-    const hasCustom = prev.some((opt) => opt.value.startsWith("custom-"));
-    if (hasCustom) {
-      // update opsi custom lama
-      return prev.map((opt) =>
-        opt.value.startsWith("custom-") ? { ...opt, label: newLabel, value: newValue } : opt
-      );
-    } else {
-      // belum ada opsi custom → buat baru
-      return [...prev, { label: newLabel, value: newValue }];
-    }
-  });
+        setOptions((prev) => {
+          const hasCustom = prev.some((opt) => opt.value.startsWith("custom-"));
+          if (hasCustom) {
+            // update opsi custom lama
+            return prev.map((opt) =>
+              opt.value.startsWith("custom-") ? { ...opt, label: newLabel, value: newValue } : opt
+            );
+          } else {
+            // belum ada opsi custom → buat baru
+            return [...prev, { label: newLabel, value: newValue }];
+          }
+        });
 
-  setSelectedType(newValue);
-  onChange({ start: startDate, end: endDate, type: newValue });
+        setSelectedType(newValue);
+        onChange({ start: startDate, end: endDate, type: newValue });
 
-  prevRange.current = { start: startDate, end: endDate };
-  prevSelected.current = newValue;
-  setIsCalendarOpen(false);
-}
+        prevRange.current = { start: startDate, end: endDate };
+        prevSelected.current = newValue;
+        setIsCalendarOpen(false);
+      }
 
     }
   }, [startDate, endDate, selectedType, options]);
@@ -137,25 +137,33 @@ if (!isSame) {
   return (
     <div className={cn("flex items-center gap-3 relative", className)}>
       {/* Dropdown Pilihan */}
-<select
-  className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-gray-500 focus:outline-none relative z-10 min-w-[205px]"
-  value={selectedType}
-  onChange={(e) => {
-    const val = e.target.value;
-    setSelectedType(val);
-    const selected = options.find((opt) => opt.value === val);
-    if (selected && !selected.getRange) {
-      // kalau Kustom → buka kalender
-      setIsCalendarOpen(true);
-    }
-  }}
->
-  {options.map((opt) => (
-    <option key={opt.value} value={opt.value}>
-      {opt.label}
-    </option>
-  ))}
-</select>
+      <select
+        className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-gray-500 focus:outline-none relative z-10 min-w-[188px]"
+        value={selectedType}
+        onChange={(e) => {
+          const val = e.target.value;
+          setSelectedType(val);
+          const selected = options.find((opt) => opt.value === val);
+          if (selected) {
+            if (selected.getRange) {
+              const { start, end } = selected.getRange();
+              onChange({ start, end, type: selected.value });
+              setDateRange([start, end]);
+              prevRange.current = { start, end };
+              prevSelected.current = selected.value;
+            } else {
+              // kalau Kustom → buka kalender
+              setIsCalendarOpen(true);
+            }
+          }
+        }}
+      >
+        {options.map((opt) => (
+          <option key={opt.value} value={opt.value}>
+            {opt.label}
+          </option>
+        ))}
+      </select>
 
 
       {/* Jika kustom → tampilkan date range picker */}

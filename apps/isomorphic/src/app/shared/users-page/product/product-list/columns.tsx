@@ -90,7 +90,7 @@ export const productsListColumns = [
           placement="top"
           color="invert"
         >
-          <Link to={routes.dashboard.ediProduct(row.original.id)}>
+          <Link to={routes.dashboard.editProduct(row.original.id)}>
             <ActionIcon
               as="span"
               size="sm"

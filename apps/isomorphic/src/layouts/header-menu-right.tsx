@@ -14,7 +14,7 @@ import NotificationDropdown from './notification-dropdown';
 import DropdownAction from '@core/components/charts/dropdown-action';
 
 type HeaderMenuRightProps = {
-  setDate: (start: Date | null, end: Date | null) => void;
+  setDate: (start: Date | null, end: Date | null, type: string) => void;
 };
 
 const rangeOptions: DateOption[] = [
@@ -161,9 +161,7 @@ const isDashboard = location.pathname === '/dashboard';
       options={rangeOptions}
       defaultValue='bulanan'
       onChange={({ start, end, type }) => {
-        console.log("⏱ Tipe:", type);
-        console.log("🗓 Start:", start);
-        console.log("🗓 End:", end);
+        setDate(start, end, type);
       }}
     />}
 

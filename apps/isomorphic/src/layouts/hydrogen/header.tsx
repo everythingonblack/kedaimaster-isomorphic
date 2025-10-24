@@ -9,20 +9,15 @@ import HeaderMenuRight from '@/layouts/header-menu-right';
 import StickyHeader from '@/layouts/sticky-header';
 import SearchWidget from '@/app/shared/search/search';
 
-export default function Header() {
-  // 🧠 Simpan range tanggal yang dikirim dari HeaderMenuRight
-  const [dateRange, setDateRange] = useState<{
-    start: Date | null;
-    end: Date | null;
-  }>({
-    start: null,
-    end: null,
-  });
-
+export default function Header({
+  setDate,
+}: {
+  setDate: (start: Date | null, end: Date | null, type: string) => void;
+}) {
   // ✅ Fungsi handler dengan tipe parameter yang jelas
-  const handleSetDate = (start: Date | null, end: Date | null) => {
-    setDateRange({ start, end });
-    console.log('Tanggal dipilih:', { start, end });
+  const handleSetDate = (start: Date | null, end: Date | null, type: string) => {
+    setDate(start, end, type);
+    console.log('Tanggal dipilih:', { start, end, type });
   };
 
   return (

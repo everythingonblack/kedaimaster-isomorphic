@@ -1,10 +1,11 @@
 'use client';
 
 import DeletePopover from '@core/components/delete-popover';
+import { getRatings } from '@core/components/table-utils/get-ratings';
 import { getStatusBadge } from '@core/components/table-utils/get-status-badge';
 import { getStockStatus } from '@core/components/table-utils/get-stock-status';
 import { routes } from '@/config/routes';
-import { ProductType } from '@/kedaimaster-api-handlers/productApiHandlers';
+import { ProductType } from '@/data/products-data';
 import EyeIcon from '@core/components/icons/eye';
 import PencilIcon from '@core/components/icons/pencil';
 import AvatarCard from '@core/ui/avatar-card';
@@ -53,6 +54,12 @@ export const productsListColumns = [
       />
     ),
   }),
+  columnHelper.display({
+    id: 'sku',
+    size: 150,
+    header: 'SKU',
+    cell: ({ row }) => <Text className="text-sm">SKU-{row.original.sku}</Text>,
+  }),
   columnHelper.accessor('stock', {
     id: 'stock',
     size: 200,
@@ -66,6 +73,12 @@ export const productsListColumns = [
     cell: ({ row }) => (
       <Text className="font-medium text-gray-700">${row.original.price}</Text>
     ),
+  }),
+  columnHelper.display({
+    id: 'rating',
+    size: 200,
+    header: 'Rating',
+    cell: ({ row }) => getRatings(row.original.rating),
   }),
   columnHelper.accessor('status', {
     id: 'status',
@@ -90,7 +103,7 @@ export const productsListColumns = [
           placement="top"
           color="invert"
         >
-          <Link to={routes.dashboard.editProduct(row.original.id)}>
+          <Link to={routes.eCommerce.ediProduct(row.original.id)}>
             <ActionIcon
               as="span"
               size="sm"
@@ -129,4 +142,3 @@ export const productsListColumns = [
     ),
   }),
 ];
-

@@ -47,7 +47,7 @@ export const menuItems = [
     dropdownItems: [
       {
         name: 'Satuan',
-        href: routes.dashboard.data,
+        href: routes.dashboard.uoms,
         badge: '',
       },
       {

@@ -1,17 +1,35 @@
 export const routes = {
   dashboard: {
     main: '/dashboard',
-    material: '/dashboard/material',
-    product: '/dashboard/product',
-    store: '/dashboard/store',
-    data: '/dashboard/data',
-    categories: '/dashboard/categories',
-    users: '/dashboard/users',
-    productDetails: (slug: string) => `/dashboard/products/${slug}`,
-    ediProduct: (slug: string) => `/dashboard/products/${slug}/edit`,
-    // editShipment: (id: string) => `/logistics/shipments/${id}/edit`,
-    // shipmentDetails: (id: string) => `/logistics/shipments/${id}`,
-    // tracking: (id: string) => `/logistics/tracking/${id}`,
+    store: '/store',
+
+    product: '/product',
+    createProduct: '/product/create',
+    productDetails: (slug: string) => `/product/${slug}`,
+    editProduct: (slug: string) => `/product/${slug}/edit`,
+    
+    material: '/material',
+    createMaterial: '/material/create',
+    materialDetails: (slug: string) => `/material/${slug}`,
+    editMaterial: (slug: string) => `/material/${slug}/edit`,
+
+    
+    categories: '/categories',
+    createCategories: '/categories/create',
+    categoryDetails: (slug: string) => `/categories/${slug}`,
+    editCategories: (slug: string) => `/categories/${slug}/edit`,
+
+    
+    uoms: '/uoms',
+    createUom: '/uoms/create',
+    uomDetails: (slug: string) => `/uoms/${slug}`,
+    editUom: (slug: string) => `/uoms/${slug}/edit`,
+
+    
+    users: '/users',
+    createUsers: '/users/create',
+    usersDetails: (slug: string) => `/users/${slug}`,
+    editUsers: (slug: string) => `/users/${slug}/edit`,
   },
   forms: {
     profileSettings: '/forms/profile-settings',
