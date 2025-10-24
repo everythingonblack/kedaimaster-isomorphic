@@ -4,7 +4,7 @@ import DeletePopover from '@core/components/delete-popover';
 import { getStatusBadge } from '@core/components/table-utils/get-status-badge';
 import { getStockStatus } from '@core/components/table-utils/get-stock-status';
 import { routes } from '@/config/routes';
-import { ProductType } from '@/data/products-data';
+import { ProductType } from '@/kedaimaster-api-handlers/productApiHandlers';
 import EyeIcon from '@core/components/icons/eye';
 import PencilIcon from '@core/components/icons/pencil';
 import AvatarCard from '@core/ui/avatar-card';

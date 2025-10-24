@@ -180,8 +180,20 @@ export async function refreshTokenManually() {
   return apiRequest('/refreshToken', 'POST', { refreshToken });
 }
 
-export function getProfile() {
-  return null;
+export async function getProfile() {
+  // For now, return a mock user profile. In a real app, this would fetch from an API.
+  const { accessToken } = getTokens();
+  if (!accessToken) {
+    return null;
+  }
+
+  // Simulate fetching a profile
+  return {
+    id: 'user-123',
+    email: 'user@example.com',
+    name: 'John Doe', // Added name for testing
+    role: 'user',
+  };
 }
 
 export function logOut(){

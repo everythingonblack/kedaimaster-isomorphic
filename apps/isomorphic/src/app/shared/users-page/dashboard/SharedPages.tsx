@@ -24,6 +24,9 @@ export default function MaterialStockReport({ className }: { className?: string 
         handleDeleteRow: (row: MaterialType) => {
           setData((prev) => prev.filter((r) => r.id !== row.id));
         },
+        handleMultipleDelete: (rows: MaterialType[]) => {
+          setData((prev) => prev.filter((r) => !rows.some((s) => s.id === r.id)));
+        },
       },
       enableColumnResizing: false,
     },

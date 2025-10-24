@@ -39,7 +39,7 @@ export const materialsListColumns = [
     size: 300,
     cell: ({ row }) => (
       <AvatarCard
-        src={row.original.uom?.imageUrl}
+        src={row.original.uomImage}
         name={row.original.name}
         description={row.original.remarks}
         avatarProps={{
@@ -52,12 +52,12 @@ export const materialsListColumns = [
   }),
 
   // Kolom Satuan (UOM)
-  columnHelper.accessor('uom.name', {
+  columnHelper.accessor((row) => row.uomName, {
     id: 'uom',
     header: 'Unit',
     size: 100,
     cell: ({ row }) => (
-      <Text className="text-gray-700 font-medium">{row.original.uom?.name}</Text>
+      <Text className="text-gray-700 font-medium">{row.original.uomName}</Text>
     ),
   }),
 

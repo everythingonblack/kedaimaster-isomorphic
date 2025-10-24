@@ -14,7 +14,7 @@ import { PiMagnifyingGlassBold } from 'react-icons/pi';
 export default function StockReport({ className }: { className?: string }) {
   const { table, setData } = useTanStackTable<ProductType>({
     tableData: [],
-    columnConfig: productsListColumns,
+    columnConfig: productsListColumns as any,
     options: {
       initialState: {
         pagination: { pageIndex: 0, pageSize: 10 },
@@ -22,6 +22,9 @@ export default function StockReport({ className }: { className?: string }) {
       meta: {
         handleDeleteRow: (row: ProductType) => {
           setData((prev) => prev.filter((r) => r.id !== row.id));
+        },
+        handleMultipleDelete: (rows: ProductType[]) => {
+          setData((prev) => prev.filter((r) => !rows.some((s) => s.id === r.id)));
         },
       },
       enableColumnResizing: false,

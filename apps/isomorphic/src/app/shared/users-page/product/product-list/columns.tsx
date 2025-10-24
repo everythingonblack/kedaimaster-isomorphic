@@ -1,16 +1,20 @@
 'use client';
 
 import DeletePopover from '@core/components/delete-popover';
+import { getStatusBadge } from '@core/components/table-utils/get-status-badge';
+import { getStockStatus } from '@core/components/table-utils/get-stock-status';
+import { routes } from '@/config/routes';
+import { ProductType } from '@/kedaimaster-api-handlers/productApiHandlers';
+import EyeIcon from '@core/components/icons/eye';
+import PencilIcon from '@core/components/icons/pencil';
 import AvatarCard from '@core/ui/avatar-card';
 import { createColumnHelper } from '@tanstack/react-table';
-import { MaterialType } from '@/kedaimaster-api-handlers/materialApiHandlers';
+import {Link} from 'react-router-dom';
 import { ActionIcon, Checkbox, Flex, Text, Tooltip } from 'rizzui';
-import { PiPencilSimpleLine, PiEyeBold } from 'react-icons/pi';
 
-const columnHelper = createColumnHelper<MaterialType>();
+const columnHelper = createColumnHelper<ProductType>();
 
-export const materialsListColumns = [
-  // Checkbox untuk select row
+export const productsListColumns = [
   columnHelper.display({
     id: 'select',
     size: 50,
@@ -31,17 +35,16 @@ export const materialsListColumns = [
       />
     ),
   }),
-
-  // Kolom Nama + Gambar (UOM Image)
   columnHelper.accessor('name', {
     id: 'name',
-    header: 'Material',
     size: 300,
+    header: 'Product',
+    enableSorting: false,
     cell: ({ row }) => (
       <AvatarCard
-        src={row.original.uom?.imageUrl}
+        src={row.original.image}
         name={row.original.name}
-        description={row.original.remarks}
+        description={row.original.category}
         avatarProps={{
           name: row.original.name,
           size: 'lg',
@@ -50,42 +53,30 @@ export const materialsListColumns = [
       />
     ),
   }),
-
-  // Kolom Satuan (UOM)
-  columnHelper.accessor('uom.name', {
-    id: 'uom',
-    header: 'Unit',
-    size: 100,
-    cell: ({ row }) => (
-      <Text className="text-gray-700 font-medium">{row.original.uom?.name}</Text>
-    ),
-  }),
-
-  // Kolom Stok
   columnHelper.accessor('stock', {
     id: 'stock',
+    size: 200,
     header: 'Stock',
-    size: 100,
+    cell: ({ row }) => getStockStatus(row.original.stock),
+  }),
+  columnHelper.accessor('price', {
+    id: 'price',
+    size: 150,
+    header: 'Price',
     cell: ({ row }) => (
-      <Text className="text-gray-800 font-semibold">{row.original.stock}</Text>
+      <Text className="font-medium text-gray-700">${row.original.price}</Text>
     ),
   }),
-
-  // Kolom Tanggal Update
-  columnHelper.accessor('updatedOn', {
-    id: 'updatedOn',
-    header: 'Last Updated',
-    size: 180,
-    cell: ({ row }) => (
-      <Text className="text-gray-600 text-sm">{row.original.updatedOn}</Text>
-    ),
+  columnHelper.accessor('status', {
+    id: 'status',
+    size: 120,
+    header: 'Status',
+    enableSorting: false,
+    cell: ({ row }) => getStatusBadge(row.original.status),
   }),
-
-  // Kolom Aksi
   columnHelper.display({
     id: 'action',
     size: 120,
-    header: 'Action',
     cell: ({
       row,
       table: {
@@ -93,29 +84,43 @@ export const materialsListColumns = [
       },
     }) => (
       <Flex align="center" justify="end" gap="3" className="pe-4">
-        <Tooltip content="Edit Material" placement="top">
-          <ActionIcon
-            as="button"
-            size="sm"
-            variant="outline"
-            aria-label="Edit Material"
-          >
-            <PiPencilSimpleLine className="h-4 w-4" />
-          </ActionIcon>
+        <Tooltip
+          size="sm"
+          content={'Edit Product'}
+          placement="top"
+          color="invert"
+        >
+          <Link to={routes.dashboard.ediProduct(row.original.id)}>
+            <ActionIcon
+              as="span"
+              size="sm"
+              variant="outline"
+              aria-label={'Edit Product'}
+            >
+              <PencilIcon className="h-4 w-4" />
+            </ActionIcon>
+          </Link>
         </Tooltip>
-        <Tooltip content="View Material" placement="top">
-          <ActionIcon
-            as="button"
-            size="sm"
-            variant="outline"
-            aria-label="View Material"
-          >
-            <PiEyeBold className="h-4 w-4" />
-          </ActionIcon>
+        <Tooltip
+          size="sm"
+          content={'View Product'}
+          placement="top"
+          color="invert"
+        >
+          <Link to={routes.eCommerce.productDetails(row.original.id)}>
+            <ActionIcon
+              as="span"
+              size="sm"
+              variant="outline"
+              aria-label={'View Product'}
+            >
+              <EyeIcon className="h-4 w-4" />
+            </ActionIcon>
+          </Link>
         </Tooltip>
         <DeletePopover
-          title={`Delete Material`}
-          description={`Are you sure you want to delete ${row.original.name}?`}
+          title={`Delete the product`}
+          description={`Are you sure you want to delete this #${row.original.id} product?`}
           onDelete={() =>
             meta?.handleDeleteRow && meta?.handleDeleteRow(row.original)
           }
@@ -124,3 +129,4 @@ export const materialsListColumns = [
     ),
   }),
 ];
+
