@@ -13,6 +13,7 @@ export default function ProductPricing() {
     <>
       <Input
         label="Price"
+        // TODO: Adjust to use price.unitPrice from API
         placeholder="10"
         {...register('price')}
         error={errors.price?.message as string}

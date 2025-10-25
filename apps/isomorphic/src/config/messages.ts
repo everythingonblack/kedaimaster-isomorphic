@@ -1,3 +1,5 @@
+import { stockInMaterial } from "@/kedaimaster-api/materialsApi";
+
 export const messages = {
   passwordOneUppercase: `The Password must contain at least one uppercase character`,
   passwordOneLowercase: `The Password must contain at least one lowercase character`,
@@ -22,7 +24,9 @@ export const messages = {
   teamIsRequired: 'New member must be assigned to a team',
   productNameIsRequired: 'Product name is required',
   productTypeIsRequired: 'Product type is required',
+  stockMustBePositive: 'Stock must be a positive number',
   priceIsRequired: 'Product price is required',
+  priceMustBePositive: 'Price must be a positive number',
   retailPriceIsRequired: 'Retail price is required',
   salePriceIsRequired: 'Sale price is required',
   shippingPriceIsRequired: 'Shipping price is required',
@@ -60,6 +64,7 @@ export const messages = {
   folderNameIsRequired: 'Folder name is required',
   folderNameLengthMin: 'Folder name must be at least 3 letters',
   productColorRequired: 'Product Color is Required',
+  productCategoryIsRequired: 'Product Category is Required',
   productSizeRequired: 'Product Size is Required',
   descriptionIsRequired: 'Description is Required',
   locationIsRequired: 'Location is Required',

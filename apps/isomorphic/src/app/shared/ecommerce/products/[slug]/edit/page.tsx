@@ -9,8 +9,8 @@ import { routes } from '@/config/routes';
 const pageHeader = {
   title: 'Edit Product',
   breadcrumb: [
-    { href: routes.eCommerce.dashboard, name: 'E-Commerce' },
-    { href: routes.eCommerce.products, name: 'Products' },
+    { href: routes.dashboard.main, name: 'E-Commerce' },
+    { href: routes.dashboard.products, name: 'Products' },
     { name: 'Edit' },
   ],
 };
@@ -22,7 +22,7 @@ export default function EditProductPage() {
     <>
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb}>
         <Link
-          to={routes.eCommerce.createProduct}
+          to={routes.dashboard.createProduct}
           className="mt-4 w-full @lg:mt-0 @lg:w-auto"
         >
           <Button as="span" className="w-full @lg:w-auto">

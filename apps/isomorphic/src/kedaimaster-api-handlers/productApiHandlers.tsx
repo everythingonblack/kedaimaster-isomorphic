@@ -1,8 +1,28 @@
-import { getAllProducts } from '@/kedaimaster-api/productsApi';
-import { CreateProductInput } from '@/validators/create-product.schema';
+import * as productsApi from '@/kedaimaster-api/productsApi';
+import { z } from 'zod';
+import { messages } from '@/config/messages';
+import { fileSchema } from '@/validators/common-rules';
 
 /**
- * Type produk yang digunakan di tabel Stock Report.
+ * Tipe data produk mentah dari API (sebelum dimapping ke UI)
+ */
+type ApiProduct = {
+  id: string;
+  name: string;
+  category?: {
+    id: string;
+    name: string;
+  };
+  imageUrl?: string;
+  stock?: number;
+  price?: {
+    unitPrice: number;
+  };
+  description?: string;
+};
+
+/**
+ * Type produk yang digunakan di tabel Stock Report (UI-friendly)
  */
 export type ProductType = {
   id: string;
@@ -15,32 +35,89 @@ export type ProductType = {
 };
 
 /**
- * Handler untuk mengambil data produk dari backend
- * dan memetakan ke struktur ProductType agar cocok untuk UI.
+ * Schema untuk form produk (Create/Edit)
+ * Disesuaikan agar sejalan dengan ApiProduct dan kebutuhan UI.
+ */
+export const productFormSchema = z.object({
+  name: z.string().min(1, { message: messages.productNameIsRequired }),
+
+  categoryId: z.string().min(1, { message: messages.productCategoryIsRequired }),
+
+  description: z.string().optional(),
+
+  price: z.coerce
+    .number({ required_error: messages.priceIsRequired })
+    .min(0, { message: messages.priceMustBePositive }),
+
+  stock: z
+    .coerce
+    .number()
+    .min(0, { message: messages.stockMustBePositive })
+    .optional()
+    .default(0),
+
+  image: fileSchema.optional(), // single file upload
+});
+
+export type ImageFormValue = {
+  name: string;
+  url: string;
+  size: number;
+  raw?: File;
+};
+
+export type CreateProductInput = z.infer<typeof productFormSchema> & {
+  image?: ImageFormValue | undefined;
+};
+
+/**
+ * Helper untuk memetakan data dari ApiProduct ke ProductType
+ */
+function mapApiProductToProductType(item: ApiProduct): ProductType {
+  return {
+    id: item.id,
+    name: item.name,
+    category: item.category?.name || '-',
+    image: item.imageUrl || '/placeholder.png',
+    stock: item.stock ?? 0,
+    price: item.price?.unitPrice
+      ? item.price.unitPrice.toLocaleString('id-ID')
+      : '0',
+    status: (item.stock ?? 0) > 0 ? 'Available' : 'Out of Stock',
+  };
+}
+
+/**
+ * Helper untuk memetakan data dari ApiProduct ke CreateProductInput
+ * Digunakan saat Edit Form (prefill data dari backend)
+ */
+function mapApiProductToCreateProductInput(item: ApiProduct): CreateProductInput {
+  return {
+    name: item.name,
+    categoryId: item.category?.id ?? '',
+    price: item.price?.unitPrice ?? 0,
+    stock: item.stock ?? 0,
+    description: item.description ?? '',
+    image: item.imageUrl
+      ? {
+          name: item.imageUrl.split('/').pop() || 'image',
+          url: item.imageUrl,
+          size: 0,
+          raw: undefined,
+        }
+      : undefined,
+  };
+}
+
+/**
+ * Handler untuk mengambil semua produk
  */
 export async function fetchProducts(): Promise<ProductType[]> {
   try {
-    // Ambil data produk dari API
-    const response = await getAllProducts();
-
-    // Validasi data berupa array
+    const response = (await productsApi.getAllProducts()) as ApiProduct[] | null;
     if (Array.isArray(response)) {
-      console.log('response', response);
-      const mappedProducts: ProductType[] = response.map((item) => ({
-        id: item.id,
-        name: item.name,
-        category: item.category?.name || '-',
-        image: item.imageUrl || '/placeholder.png',
-        stock: item.stock ?? 0,
-        price: item.price?.unitPrice
-          ? item.price.unitPrice.toLocaleString('id-ID')
-          : '0',
-        status: item.stock > 0 ? 'Available' : 'Out of Stock',
-      }));
-      console.log(response)
-      return mappedProducts;
+      return response.map(mapApiProductToProductType);
     }
-
     return [];
   } catch (error) {
     console.error('❌ Failed to fetch products:', error);
@@ -49,118 +126,107 @@ export async function fetchProducts(): Promise<ProductType[]> {
 }
 
 /**
- * Handler untuk mengambil data produk berdasarkan ID dari backend
- * dan memetakan ke struktur ProductType agar cocok untuk UI.
+ * Handler untuk mengambil produk berdasarkan ID
  */
-async function getProductById(id: string): Promise<ProductType | undefined> {
+export async function fetchProductById(id: string): Promise<CreateProductInput | undefined> {
   try {
-    // Ambil data produk dari API
-    const response = await getAllProducts();
-
-    // Validasi data berupa array
-    if (Array.isArray(response)) {
-      const foundProduct = response.find((item) => item.id === id);
-      if (foundProduct) {
-        const mappedProduct: ProductType = {
-          id: foundProduct.id,
-          name: foundProduct.name,
-          category: foundProduct.category?.name || '-',
-          image: foundProduct.imageUrl || '/placeholder.png',
-          stock: foundProduct.stock ?? 0,
-          price: foundProduct.price?.unitPrice
-            ? foundProduct.price.unitPrice.toLocaleString('id-ID')
-            : '0',
-          status: foundProduct.stock > 0 ? 'Available' : 'Out of Stock',
-        };
-        return mappedProduct;
-      }
+    const item = (await productsApi.getProductById(id)) as ApiProduct | null;
+    if (!item) {
+      console.warn(`⚠️ Product with ID ${id} not found`);
+      return undefined;
     }
-
-    return undefined;
+    return mapApiProductToCreateProductInput(item);
   } catch (error) {
-    console.error('❌ Failed to fetch product:', error);
+    console.error(`❌ Failed to fetch product by ID (${id}):`, error);
     return undefined;
   }
 }
-export { getProductById };
 
 /**
- * Handler untuk membuat produk baru.
- * @param productData Data produk yang akan dibuat.
- * @returns Produk yang baru dibuat atau null jika gagal.
+ * Handler untuk membuat produk baru
  */
-export async function createProduct(productData: CreateProductInput): Promise<ProductType | null> {
+export async function createProduct(data: CreateProductInput) {
   try {
-    const response = await fetch('/api/products', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(productData),
-    });
-
-    if (!response.ok) {
-      console.error('❌ Failed to create product:', response.status);
-      return null;
-    }
-
-    const newProduct = (await response.json()) as ProductType;
-    return newProduct;
+    const payload = { ...data, image: data.image?.raw ?? undefined };
+    return await productsApi.createProduct(payload);
   } catch (error) {
     console.error('❌ Failed to create product:', error);
-    return null;
+    throw error;
   }
 }
 
 /**
- * Handler untuk memperbarui produk.
- * @param id ID produk yang akan diperbarui.
- * @param productData Data produk yang akan diperbarui.
- * @returns Produk yang diperbarui atau null jika gagal.
+ * Handler untuk update produk
  */
-export async function updateProduct(id: string, productData: CreateProductInput): Promise<ProductType | null> {
+export async function updateProduct(id: string, data: CreateProductInput) {
   try {
-    const response = await fetch(`/api/products/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(productData),
-    });
-
-    if (!response.ok) {
-      console.error('❌ Failed to update product:', response.status);
-      return null;
-    }
-
-    const updatedProduct = (await response.json()) as ProductType;
-    return updatedProduct;
+    const payload = { ...data, image: data.image?.raw ?? undefined };
+    return await productsApi.updateProduct(id, payload);
   } catch (error) {
-    console.error('❌ Failed to update product:', error);
-    return null;
+    console.error(`❌ Failed to update product (${id}):`, error);
+    throw error;
   }
 }
 
 /**
- * Handler untuk menghapus produk.
- * @param id ID produk yang akan dihapus.
- * @returns True jika berhasil dihapus, false jika gagal.
+ * Handler untuk hapus produk
  */
-export async function deleteProduct(id: string): Promise<boolean> {
+export async function deleteProduct(id: string) {
   try {
-    const response = await fetch(`/api/products/${id}`, {
-      method: 'DELETE',
-    });
-
-    if (!response.ok) {
-      console.error('❌ Failed to delete product:', response.status);
-      return false;
-    }
-
-    return true;
+    return await productsApi.deleteProduct(id);
   } catch (error) {
-    console.error('❌ Failed to delete product:', error);
-    return false;
+    console.error(`❌ Failed to delete product (${id}):`, error);
+    throw error;
   }
 }
+
+/**
+ * Handler untuk update stok produk
+ */
+export async function updateProductStock(id: string, data: { type: 'IN' | 'OUT'; qty: number }) {
+  try {
+    return await productsApi.updateProductStock(id, data);
+  } catch (error) {
+    console.error(`❌ Failed to update product stock (${id}):`, error);
+    throw error;
+  }
+}
+
+/**
+ * Handler untuk update harga produk
+ */
+export async function updateProductPrice(id: string, data: { price: number; effectiveDate: string }) {
+  try {
+    return await productsApi.updateProductPrice(id, data);
+  } catch (error) {
+    console.error(`❌ Failed to update product price (${id}):`, error);
+    throw error;
+  }
+}
+
+/**
+ * Handler untuk ambil daftar serving types
+ */
+export async function fetchServingTypes(): Promise<string[]> {
+  try {
+    return await productsApi.getServingTypes();
+  } catch (error) {
+    console.error('❌ Failed to fetch serving types:', error);
+    return [];
+  }
+}
+
+/**
+ * Handler untuk ambil daftar payment types
+ */
+export async function fetchPaymentTypes(): Promise<string[]> {
+  try {
+    return await productsApi.getPaymentTypes();
+  } catch (error) {
+    console.error('❌ Failed to fetch payment types:', error);
+    return [];
+  }
+}
+
+
 

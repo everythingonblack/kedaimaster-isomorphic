@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import PageHeader from '@/app/shared/page-header';
 import ExportButton from '@/app/shared/export-button';
 import { useTanStackTable } from '@core/components/table/custom/use-TanStack-Table';
-import { productsListColumns } from '@/app/shared/products-page/product/product-list/columns';
+import { productsListColumns } from '@/app/shared/ecommerce/product/product-list/columns';
 import Table from '@core/components/table';
 import TablePagination from '@core/components/table/pagination';
 import { Input } from 'rizzui';
@@ -18,8 +18,8 @@ import cn from '@core/utils/class-names';
 const pageHeader = {
   title: 'Products',
   breadcrumb: [
-    { href: routes.eCommerce.dashboard, name: 'E-Commerce' },
-    { href: routes.eCommerce.products, name: 'Products' },
+    { href: routes.dashboard.main, name: 'E-Commerce' },
+    { href: routes.dashboard.products, name: 'Products' },
     { name: 'List' },
   ],
 };
@@ -68,7 +68,7 @@ export default function ProductsPage() {
             fileName="product_data"
             header="ID,Name,Category,Product Thumbnail,SKU,Stock,Price,Status,Rating"
           />
-          <Link to={routes.eCommerce.createProduct} className="w-full @lg:w-auto">
+          <Link to={routes.dashboard.createProduct} className="w-full @lg:w-auto">
             <Button as="span" className="w-full @lg:w-auto">
               <PiPlusBold className="me-1.5 h-[17px] w-[17px]" />
               Add Product

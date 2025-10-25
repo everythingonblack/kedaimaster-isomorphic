@@ -6,27 +6,27 @@ import ProductDetailsRelatedProducts from '@/app/shared/ecommerce/product/produc
 import ProductDetailsDescription from '@/app/shared/ecommerce/product/product-details-description';
 import ProductDeliveryOptions from '@/app/shared/ecommerce/product/product-delivery-options';
 import ProductDetailsGallery from '@/app/shared/ecommerce/product/product-details-gallery';
-import ProductDetailsSummery from '@/app/shared/ecommerce/product/product-details-summery';
+// import ProductDetailsSummery from '@/app/shared/ecommerce/product/product-details-summery';
 import ProductDetailsReview from '@/app/shared/ecommerce/product/product-details-review';
-import { getProductById, ProductType } from '@/kedaimaster-api-handlers/productApiHandlers';
+import { ProductType } from '@/kedaimaster-api-handlers/productApiHandlers';
 import { generateSlug } from '@core/utils/generate-slug';
 
 export default function ProductDetails() {
   const params = useParams();
   const [product, setProduct] = useState<ProductType | null>(null);
 
-  useEffect(() => {
-    async function fetchProduct() {
-      try {
-        const foundProduct = await getProductById(params.slug as string);
-        setProduct(foundProduct || null);
-      } catch (error) {
-        console.error('Failed to fetch product:', error);
-      }
-    }
+  // useEffect(() => {
+  //   async function fetchProduct() {
+  //     try {
+  //       const foundProduct = await getProductById(params.slug as string);
+  //       setProduct(foundProduct || null);
+  //     } catch (error) {
+  //       console.error('Failed to fetch product:', error);
+  //     }
+  //   }
 
-    fetchProduct();
-  }, [params.slug]);
+  //   fetchProduct();
+  // }, [params.slug]);
 
   if (!product) {
     return <div>Loading...</div>;
@@ -39,7 +39,7 @@ export default function ProductDetails() {
           <ProductDetailsGallery />
         </div>
         <div className="col-span-5 @container">
-          <ProductDetailsSummery product={product} />
+          {/* <ProductDetailsSummery product={product} /> */}
           <ProductDeliveryOptions />
           <ProductDetailsDescription />
           <ProductDetailsReview />

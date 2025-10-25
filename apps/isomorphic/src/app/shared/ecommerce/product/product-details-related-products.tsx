@@ -13,7 +13,7 @@ export default function ProductDetailsRelatedProducts() {
         <Title as="h3" className="font-semibold">
           Similar Products
         </Title>
-        <Link to={routes.eCommerce.shop}>
+        <Link to={routes.dashboard.products}>
           <Button as="span" variant="text" className="py-0 underline">
             See All
           </Button>

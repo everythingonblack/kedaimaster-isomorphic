@@ -51,6 +51,7 @@ export default function InventoryTracing() {
       <Input
         type="number"
         label="Current Stock Level"
+        // TODO: Adjust to use stock from API
         placeholder="150"
         {...register('currentStock')}
         error={errors.currentStock?.message as string}
