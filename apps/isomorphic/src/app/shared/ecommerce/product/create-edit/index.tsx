@@ -1,12 +1,16 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+
+import { routes } from '@/config/routes';
+
+import PageHeader from '@/app/shared/page-header';
+
 import toast from 'react-hot-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
 import { Text } from 'rizzui';
 import cn from '@core/utils/class-names';
-import FormNav, { formParts } from '@/app/shared/ecommerce/product/create-edit/form-nav';
 import ProductSummary from '@/app/shared/ecommerce/product/create-edit/product-summary';
 import ProductMedia from '@/app/shared/ecommerce/product/create-edit/product-media';
 import FormFooter from '@core/components/form-footer';
@@ -19,11 +23,6 @@ import { useLayout } from '@/layouts/use-layout';
 import { LAYOUT_OPTIONS } from '@/config/enums';
 import { useParams } from 'react-router-dom';
 import productCategoriesApiHandlers from '@/kedaimaster-api-handlers/productCategoriesApiHandlers';
-
-const MAP_STEP_TO_COMPONENT = {
-  [formParts.summary]: ProductSummary,
-  [formParts.media]: ProductMedia,
-};
 
 interface IndexProps {
   className?: string;
@@ -39,6 +38,15 @@ export default function CreateEditProduct({ className }: IndexProps) {
     { value: string; label: string }[]
   >([]);
 
+  const pageHeader = {
+    title: 'Edit Produk',
+    breadcrumb: [
+      { href: routes.dashboard.main, name: 'Dashboard' },
+      { href: routes.dashboard.products, name: 'Produk' },
+      { name: `${product?.name}` },
+    ],
+  };
+
   const methods = useForm<CreateProductInput>({
     resolver: zodResolver(productFormSchema),
     defaultValues: product ?? {
@@ -46,7 +54,6 @@ export default function CreateEditProduct({ className }: IndexProps) {
       categoryId: '',
       price: 0,
       stock: 0,
-      description: '',
       image: undefined,
     },
   });
@@ -95,16 +102,18 @@ export default function CreateEditProduct({ className }: IndexProps) {
     try {
       let result;
       if (slug) {
-        result = await updateProduct(slug, data);
+        result = await updateProduct(slug, data, product);
       } else {
         result = await createProduct(data);
       }
 
       if (result) {
+        // Update state product agar breadcrumb ikut berubah
+        setProduct(result);
+
         toast.success(
           <Text as="b">Product successfully {slug ? 'updated' : 'created'}</Text>
         );
-        methods.reset();
       } else {
         toast.error(<Text as="b">Failed to {slug ? 'update' : 'create'} product</Text>);
       }
@@ -122,11 +131,8 @@ export default function CreateEditProduct({ className }: IndexProps) {
 
   return (
     <div className="@container">
-      <FormNav
-        className={cn(
-          layout === LAYOUT_OPTIONS.BERYLLIUM && 'z-[999] 2xl:top-[72px]'
-        )}
-      />
+      <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb} />
+
       <FormProvider {...methods}>
         <form
           onSubmit={methods.handleSubmit(onSubmit)}
@@ -136,13 +142,13 @@ export default function CreateEditProduct({ className }: IndexProps) {
           )}
         >
           <div className="mb-10 grid gap-7 divide-y divide-dashed divide-gray-200 @2xl:gap-9 @3xl:gap-11">
-            <div id={formParts.summary}>
+            <div>
               <ProductSummary
                 className="pt-7 @2xl:pt-9 @3xl:pt-11"
                 categoryOptions={categoryOptions}
               />
             </div>
-            <div id={formParts.media}>
+            <div>
               <ProductMedia className="pt-7 @2xl:pt-9 @3xl:pt-11" />
             </div>
           </div>

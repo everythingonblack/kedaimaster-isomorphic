@@ -102,17 +102,52 @@ export async function getProductById(id) {
  *   "stock": 0
  * }
  */
+function base64ToFile(base64, filename) {
+  if (!base64 || typeof base64 !== 'string' || !base64.includes(',')) return null;
+  const arr = base64.split(',');
+  const mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new File([u8arr], filename, { type: mime });
+}
+
 export async function createProduct(data) {
   if (!data?.name) throw new Error('Product name is required');
-
   const formData = new FormData();
   formData.append('name', data.name);
   if (data.categoryId) formData.append('categoryId', data.categoryId);
-  if (data.image) formData.append('image', data.image);
 
-  return apiRequest('/api/v1/products', 'POST', formData, {
-    'Content-Type': 'multipart/form-data',
-  });
+  // Konversi base64 ke File jika ada dan valid
+  if (data.image?.url && data.image?.name) {
+    const file = base64ToFile(data.image.url, data.image.name);
+    if (file) formData.append('image', file);
+  }
+
+  // Buat produk utama
+  const result = await apiRequest('/api/v1/products', 'POST', formData);
+
+  // Update stok dan price jika ada
+  if (data.stock !== undefined && result?.id) {
+    const qty = Number(data.stock);
+    if (!isNaN(qty)) {
+      await apiRequest(`/api/v1/products/${result.id}/stock`, 'PUT', {
+        type: qty > 0 ? 'IN' : 'OUT',
+        qty: Math.abs(qty),
+      });
+    }
+  }
+  if (data.price !== undefined && result?.id) {
+    await apiRequest(`/api/v1/products/${result.id}/price`, 'PUT', {
+      price: Number(data.price),
+      effectiveDate: new Date().toISOString(),
+    });
+  }
+
+  return result;
 }
 
 /**
@@ -138,15 +173,17 @@ export async function createProduct(data) {
  */
 export async function updateProduct(id, data) {
   if (!id) throw new Error('Product ID is required');
-
   const formData = new FormData();
-  if (data?.name) formData.append('name', data.name);
-  if (data?.categoryId) formData.append('categoryId', data.categoryId);
-  if (data?.image) formData.append('image', data.image);
+  if (data.name) formData.append('name', data.name);
+  if (data.categoryId) formData.append('categoryId', data.categoryId);
 
-  return apiRequest(`/api/v1/products/${id}`, 'PUT', formData, {
-    'Content-Type': 'multipart/form-data',
-  });
+  // Konversi base64 ke File jika ada dan valid
+  if (data.image?.url && data.image?.name) {
+    const file = base64ToFile(data.image.url, data.image.name);
+    if (file) formData.append('image', file);
+  }
+
+  return apiRequest(`/api/v1/products/${id}`, 'PUT', formData);
 }
 
 /**
@@ -183,8 +220,10 @@ export async function updateProductStock(id, data) {
   if (!data?.type || data?.qty == null)
     throw new Error('Stock update requires type and qty');
 
-  return apiRequest(`/api/v1/products/${id}/stock`, 'PUT', JSON.stringify(data), {
-    'Content-Type': 'application/json',
+  // Kirim sebagai JSON
+  return apiRequest(`/api/v1/products/${id}/stock`, 'PUT', {
+    type: data.type,
+    qty: data.qty,
   });
 }
 
@@ -209,8 +248,10 @@ export async function updateProductPrice(id, data) {
   if (!data?.price || !data?.effectiveDate)
     throw new Error('Price and effectiveDate are required');
 
-  return apiRequest(`/api/v1/products/${id}/price`, 'PUT', JSON.stringify(data), {
-    'Content-Type': 'application/json',
+  // Kirim sebagai JSON
+  return apiRequest(`/api/v1/products/${id}/price`, 'PUT', {
+    price: data.price,
+    effectiveDate: data.effectiveDate,
   });
 }
 

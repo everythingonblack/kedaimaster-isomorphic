@@ -156,19 +156,6 @@ export async function createProduct(data: CreateProductInput) {
 }
 
 /**
- * Handler untuk update produk
- */
-export async function updateProduct(id: string, data: CreateProductInput) {
-  try {
-    const payload = { ...data, image: data.image?.raw ?? undefined };
-    return await productsApi.updateProduct(id, payload);
-  } catch (error) {
-    console.error(`❌ Failed to update product (${id}):`, error);
-    throw error;
-  }
-}
-
-/**
  * Handler untuk hapus produk
  */
 export async function deleteProduct(id: string) {
@@ -226,6 +213,39 @@ export async function fetchPaymentTypes(): Promise<string[]> {
     console.error('❌ Failed to fetch payment types:', error);
     return [];
   }
+}
+
+/**
+ * Handler untuk update produk secara smart
+ */
+export async function updateProduct(id: string, data: CreateProductInput, oldData?: CreateProductInput) {
+  // Update name, categoryId, image jika ada perubahan
+  const payload: any = {};
+  payload.name = data.name;
+  payload.categoryId = data.categoryId;
+  if (data.image) payload.image = data.image;
+
+  let result = null;
+  if (Object.keys(payload).length > 0) {
+    result = await productsApi.updateProduct(id, payload);
+  }
+
+  // Update stok jika ada field dan berubah
+  if (typeof data.stock === 'number' && (!oldData || data.stock !== oldData.stock)) {
+    const qty = Math.abs(data.stock - (oldData?.stock ?? 0));
+    const type = data.stock > (oldData?.stock ?? 0) ? 'IN' : 'OUT';
+    await productsApi.updateProductStock(id, { type, qty });
+  }
+
+  // Update price jika ada field dan berubah
+  if (typeof data.price === 'number' && (!oldData || data.price !== oldData.price)) {
+    await productsApi.updateProductPrice(id, {
+      price: data.price,
+      effectiveDate: new Date().toISOString(),
+    });
+  }
+
+  return result;
 }
 
 

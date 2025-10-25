@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { PiPlusBold } from 'react-icons/pi';
 import { routes } from '@/config/routes';
 import { Button } from 'rizzui/button';
-import { fetchProducts, ProductType } from '@/kedaimaster-api-handlers/productApiHandlers';
+import { deleteProduct, fetchProducts, ProductType } from '@/kedaimaster-api-handlers/productApiHandlers';
 import { useEffect } from 'react';
 import PageHeader from '@/app/shared/page-header';
 import ExportButton from '@/app/shared/export-button';
@@ -34,11 +34,29 @@ export default function ProductsPage() {
         pagination: { pageIndex: 0, pageSize: 10 },
       },
       meta: {
-        handleDeleteRow: (row: ProductType) => {
-          setData((prev) => prev.filter((r) => r.id !== row.id));
+        handleDeleteRow: async (row: ProductType) => {
+          try {
+            await deleteProduct(row.id);
+            setData((prev) => prev.filter((r) => r.id !== row.id));
+            // Optionally refetch all products to ensure data consistency
+            const updatedProducts = await fetchProducts();
+            setData(updatedProducts);
+          } catch (error) {
+            console.error('Error deleting product:', error);
+            // Handle error, e.g., show a toast notification
+          }
         },
-        handleMultipleDelete: (rows: ProductType[]) => {
-          setData((prev) => prev.filter((r) => !rows.some((s) => s.id === r.id)));
+        handleMultipleDelete: async (rows: ProductType[]) => {
+          try {
+            await Promise.all(rows.map((row) => deleteProduct(row.id)));
+            setData((prev) => prev.filter((r) => !rows.some((s) => s.id === r.id)));
+            // Optionally refetch all products to ensure data consistency
+            const updatedProducts = await fetchProducts();
+            setData(updatedProducts);
+          } catch (error) {
+            console.error('Error deleting multiple products:', error);
+            // Handle error, e.g., show a toast notification
+          }
         },
       },
       enableColumnResizing: false,

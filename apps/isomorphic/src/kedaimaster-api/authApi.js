@@ -37,17 +37,24 @@ export async function apiRequest(endpoint, method = 'POST', data = {}, retry = t
   const { accessToken } = getTokens();
 
   try {
-    const options = {
-      method,
-      headers: {
-        'Content-Type': 'application/json',
-        ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
-      },
+    const headers = {
+      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
     };
 
-    // ❗ hanya kirim body kalau bukan GET/HEAD
+    // Hanya set Content-Type jika bukan FormData
+    const isFormData = typeof FormData !== 'undefined' && data instanceof FormData;
+    if (!isFormData) {
+      headers['Content-Type'] = 'application/json';
+    }
+
+    const options = {
+      method,
+      headers,
+    };
+
+    // Kirim body sesuai tipe
     if (method !== 'GET' && method !== 'HEAD') {
-      options.body = JSON.stringify(data);
+      options.body = isFormData ? data : JSON.stringify(data);
     }
 
     const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
@@ -196,7 +203,7 @@ export async function getProfile() {
   };
 }
 
-export function logOut(){
+export function logOut() {
   clearTokens();
   window.location.href = '/';
 }
