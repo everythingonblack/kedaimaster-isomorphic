@@ -1,21 +1,30 @@
 'use client';
 
-import { useParams } from 'react-router-dom';
 import ProductDetailsRelatedProducts from '@/app/shared/ecommerce/product/product-details-related-products';
 import ProductDetailsDescription from '@/app/shared/ecommerce/product/product-details-description';
 import ProductDeliveryOptions from '@/app/shared/ecommerce/product/product-delivery-options';
 import ProductDetailsGallery from '@/app/shared/ecommerce/product/product-details-gallery';
 import ProductDetailsSummery from '@/app/shared/ecommerce/product/product-details-summery';
 import ProductDetailsReview from '@/app/shared/ecommerce/product/product-details-review';
-import { modernProductsGrid } from '@/data/shop-products';
-import { generateSlug } from '@core/utils/generate-slug';
 
-export default function ProductDetails() {
-  const params = useParams();
-  const product =
-    modernProductsGrid.find(
-      (item) => generateSlug(item.title) === params.slug
-    ) ?? modernProductsGrid[0];
+interface Product {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  rating: number;
+  image: string;
+  gallery: { id: string; url: string; }[];
+  category: string;
+  sku: string;
+  stock: number;
+}
+
+interface ProductDetailsProps {
+  product: Product;
+}
+
+export default function ProductDetails({ product }: ProductDetailsProps) {
 
   return (
     <div className="@container">

@@ -2,7 +2,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LandingPage from '@/kedaimaster-landing/page';
 import HydrogenLayout from '@/layouts/hydrogen/layout';
 import DashboardPage from '@/app/shared/dashboard-page/dashboard/index';
-import ProductsPage from '@/app/shared/products-page/dashboard/index';
+import ProductDetails from '@/app/shared/ecommerce/product/product-details';
+import ProductsPage from '@/app/shared/products/page';
 import MaterialsPage from '@/app/shared/materials-page/dashboard/index';
 import UsersPage from '@/app/shared/users-page/dashboard/index';
 import { useState } from 'react';
@@ -67,11 +68,29 @@ function App() {
     setDashboardAggregate(data);
   };
 
+  // Dummy product data for ProductDetails
+  const dummyProduct = {
+    id: '1',
+    title: 'Dummy Product',
+    description: 'This is a dummy product description for testing purposes.',
+    price: 25.99,
+    rating: 4.5,
+    image: '/public/kedaimaster.jpg', // Replace with an actual image path if available
+    gallery: [
+      { id: '1', url: '/public/kedaimaster.jpg' },
+      { id: '2', url: '/public/kedaimaster.jpg' },
+    ],
+    category: 'Electronics',
+    sku: 'DP001',
+    stock: 100,
+    // Add other properties as needed by ProductDetailsSummery
+  };
+
   return (
     <BrowserRouter>
       <Routes>
         {/* Landing Page */}
-        <Route path="/" element={<MenuPage />} />
+        <Route path="/" element={<LandingPage />} />
 
         {/* Layout Route untuk semua halaman dashboard */}
         <Route element={<HydrogenLayout setDate={handleSetDate} />}>
@@ -89,6 +108,7 @@ function App() {
           />
           <Route path="/material" element={<MaterialsPage />} />
           <Route path="/product" element={<ProductsPage />} />
+          <Route path="/product/:slug" element={<ProductDetails product={dummyProduct} />} />
           <Route path="/store" element={<StorePage />} />
           <Route path="/uoms" element={<DataPage />} />
           <Route path="/categories" element={<CategoriesPage />} />

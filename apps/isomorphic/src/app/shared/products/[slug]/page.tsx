@@ -1,15 +1,13 @@
 import { routes } from '@/config/routes';
 import PageHeader from '@/app/shared/page-header';
-import ProductDetails from '@/app/shared/ecommerce/product/product-details';
-import { metaObject } from '@/config/site.config';
+import ProductDetailsComponent from '@/app/shared/ecommerce/product/product-details';
+import { MetaObject } from '@/config/site.config';
 
-export const metadata = {
-  ...metaObject('Product Details'),
-};
+interface ProductDetailsPageProps {
+  slug: string;
+}
 
-export default async function ProductDetailsPage({ params }: any) {
-  const slug = (await params).slug;
-
+export default function ProductDetailsPage({ slug }: ProductDetailsPageProps) {
   const pageHeader = {
     title: 'Shop',
     breadcrumb: [
@@ -22,15 +20,18 @@ export default async function ProductDetailsPage({ params }: any) {
         name: 'Shop',
       },
       {
-        name: slug,
+        name: slug || 'Product',
       },
     ],
   };
 
   return (
     <>
+      {/* 🧠 Meta tags */}
+      <MetaObject title={`Product Details - ${slug}`} description="View product details page" />
+
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb} />
-      <ProductDetails />
+      <ProductDetailsComponent product={{} as any} />
     </>
   );
 }

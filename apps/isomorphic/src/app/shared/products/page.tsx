@@ -5,11 +5,11 @@ import { Button } from 'rizzui/button';
 import PageHeader from '@/app/shared/page-header';
 import ProductsTable from '@/app/shared/ecommerce/product/product-list/table';
 import { productsData } from '@/data/products-data';
-import { metaObject } from '@/config/site.config';
+import { MetaObject } from '@/config/site.config';
 import ExportButton from '@/app/shared/export-button';
 
 export const metadata = {
-  ...metaObject('Products'),
+  ...MetaObject({ title: 'Products' }),
 };
 
 const pageHeader = {
@@ -40,7 +40,7 @@ export default function ProductsPage() {
             header="ID,Name,Category,Product Thumbnail,SKU,Stock,Price,Status,Rating"
           />
           <Link
-            href={routes.eCommerce.createProduct}
+            to={routes.eCommerce.createProduct}
             className="w-full @lg:w-auto"
           >
             <Button as="span" className="w-full @lg:w-auto">

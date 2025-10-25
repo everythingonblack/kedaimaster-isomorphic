@@ -69,12 +69,12 @@ export default function ProductsTable({
       {!hideFilters && <Filters table={table} />}
       <Table table={table} variant="modern" classNames={classNames} />
       {!hideFooter && <TableFooter table={table} onExport={handleExportData} />}
-      {!hidePagination && (
+      {/* {!hidePagination && (
         <TablePagination
           table={table}
           className={cn('py-4', paginationClassName)}
         />
-      )}
+      )} */}
     </>
   );
 }
