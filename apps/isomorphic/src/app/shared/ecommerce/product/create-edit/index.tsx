@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { Element } from 'react-scroll';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
 import { Text } from 'rizzui';
@@ -58,16 +57,32 @@ export default function CreateEditProduct({
     defaultValues: defaultValues(product),
   });
 
-  const onSubmit: SubmitHandler<CreateProductInput> = (data) => {
+  const onSubmit: SubmitHandler<CreateProductInput> = async (data) => {
     setLoading(true);
-    setTimeout(() => {
+    try {
+      let result;
+      if (slug) {
+        // Update existing product
+        result = await updateProduct(slug, data);
+      } else {
+        // Create new product
+        result = await createProduct(data);
+      }
+
+      if (result) {
+        toast.success(
+          <Text as="b">Product successfully {slug ? 'updated' : 'created'}</Text>
+        );
+        methods.reset();
+      } else {
+        toast.error(<Text as="b">Failed to {slug ? 'update' : 'create'} product</Text>);
+      }
+    } catch (error) {
+      console.error('Error during product creation/update:', error);
+      toast.error(<Text as="b">An error occurred</Text>);
+    } finally {
       setLoading(false);
-      console.log('product_data', data);
-      toast.success(
-        <Text as="b">Product successfully {slug ? 'updated' : 'created'}</Text>
-      );
-      methods.reset();
-    }, 600);
+    }
   };
 
   return (
@@ -87,12 +102,12 @@ export default function CreateEditProduct({
         >
           <div className="mb-10 grid gap-7 divide-y divide-dashed divide-gray-200 @2xl:gap-9 @3xl:gap-11">
             {Object.entries(MAP_STEP_TO_COMPONENT).map(([key, Component]) => (
-              <Element
+              <div
                 key={key}
-                name={formParts[key as keyof typeof formParts]}
+                id={formParts[key as keyof typeof formParts]}
               >
                 {<Component className="pt-7 @2xl:pt-9 @3xl:pt-11" />}
-              </Element>
+              </div>
             ))}
           </div>
 

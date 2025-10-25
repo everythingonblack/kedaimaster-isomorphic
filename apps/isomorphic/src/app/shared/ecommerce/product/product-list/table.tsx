@@ -4,13 +4,14 @@ import { productsData } from '@/data/products-data';
 import Table from '@core/components/table';
 import { useTanStackTable } from '@core/components/table/custom/use-TanStack-Table';
 import TablePagination from '@core/components/table/pagination';
-import { ProductsDataType } from '@/app/shared/ecommerce/dashboard/stock-report';
 import { productsListColumns } from './columns';
 import Filters from './filters';
 import TableFooter from '@core/components/table/footer';
 import { TableClassNameProps } from '@core/components/table/table-types';
 import cn from '@core/utils/class-names';
 import { exportToCSV } from '@core/utils/export-to-csv';
+
+import { ProductType } from '@/kedaimaster-api-handlers/productApiHandlers';
 
 export default function ProductsTable({
   pageSize = 5,
@@ -22,6 +23,7 @@ export default function ProductsTable({
     rowClassName: 'last:border-0',
   },
   paginationClassName,
+  products,
 }: {
   pageSize?: number;
   hideFilters?: boolean;
@@ -29,9 +31,11 @@ export default function ProductsTable({
   hideFooter?: boolean;
   classNames?: TableClassNameProps;
   paginationClassName?: string;
+  products: ProductType[];
 }) {
-  const { table, setData } = useTanStackTable<ProductsDataType>({
-    tableData: productsData,
+  console.log('ProductsTable products', products);
+  const { table, setData } = useTanStackTable<ProductType>({
+    tableData: products,
     columnConfig: productsListColumns,
     options: {
       initialState: {

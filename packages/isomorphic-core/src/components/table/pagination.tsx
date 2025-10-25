@@ -72,7 +72,7 @@ export default function TablePagination<TData extends Record<string, any>>({
           Page {table.getState().pagination.pageIndex + 1} of{" "}
           {table.getPageCount().toLocaleString()}
         </Text>
-        <Grid gap="2" columns="4">
+        <Grid gap="2" columns="4" className="flex">
           <ActionIcon
             size="sm"
             rounded="lg"

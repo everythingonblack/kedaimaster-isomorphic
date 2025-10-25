@@ -15,7 +15,7 @@ import QuillLoader from '@core/components/loader/quill-loader';
 // Lazy load QuillEditor untuk performa
 const QuillEditor = lazy(() => import('@core/ui/quill-editor'));
 
-export default function ProductSummary({ className }: { className?: string }) {
+export default function CreateProductPage({ className }: { className?: string }) {
   const {
     register,
     control,

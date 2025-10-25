@@ -1,48 +1,47 @@
-import { Link }from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { PiPlusBold } from 'react-icons/pi';
-import CreateEditProduct from '@/app/shared/ecommerce/product/create-edit';
-import { metaObject } from '@/config/site.config';
-import PageHeader from '@/app/shared/page-header';
-import { Button } from 'rizzui/button';
 import { routes } from '@/config/routes';
+import { Button } from 'rizzui/button';
+import PageHeader from '@/app/shared/page-header';
+import ReviewsTable from '@/app/shared/ecommerce/review/table';
+import { metaObject } from '@/config/site.config';
 
 export const metadata = {
-  ...metaObject('Create Product'),
+  ...metaObject('Reviews'),
 };
 
 const pageHeader = {
-  title: 'Create Product',
+  title: 'Reviews',
   breadcrumb: [
     {
       href: routes.eCommerce.dashboard,
       name: 'E-Commerce',
     },
     {
-      href: routes.eCommerce.products,
-      name: 'Products',
+      href: routes.eCommerce.reviews,
+      name: 'Reviews',
     },
     {
-      name: 'Create',
+      name: 'List',
     },
   ],
 };
 
-export default function CreateProductPage() {
+export default function ReviewsPage() {
   return (
     <>
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb}>
         <Link
-          href={routes.eCommerce.createProduct}
+          href={routes.eCommerce.reviews}
           className="mt-4 w-full @lg:mt-0 @lg:w-auto"
         >
           <Button as="span" className="w-full @lg:w-auto">
             <PiPlusBold className="me-1.5 h-[17px] w-[17px]" />
-            Add Product
+            Add Review
           </Button>
         </Link>
       </PageHeader>
-
-      <CreateEditProduct />
+      <ReviewsTable />
     </>
   );
 }

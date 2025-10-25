@@ -3,10 +3,10 @@ export const routes = {
     main: '/dashboard',
     store: '/store',
 
-    product: '/product',
-    createProduct: '/product/create',
-    productDetails: (slug: string) => `/product/${slug}`,
-    editProduct: (slug: string) => `/product/${slug}/edit`,
+    products: '/products',
+    createProduct: '/products/create',
+    productDetails: (slug: string) => `/products/${slug}`,
+    editProduct: (slug: string) => `/products/${slug}/edit`,
     
     material: '/material',
     createMaterial: '/material/create',

@@ -3,7 +3,9 @@ import LandingPage from '@/kedaimaster-landing/page';
 import HydrogenLayout from '@/layouts/hydrogen/layout';
 import DashboardPage from '@/app/shared/dashboard-page/dashboard/index';
 import ProductDetails from '@/app/shared/ecommerce/product/product-details';
-import ProductsPage from '@/app/shared/products/page';
+import EditProductPage from '@/app/shared/ecommerce/products/[slug]/edit/page';
+import CreateProductPage from '@/app/shared/ecommerce/products/create/page';
+import ProductsPage from '@/app/shared/ecommerce/products/page';
 import MaterialsPage from '@/app/shared/materials-page/dashboard/index';
 import UsersPage from '@/app/shared/users-page/dashboard/index';
 import { useState } from 'react';
@@ -107,8 +109,10 @@ function App() {
             }
           />
           <Route path="/material" element={<MaterialsPage />} />
-          <Route path="/product" element={<ProductsPage />} />
-          <Route path="/product/:slug" element={<ProductDetails product={dummyProduct} />} />
+          <Route path="/products" element={<ProductsPage />} />
+          <Route path="/products/create" element={<CreateProductPage />} />
+          <Route path="/products/:slug" element={<ProductDetails />} />
+          <Route path="/products/:slug/edit" element={<EditProductPage />} />
           <Route path="/store" element={<StorePage />} />
           <Route path="/uoms" element={<DataPage />} />
           <Route path="/categories" element={<CategoriesPage />} />

@@ -1,30 +1,36 @@
 'use client';
 
+import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import ProductDetailsRelatedProducts from '@/app/shared/ecommerce/product/product-details-related-products';
 import ProductDetailsDescription from '@/app/shared/ecommerce/product/product-details-description';
 import ProductDeliveryOptions from '@/app/shared/ecommerce/product/product-delivery-options';
 import ProductDetailsGallery from '@/app/shared/ecommerce/product/product-details-gallery';
 import ProductDetailsSummery from '@/app/shared/ecommerce/product/product-details-summery';
 import ProductDetailsReview from '@/app/shared/ecommerce/product/product-details-review';
+import { getProductById, ProductType } from '@/kedaimaster-api-handlers/productApiHandlers';
+import { generateSlug } from '@core/utils/generate-slug';
 
-interface Product {
-  id: string;
-  title: string;
-  description: string;
-  price: number;
-  rating: number;
-  image: string;
-  gallery: { id: string; url: string; }[];
-  category: string;
-  sku: string;
-  stock: number;
-}
+export default function ProductDetails() {
+  const params = useParams();
+  const [product, setProduct] = useState<ProductType | null>(null);
 
-interface ProductDetailsProps {
-  product: Product;
-}
+  useEffect(() => {
+    async function fetchProduct() {
+      try {
+        const foundProduct = await getProductById(params.slug as string);
+        setProduct(foundProduct || null);
+      } catch (error) {
+        console.error('Failed to fetch product:', error);
+      }
+    }
 
-export default function ProductDetails({ product }: ProductDetailsProps) {
+    fetchProduct();
+  }, [params.slug]);
+
+  if (!product) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="@container">

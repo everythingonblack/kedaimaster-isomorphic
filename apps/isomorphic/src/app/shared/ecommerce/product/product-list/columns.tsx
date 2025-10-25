@@ -1,6 +1,7 @@
 'use client';
 
 import DeletePopover from '@core/components/delete-popover';
+import { getRatings } from '@core/components/table-utils/get-ratings';
 import { getStatusBadge } from '@core/components/table-utils/get-status-badge';
 import { getStockStatus } from '@core/components/table-utils/get-stock-status';
 import { routes } from '@/config/routes';
@@ -90,7 +91,7 @@ export const productsListColumns = [
           placement="top"
           color="invert"
         >
-          <Link to={routes.dashboard.editProduct(row.original.id)}>
+          <Link to={routes.eCommerce.ediProduct(row.original.id)}>
             <ActionIcon
               as="span"
               size="sm"
@@ -129,4 +130,3 @@ export const productsListColumns = [
     ),
   }),
 ];
-

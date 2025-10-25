@@ -1,5 +1,6 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 import { Input, Button, ActionIcon, Select } from 'rizzui';
 import cn from '@core/utils/class-names';

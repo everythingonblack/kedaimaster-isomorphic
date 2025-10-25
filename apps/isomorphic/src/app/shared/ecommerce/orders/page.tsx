@@ -1,27 +1,27 @@
-import { Link }from 'react-router-dom';
-import { PiPlusBold } from 'react-icons/pi';
+import { Link } from 'react-router-dom';
 import { routes } from '@/config/routes';
 import { Button } from 'rizzui/button';
 import PageHeader from '@/app/shared/page-header';
-import ProductsTable from '@/app/shared/ecommerce/product/product-list/table';
-import { productsData } from '@/data/products-data';
-import { MetaObject } from '@/config/site.config';
+import OrdersTable from '@/app/shared/ecommerce/order/order-list/table';
+import { PiPlusBold } from 'react-icons/pi';
+import { orderData } from '@/data/order-data';
+import { metaObject } from '@/config/site.config';
 import ExportButton from '@/app/shared/export-button';
 
 export const metadata = {
-  ...MetaObject({ title: 'Products' }),
+  ...metaObject('Orders'),
 };
 
 const pageHeader = {
-  title: 'Products',
+  title: 'Orders',
   breadcrumb: [
     {
       href: routes.eCommerce.dashboard,
       name: 'E-Commerce',
     },
     {
-      href: routes.eCommerce.products,
-      name: 'Products',
+      href: routes.eCommerce.orders,
+      name: 'Orders',
     },
     {
       name: 'List',
@@ -29,29 +29,29 @@ const pageHeader = {
   ],
 };
 
-export default function ProductsPage() {
+export default function OrdersPage() {
   return (
     <>
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb}>
         <div className="mt-4 flex items-center gap-3 @lg:mt-0">
           <ExportButton
-            data={productsData}
-            fileName="product_data"
-            header="ID,Name,Category,Product Thumbnail,SKU,Stock,Price,Status,Rating"
+            data={orderData}
+            fileName="order_data"
+            header="Order ID,Name,Email,Avatar,Items,Price,Status,Created At,Updated At"
           />
           <Link
-            to={routes.eCommerce.createProduct}
+            href={routes.eCommerce.createProduct}
             className="w-full @lg:w-auto"
           >
             <Button as="span" className="w-full @lg:w-auto">
               <PiPlusBold className="me-1.5 h-[17px] w-[17px]" />
-              Add Product
+              Add Order
             </Button>
           </Link>
         </div>
       </PageHeader>
 
-      <ProductsTable pageSize={10} />
+      <OrdersTable />
     </>
   );
 }

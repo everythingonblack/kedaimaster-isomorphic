@@ -1,5 +1,3 @@
-
-
 const productGallery = [
   'https://isomorphic-furyroad.s3.amazonaws.com/public/products/details/1.jpg',
   'https://isomorphic-furyroad.s3.amazonaws.com/public/products/details/2.jpg',
@@ -16,8 +14,6 @@ export default function ProductDetailsGallery() {
           className="relative mx-auto aspect-[4/4.65] w-full overflow-hidden rounded bg-gray-100 @xl:rounded-md"
         >
           <img
-            fill
-            priority
             src={image}
             alt={'Product Gallery'}
             sizes="(max-width: 768px) 100vw"

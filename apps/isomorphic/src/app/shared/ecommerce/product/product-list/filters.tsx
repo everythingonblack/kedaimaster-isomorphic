@@ -47,7 +47,7 @@ export default function Filters<TData extends Record<string, any>>({
         prefix={<PiMagnifyingGlassBold className="size-4" />}
       />
 
-      <FilterDrawerView
+      {/* <FilterDrawerView
         isOpen={openDrawer}
         drawerTitle="Table Filters"
         setOpenDrawer={setOpenDrawer}
@@ -55,7 +55,7 @@ export default function Filters<TData extends Record<string, any>>({
         <div className="grid grid-cols-1 gap-6">
           <FilterElements table={table} />
         </div>
-      </FilterDrawerView>
+      </FilterDrawerView> */}
 
       <Flex align="center" gap="3" className="w-auto">
         {isMultipleSelected ? (

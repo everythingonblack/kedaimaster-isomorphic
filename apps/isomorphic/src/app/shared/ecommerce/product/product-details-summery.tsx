@@ -2,13 +2,14 @@
 
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import isEmpty from 'lodash/isEmpty';
+import isEmpty from 'lodash';
 import { PiShoppingCartSimple } from 'react-icons/pi';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { Product } from '@/types';
 import { Button, Title, Text } from 'rizzui';
 import { toCurrency } from '@core/utils/to-currency';
+import { ProductType } from '@/kedaimaster-api-handlers/productApiHandlers';
 import GetSize from '@/app/shared/ecommerce/product/get-size';
 import { calculatePercentage } from '@core/utils/calculate-percentage';
 import { GetColor } from '@/app/shared/ecommerce/product/get-color';
@@ -23,7 +24,7 @@ import { generateCartProduct } from '@/store/quick-cart/generate-cart-product';
 export default function ProductDetailsSummery({
   product,
 }: {
-  product: Product;
+  product: ProductType;
 }) {
   const { addItemToCart } = useCart();
   const [isLoading, setLoading] = useState(false);
@@ -37,6 +38,8 @@ export default function ProductDetailsSummery({
   const onSubmit: SubmitHandler<ProductDetailsInput> = (data) => {
     const item = generateCartProduct({
       ...product,
+      title: product.name,
+      thumbnail: product.image,
       color: data.productColor,
       size: data.productSize,
     });
@@ -56,10 +59,10 @@ export default function ProductDetailsSummery({
     <>
       <div className="border-b border-muted pb-6 @lg:pb-8">
         <Title as="h2" className="mb-2.5 font-bold @6xl:text-4xl">
-          {product?.title}
+          {product?.name}
         </Title>
         <Text as="p" className="text-base">
-          {product?.description}
+          {product?.category}
         </Text>
       </div>
 
@@ -67,13 +70,13 @@ export default function ProductDetailsSummery({
         <form className="pb-8 pt-5" onSubmit={methods.handleSubmit(onSubmit)}>
           <div className="mb-1.5 mt-2 flex items-end font-lexend text-base">
             <div className="-mb-0.5 text-2xl font-semibold text-gray-900 lg:text-3xl">
-              {toCurrency(product?.price as number)}
+              {toCurrency(parseFloat(product?.price))}
             </div>
             <del className="ps-1.5 font-medium text-gray-500">
               {toCurrency(product?.sale_price as number)}
             </del>
             <div className="ps-1.5 text-red">
-              ({calculatePercentage(295, 320)}% OFF)
+              ({calculatePercentage(product?.price as any, product?.sale_price as any)}% OFF)
             </div>
           </div>
           <div className="font-medium text-green-dark">
