@@ -15,7 +15,7 @@ export const pageLinks = [
   },
   {
     name: 'Product',
-    href: routes.dashboard.product,
+    href: routes.dashboard.products,
   },
   {
     name: 'Store',
@@ -23,7 +23,7 @@ export const pageLinks = [
   },
   {
     name: 'Data',
-    href: routes.dashboard.data,
+    href: routes.dashboard.users,
   },
   {
     name: 'Categories',

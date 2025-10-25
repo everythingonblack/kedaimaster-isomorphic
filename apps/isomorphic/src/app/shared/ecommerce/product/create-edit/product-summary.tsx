@@ -24,8 +24,8 @@ export default function ProductSummary({ className, categoryOptions }: ProductSu
 
   return (
     <FormGroup
-      title="Summary"
-      description="Edit your product description and necessary information from here"
+      title=""
+      description=""
       className={cn(className)}
     >
       {/* Product Name */}

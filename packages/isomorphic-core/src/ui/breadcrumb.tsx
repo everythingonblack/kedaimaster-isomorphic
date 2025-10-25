@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 export type BreadcrumbItemProps = {
   href?: string;
   className?: string;
-  children: React.ReactNode;
+  children: string | number | React.ReactElement | Array<string | number | React.ReactElement>;
 };
 
 const BreadcrumbItem = ({

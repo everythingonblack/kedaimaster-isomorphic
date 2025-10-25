@@ -107,7 +107,7 @@ export const productsListColumns = [
           placement="top"
           color="invert"
         >
-          <Link to={routes.eCommerce.productDetails(row.original.id)}>
+          <Link to={routes.dashboard.productDetails(row.original.id)}>
             <ActionIcon
               as="span"
               size="sm"

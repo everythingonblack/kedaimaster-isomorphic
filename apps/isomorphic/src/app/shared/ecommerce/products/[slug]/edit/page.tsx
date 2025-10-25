@@ -31,7 +31,7 @@ export default function EditProductPage() {
         </Link>
       </PageHeader>
 
-      <CreateEditProduct slug={slug!} />
+      <CreateEditProduct />
     </>
   );
 }

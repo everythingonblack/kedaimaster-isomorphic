@@ -144,7 +144,7 @@ export default function CreateEditProduct({ className }: IndexProps) {
           <div className="mb-10 grid gap-7 divide-y divide-dashed divide-gray-200 @2xl:gap-9 @3xl:gap-11">
             <div>
               <ProductSummary
-                className="pt-7 @2xl:pt-9 @3xl:pt-11"
+                className=""
                 categoryOptions={categoryOptions}
               />
             </div>

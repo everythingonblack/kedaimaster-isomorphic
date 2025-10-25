@@ -31,7 +31,7 @@ export const menuItems = [
   },
   {
     name: 'Produk',
-    href: routes.dashboard.product,
+    href: routes.dashboard.products,
     icon: <PiSquaresFourDuotone />,
   },
   {
