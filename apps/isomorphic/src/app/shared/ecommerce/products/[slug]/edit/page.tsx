@@ -1,6 +1,5 @@
 import { Link, useParams } from 'react-router-dom';
 import { PiPlusBold } from 'react-icons/pi';
-import { productData } from '@/app/shared/ecommerce/product/create-edit/form-utils';
 import CreateEditProduct from '@/app/shared/ecommerce/product/create-edit';
 import PageHeader from '@/app/shared/page-header';
 import { Button } from 'rizzui/button';
@@ -32,7 +31,7 @@ export default function EditProductPage() {
         </Link>
       </PageHeader>
 
-      <CreateEditProduct slug={slug!} product={productData} />
+      <CreateEditProduct slug={slug!} />
     </>
   );
 }

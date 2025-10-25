@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LandingPage from '@/kedaimaster-landing/page';
 import HydrogenLayout from '@/layouts/hydrogen/layout';
 import DashboardPage from '@/app/shared/dashboard-page/dashboard/index';
-import ProductDetails from '@/app/shared/ecommerce/product/product-details';
 import EditProductPage from '@/app/shared/ecommerce/product/create-edit/index';
 import CreateProductPage from '@/app/shared/ecommerce/product/create-edit/index';
 import ProductsPage from '@/app/shared/ecommerce/products/page';
@@ -111,7 +110,6 @@ function App() {
           <Route path="/material" element={<MaterialsPage />} />
           <Route path="/products" element={<ProductsPage />} />
           <Route path="/products/create" element={<CreateProductPage />} />
-          <Route path="/products/:slug" element={<ProductDetails />} />
           <Route path="/products/:slug/edit" element={<EditProductPage />} />
           <Route path="/store" element={<StorePage />} />
           <Route path="/uoms" element={<DataPage />} />
