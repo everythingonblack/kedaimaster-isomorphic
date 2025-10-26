@@ -14,9 +14,11 @@ import {
   PiArrowDownRight,
   PiArrowUpRight,
 } from 'react-icons/pi';
+import { useEffect } from 'react';
 
 type AppointmentStatsType = {
   className?: string;
+  dashboardData?: any; // gunakan tipe yang sesuai jika ada
 };
 
 export type StatType = {
@@ -35,38 +37,58 @@ export type StatCardProps = {
   transaction: StatType;
 };
 
-const statData: StatType[] = [
-  {
-    title: 'Jumlah Transaksi',
-    amount: '360',
-    increased: true,
-    percentage: '32.40',
-    icon: PiCalendarCheck,
-  },
-  {
-    title: 'Item Favorit',
-    amount: 'Kentang Goreng',
-    increased: true,
-    lastMonth: 'Nasi Goreng', // ✅ tambahan: item favorit bulan lalu
-    icon: PiCheckCircle,
-  },
-  {
-    title: 'Pendapatan',
-    amount: 'Rp 12.060.000',
-    increased: false,
-    percentage: '32.40',
-    icon: PiClock,
-  },
-  {
-    title: 'Pengeluaran',
-    amount: 'Rp 361.060',
-    increased: true,
-    percentage: '32.40',
-    icon: PiPhoneSlash,
-  },
-];
+export default function AppointmentStats({ className, dashboardData }: AppointmentStatsType) {
+  // Ambil data dari dashboardData
+  const transaction = dashboardData?.current?.transaction ?? 0;
+  const growthTransaction = dashboardData?.current?.growthTransaction ?? 0;
+  const topProduct = dashboardData?.current?.topProduct?.name ?? '-';
+  const cmpTopProduct = dashboardData?.comparison?.topProduct?.name ?? '-';
+  const income = dashboardData?.current?.income ?? 0;
+  const growthIncome = dashboardData?.current?.growthIncome ?? 0;
+  const outcome = dashboardData?.current?.outcome ?? 0;
+  const growthOutcome = dashboardData?.current?.growthOutcome ?? 0;
 
-export default function AppointmentStats({ className }: AppointmentStatsType) {
+  // Format angka dan persen
+  const formatRupiah = (val: number) =>
+    'Rp ' + val.toLocaleString('id-ID', { maximumFractionDigits: 0 });
+  const formatPercent = (val: number) =>
+    (val > 0 ? '+' : '') + val.toFixed(2) + '%';
+
+  useEffect(() => {
+    console.log('Dashboard Data in AppointmentStats:', dashboardData);
+  }, [dashboardData]);
+  // Data dinamis
+  const statData: StatType[] = [
+    {
+      title: 'Jumlah Transaksi',
+      amount: transaction.toLocaleString('id-ID'),
+      increased: growthTransaction >= 0,
+      percentage: formatPercent(growthTransaction),
+      icon: PiCalendarCheck,
+    },
+    {
+      title: 'Item Favorit',
+      amount: topProduct,
+      increased: true,
+      lastMonth: cmpTopProduct,
+      icon: PiCheckCircle,
+    },
+    {
+      title: 'Pendapatan',
+      amount: formatRupiah(income),
+      increased: growthIncome >= 0,
+      percentage: formatPercent(growthIncome),
+      icon: PiClock,
+    },
+    {
+      title: 'Pengeluaran',
+      amount: formatRupiah(outcome),
+      increased: growthOutcome >= 0,
+      percentage: formatPercent(growthOutcome),
+      icon: PiPhoneSlash,
+    },
+  ];
+
   const {
     sliderEl,
     sliderPrevBtn,
@@ -92,7 +114,7 @@ export default function AppointmentStats({ className }: AppointmentStatsType) {
           ref={sliderEl}
           className="custom-scrollbar grid grid-flow-col gap-5 overflow-x-auto scroll-smooth 2xl:gap-6 3xl:gap-8 [&::-webkit-scrollbar]:h-0"
         >
-          <StatGrid />
+          <StatGrid statData={statData} />
         </div>
       </div>
 
@@ -109,7 +131,8 @@ export default function AppointmentStats({ className }: AppointmentStatsType) {
   );
 }
 
-export function StatGrid() {
+// Ubah StatGrid agar menerima statData dari props
+export function StatGrid({ statData }: { statData: StatType[] }) {
   return (
     <>
       {statData.map((stat: StatType, index: number) => (

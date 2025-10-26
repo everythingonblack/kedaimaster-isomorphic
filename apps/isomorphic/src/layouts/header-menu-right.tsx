@@ -102,7 +102,7 @@ const isDashboard = location.pathname === '/dashboard';
     switch (viewType) {
       case 'Harian':
         start.setHours(0, 0, 0, 0);
-        end.setHours(23, 59, 59, 999);
+        end = start;
         break;
       case 'Mingguan': {
         const day = now.getDay();

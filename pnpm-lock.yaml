@@ -72,6 +72,9 @@ importers:
       '@paralleldrive/cuid2':
         specifier: ^2.2.2
         version: 2.2.2
+      dayjs:
+        specifier: ^1.11.18
+        version: 1.11.18
       fast-glob:
         specifier: ^3.3.3
         version: 3.3.3

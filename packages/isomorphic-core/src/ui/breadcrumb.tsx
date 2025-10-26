@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 export type BreadcrumbItemProps = {
   href?: string;
   className?: string;
-  children: string | number | React.ReactElement | Array<string | number | React.ReactElement>;
+  children: any;
 };
 
 const BreadcrumbItem = ({
@@ -73,3 +73,4 @@ const Breadcrumb = ({
 Breadcrumb.Item = BreadcrumbItem;
 Breadcrumb.displayName = 'Breadcrumb';
 export default Breadcrumb;
+
