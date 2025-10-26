@@ -8,10 +8,10 @@ export const routes = {
     productDetails: (slug: string) => `/products/${slug}`,
     editProduct: (slug: string) => `/products/${slug}/edit`,
     
-    material: '/material',
-    createMaterial: '/material/create',
-    materialDetails: (slug: string) => `/material/${slug}`,
-    editMaterial: (slug: string) => `/material/${slug}/edit`,
+    material: '/materials',
+    createMaterial: '/materials/create',
+    materialDetails: (slug: string) => `/materials/${slug}`,
+    editMaterial: (slug: string) => `/materials/${slug}/edit`,
 
     
     categories: '/categories',

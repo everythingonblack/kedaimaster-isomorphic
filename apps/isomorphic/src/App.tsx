@@ -5,8 +5,9 @@ import DashboardPage from '@/app/shared/dashboard-page/dashboard/index';
 import EditProductPage from '@/app/shared/ecommerce/product/create-edit/index';
 import CreateProductPage from '@/app/shared/ecommerce/product/create-edit/index';
 import ProductsPage from '@/app/shared/ecommerce/products/page';
-import MaterialsPage from '@/app/shared/materials-page/dashboard/index';
-import UsersPage from '@/app/shared/users-page/dashboard/index';
+import MaterialsPage from '@/app/shared/new-materials-page/products/page';
+import EditMaterialsPage from '@/app/shared/new-materials-page/product/create-edit/index';
+import CreateMaterialPage from '@/app/shared/new-materials-page/product/create-edit/index';
 import { useEffect, useState } from 'react';
 
 import {
@@ -64,14 +65,18 @@ function App() {
               />
             }
           />
-          <Route path="/material" element={<MaterialsPage />} />
+          
+          <Route path="/materials" element={<MaterialsPage />} />
+          <Route path="/materials/create" element={<CreateMaterialPage />} />
+          <Route path="/materials/:slug/edit" element={<EditMaterialsPage />} />
+
           <Route path="/products" element={<ProductsPage />} />
           <Route path="/products/create" element={<CreateProductPage />} />
           <Route path="/products/:slug/edit" element={<EditProductPage />} />
           <Route path="/store" element={<StorePage />} />
           <Route path="/uoms" element={<DataPage />} />
           <Route path="/categories" element={<CategoriesPage />} />
-          <Route path="/users" element={<UsersPage />} />
+          {/* <Route path="/users" element={<UsersPage />} /> */}
         </Route>
       </Routes>
     </BrowserRouter>

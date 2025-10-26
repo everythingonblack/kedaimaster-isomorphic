@@ -18,7 +18,7 @@ import { createMaterial, updateMaterial, fetchMaterialById, CreateMaterialInput,
 import { useLayout } from '@/layouts/use-layout';
 import { LAYOUT_OPTIONS } from '@/config/enums';
 import { useParams } from 'react-router-dom';
-// import materialCategoriesApiHandlers from '@/kedaimaster-api-handlers/materialCategoriesApiHandlers'; // Assuming a similar handler for material categories
+import {getAllUoms} from '@/kedaimaster-api/uomApi'; // Assuming a similar handler for material categories
 
 interface IndexProps {
   className?: string;
@@ -54,19 +54,19 @@ export default function CreateEditMaterial({ className }: IndexProps) {
     },
   });
 
+
   // Fetch categories for dropdown
   useEffect(() => {
     async function fetchCategories() {
       try {
-        // Placeholder for material categories - assuming UOM as categories for now
-        const options = [
-          { value: '1', label: 'Kg' },
-          { value: '2', label: 'Liter' },
-          { value: '3', label: 'Piece' },
-        ];
+        const categories = await getAllUoms();
+        const options = categories.map((category: any) => ({
+          value: category.id,
+          label: category.name,
+        }));
         setCategoryOptions(options);
       } catch (error) {
-        console.error('Failed to fetch material categories:', error);
+        console.error('Failed to fetch categories:', error);
       }
     }
     fetchCategories();

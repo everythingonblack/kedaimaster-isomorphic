@@ -214,9 +214,11 @@ export async function updateMaterialPrice(id: string, data: { price: number; eff
 export async function updateMaterial(id: string, data: CreateMaterialInput, oldData?: CreateMaterialInput) {
   // Update name, remarks, uomId jika ada perubahan
   const payload: any = {};
-  if (data.name !== oldData?.name) payload.name = data.name;
-  if (data.remarks !== oldData?.remarks && data.remarks !== undefined) payload.remarks = data.remarks;
-  if (data.categoryId !== oldData?.categoryId) payload.uomId = data.categoryId;
+
+  console.log(data)
+  console.log(oldData)
+  payload.name = data.name;
+  payload.uomId = data.categoryId;
 
   let result = null;
   if (Object.keys(payload).length > 0) {
