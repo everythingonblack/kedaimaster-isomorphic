@@ -27,9 +27,9 @@ export const routes = {
 
     
     users: '/users',
-    createUsers: '/users/create',
-    usersDetails: (slug: string) => `/users/${slug}`,
-    editUsers: (slug: string) => `/users/${slug}/edit`,
+    createUser: '/users/create',
+    userDetails: (slug: string) => `/users/${slug}`,
+    editUser: (slug: string) => `/users/${slug}/edit`,
   },
   forms: {
     profileSettings: '/forms/profile-settings',

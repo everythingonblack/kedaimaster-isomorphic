@@ -240,106 +240,106 @@ console.log(type)
   let current: TransactionGraphPoint[] = [];
   let comparison: TransactionGraphPoint[] = [];
 
-  if (type === 'harian') {
-    // 7 hari terakhir
-    for (let i = 6; i >= 0; i--) {
-      const d = end.subtract(i, 'day');
-      const dateStr = d.format('YYYY-MM-DD');
-      const data = await getDashboard(dateStr, dateStr);
-      current.push({
-        label: dateStr,
-        transaction: data.transaction ?? 0,
-        dateRange: { start: dateStr, end: dateStr },
-      });
-    }
-    // Comparison: 7 hari sebelum periode current
-    for (let i = 6; i >= 0; i--) {
-      const d = end.subtract(7 + i, 'day');
-      const dateStr = d.format('YYYY-MM-DD');
-      const data = await getDashboard(dateStr, dateStr);
-      comparison.push({
-        label: dateStr,
-        transaction: data.transaction ?? 0,
-        dateRange: { start: dateStr, end: dateStr },
-      });
-    }
-  } else if (type === 'mingguan') {
-    // 4 minggu terakhir
-    for (let i = 3; i >= 0; i--) {
-      const weekStart = end.subtract(i, 'week').startOf('week');
-      const weekEnd = end.subtract(i, 'week').endOf('week');
-      const s = weekStart.format('YYYY-MM-DD');
-      const e = weekEnd.format('YYYY-MM-DD');
-      const data = await getDashboard(s, e);
-      current.push({
-        label: `${s} - ${e}`,
-        transaction: data.transaction ?? 0,
-        dateRange: { start: s, end: e },
-      });
-    }
-    // Comparison: 4 minggu sebelum current
-    for (let i = 3; i >= 0; i--) {
-      const weekStart = end.subtract(4 + i, 'week').startOf('week');
-      const weekEnd = end.subtract(4 + i, 'week').endOf('week');
-      const s = weekStart.format('YYYY-MM-DD');
-      const e = weekEnd.format('YYYY-MM-DD');
-      const data = await getDashboard(s, e);
-      comparison.push({
-        label: `${s} - ${e}`,
-        transaction: data.transaction ?? 0,
-        dateRange: { start: s, end: e },
-      });
-    }
-  } else if (type === 'bulanan') {
-    // 12 bulan terakhir
-    for (let i = 11; i >= 0; i--) {
-      const month = end.subtract(i, 'month');
-      const s = month.startOf('month').format('YYYY-MM-DD');
-      const e = month.endOf('month').format('YYYY-MM-DD');
-      const data = await getDashboard(s, e);
-      current.push({
-        label: month.format('MMM YYYY'),
-        transaction: data.transaction ?? 0,
-        dateRange: { start: s, end: e },
-      });
-    }
-    // Comparison: 12 bulan sebelum current
-    for (let i = 11; i >= 0; i--) {
-      const month = end.subtract(12 + i, 'month');
-      const s = month.startOf('month').format('YYYY-MM-DD');
-      const e = month.endOf('month').format('YYYY-MM-DD');
-      const data = await getDashboard(s, e);
-      comparison.push({
-        label: month.format('MMM YYYY'),
-        transaction: data.transaction ?? 0,
-        dateRange: { start: s, end: e },
-      });
-    }
-  } else {
-    // Custom: loop sebanyak jumlah hari antara startDate dan endDate
-    const days = end.diff(start, 'day') + 1;
-    for (let i = 0; i < days; i++) {
-      const d = start.add(i, 'day');
-      const dateStr = d.format('YYYY-MM-DD');
-      const data = await getDashboard(dateStr, dateStr);
-      current.push({
-        label: dateStr,
-        transaction: data.transaction ?? 0,
-        dateRange: { start: dateStr, end: dateStr },
-      });
-    }
-    // Comparison: periode sebelum current, sama panjang
-    for (let i = 0; i < days; i++) {
-      const d = start.subtract(days, 'day').add(i, 'day');
-      const dateStr = d.format('YYYY-MM-DD');
-      const data = await getDashboard(dateStr, dateStr);
-      comparison.push({
-        label: dateStr,
-        transaction: data.transaction ?? 0,
-        dateRange: { start: dateStr, end: dateStr },
-      });
-    }
-  }
+  // if (type === 'harian') {
+  //   // 7 hari terakhir
+  //   for (let i = 6; i >= 0; i--) {
+  //     const d = end.subtract(i, 'day');
+  //     const dateStr = d.format('YYYY-MM-DD');
+  //     const data = await getDashboard(dateStr, dateStr);
+  //     current.push({
+  //       label: dateStr,
+  //       transaction: data.transaction ?? 0,
+  //       dateRange: { start: dateStr, end: dateStr },
+  //     });
+  //   }
+  //   // Comparison: 7 hari sebelum periode current
+  //   for (let i = 6; i >= 0; i--) {
+  //     const d = end.subtract(7 + i, 'day');
+  //     const dateStr = d.format('YYYY-MM-DD');
+  //     const data = await getDashboard(dateStr, dateStr);
+  //     comparison.push({
+  //       label: dateStr,
+  //       transaction: data.transaction ?? 0,
+  //       dateRange: { start: dateStr, end: dateStr },
+  //     });
+  //   }
+  // } else if (type === 'mingguan') {
+  //   // 4 minggu terakhir
+  //   for (let i = 3; i >= 0; i--) {
+  //     const weekStart = end.subtract(i, 'week').startOf('week');
+  //     const weekEnd = end.subtract(i, 'week').endOf('week');
+  //     const s = weekStart.format('YYYY-MM-DD');
+  //     const e = weekEnd.format('YYYY-MM-DD');
+  //     const data = await getDashboard(s, e);
+  //     current.push({
+  //       label: `${s} - ${e}`,
+  //       transaction: data.transaction ?? 0,
+  //       dateRange: { start: s, end: e },
+  //     });
+  //   }
+  //   // Comparison: 4 minggu sebelum current
+  //   for (let i = 3; i >= 0; i--) {
+  //     const weekStart = end.subtract(4 + i, 'week').startOf('week');
+  //     const weekEnd = end.subtract(4 + i, 'week').endOf('week');
+  //     const s = weekStart.format('YYYY-MM-DD');
+  //     const e = weekEnd.format('YYYY-MM-DD');
+  //     const data = await getDashboard(s, e);
+  //     comparison.push({
+  //       label: `${s} - ${e}`,
+  //       transaction: data.transaction ?? 0,
+  //       dateRange: { start: s, end: e },
+  //     });
+  //   }
+  // } else if (type === 'bulanan') {
+  //   // 12 bulan terakhir
+  //   for (let i = 11; i >= 0; i--) {
+  //     const month = end.subtract(i, 'month');
+  //     const s = month.startOf('month').format('YYYY-MM-DD');
+  //     const e = month.endOf('month').format('YYYY-MM-DD');
+  //     const data = await getDashboard(s, e);
+  //     current.push({
+  //       label: month.format('MMM YYYY'),
+  //       transaction: data.transaction ?? 0,
+  //       dateRange: { start: s, end: e },
+  //     });
+  //   }
+  //   // Comparison: 12 bulan sebelum current
+  //   for (let i = 11; i >= 0; i--) {
+  //     const month = end.subtract(12 + i, 'month');
+  //     const s = month.startOf('month').format('YYYY-MM-DD');
+  //     const e = month.endOf('month').format('YYYY-MM-DD');
+  //     const data = await getDashboard(s, e);
+  //     comparison.push({
+  //       label: month.format('MMM YYYY'),
+  //       transaction: data.transaction ?? 0,
+  //       dateRange: { start: s, end: e },
+  //     });
+  //   }
+  // } else {
+  //   // Custom: loop sebanyak jumlah hari antara startDate dan endDate
+  //   const days = end.diff(start, 'day') + 1;
+  //   for (let i = 0; i < days; i++) {
+  //     const d = start.add(i, 'day');
+  //     const dateStr = d.format('YYYY-MM-DD');
+  //     const data = await getDashboard(dateStr, dateStr);
+  //     current.push({
+  //       label: dateStr,
+  //       transaction: data.transaction ?? 0,
+  //       dateRange: { start: dateStr, end: dateStr },
+  //     });
+  //   }
+  //   // Comparison: periode sebelum current, sama panjang
+  //   for (let i = 0; i < days; i++) {
+  //     const d = start.subtract(days, 'day').add(i, 'day');
+  //     const dateStr = d.format('YYYY-MM-DD');
+  //     const data = await getDashboard(dateStr, dateStr);
+  //     comparison.push({
+  //       label: dateStr,
+  //       transaction: data.transaction ?? 0,
+  //       dateRange: { start: dateStr, end: dateStr },
+  //     });
+  //   }
+  // }
 
   // Hitung growth transaksi antara 2 titik terakhir current
   let growthTransaction: number | undefined = undefined;

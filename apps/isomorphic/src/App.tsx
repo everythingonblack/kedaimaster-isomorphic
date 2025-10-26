@@ -8,6 +8,13 @@ import ProductsPage from '@/app/shared/ecommerce/products/page';
 import MaterialsPage from '@/app/shared/new-materials-page/products/page';
 import EditMaterialsPage from '@/app/shared/new-materials-page/product/create-edit/index';
 import CreateMaterialPage from '@/app/shared/new-materials-page/product/create-edit/index';
+import AccountSettings from '@/app/shared/account-settings/page';
+
+
+import UsersPage from '@/app/shared/users-page/products/page';
+import EditUserPage from '@/app/shared/users-page/product/create-edit/index';
+import CreateUserPage from '@/app/shared/users-page/product/create-edit/index';
+
 import { useEffect, useState } from 'react';
 
 import {
@@ -76,7 +83,12 @@ function App() {
           <Route path="/store" element={<StorePage />} />
           <Route path="/uoms" element={<DataPage />} />
           <Route path="/categories" element={<CategoriesPage />} />
-          {/* <Route path="/users" element={<UsersPage />} /> */}
+          <Route path="/profile" element={<AccountSettings />} />
+
+          
+          <Route path="/users" element={<UsersPage />} />
+          <Route path="/users/create" element={<CreateUserPage />} />
+          <Route path="/users/:slug/edit" element={<EditUserPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
