@@ -1,6 +1,6 @@
 // src/App.jsx
 import React, { useState, useEffect, useRef } from 'react';
-import './page.css';
+import styles from './page.module.css';
 import { getAllProducts } from '../kedaimaster-api/productsApi.js';
 
 import Header from './Header';
@@ -91,26 +91,23 @@ const App = () => {
   };
 
   const handleTransactionComplete = () => {
-    // Optionally re-fetch products or perform other actions after a successful transaction
-    // For now, we'll just reset the cart and close the FAB
     setCart({});
-    // If you want to re-fetch products after a transaction, you can call fetchProducts here
-    // fetchProducts();
+    // fetchProducts(); // Uncomment if you want to re-fetch products
   };
 
   if (loading) {
-    return <div className="mobile-container">Loading menu...</div>;
+    return <div className={styles.mobileContainer}>Loading menu...</div>;
   }
 
   if (error) {
-    return <div className="mobile-container">Error: {error.message}</div>;
+    return <div className={styles.mobileContainer}>Error: {error.message}</div>;
   }
 
   return (
-    <>
-      <div className="mobile-container">
+    <div className={styles.appContainer}>
+      <div className={styles.mobileContainer}>
         <Header />
-        <main className="main-content">
+        <main className={styles.mainContent}>
           <MusicPlayer />
           <Categories />
           <MenuList
@@ -138,7 +135,7 @@ const App = () => {
         onConfirm={confirmDeleteItem}
         onCancel={() => setIsDeleteModalOpen(false)}
       />
-    </>
+    </div>
   );
 };
 

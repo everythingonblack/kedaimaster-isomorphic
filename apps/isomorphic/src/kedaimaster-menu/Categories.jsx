@@ -1,25 +1,33 @@
 // src/components/Categories.jsx
 import React from 'react';
+import styles from './page.module.css';
 
 const Categories = () => {
   return (
-    <section className="categories">
-      <a href="#" className="category-item">
-        <div className="category-icon icon-semua" style={{ backgroundImage: "url('https://cdn-icons-png.flaticon.com/512/82/82226.png')" }}>
-          <img src="https://cdn-icons-png.flaticon.com/512/82/82226.png" style={{ width: '50%', height: '50%' }} />
+    <section className={styles.categories}>
+      <a href="#" className={styles.categoryItem}>
+        <div
+          className={`${styles.categoryIcon} ${styles.iconSemua}`}
+          style={{ backgroundImage: "url('https://cdn-icons-png.flaticon.com/512/82/82226.png')" }}
+        >
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/82/82226.png"
+            style={{ width: '50%', height: '50%' }}
+            alt="semua"
+          />
         </div>
         <span>semua</span>
       </a>
-      <a href="#" className="category-item">
-        <div className="category-icon icon-coffe"></div>
+      <a href="#" className={styles.categoryItem}>
+        <div className={`${styles.categoryIcon} ${styles.iconCoffe}`}></div>
         <span>coffee</span>
       </a>
-      <a href="#" className="category-item">
-        <div className="category-icon icon-drink"></div>
+      <a href="#" className={styles.categoryItem}>
+        <div className={`${styles.categoryIcon} ${styles.iconDrink}`}></div>
         <span>drink</span>
       </a>
-      <a href="#" className="category-item">
-        <div className="category-icon icon-snack"></div>
+      <a href="#" className={styles.categoryItem}>
+        <div className={`${styles.categoryIcon} ${styles.iconSnack}`}></div>
         <span>snack</span>
       </a>
     </section>

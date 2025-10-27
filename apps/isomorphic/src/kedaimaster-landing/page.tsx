@@ -11,7 +11,7 @@ interface PricingModalProps {
 }
 
 import React, { useState, useEffect } from "react";
-import "./page.css";
+// import "./page.css";
 import { useNavigate  } from "react-router-dom";
 // Impor AuthModal yang sudah dipisah
 // Impor fungsi API
