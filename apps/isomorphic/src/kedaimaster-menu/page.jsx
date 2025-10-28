@@ -117,6 +117,11 @@ const App = () => {
             onIncreaseQuantity={handleIncreaseQuantity}
             onDecreaseQuantity={handleDecreaseQuantity}
           />
+          
+      <div className="
+    h-[46px]
+    text-center
+">©KEDAIMASTER.COM</div>
         </main>
       </div>
 

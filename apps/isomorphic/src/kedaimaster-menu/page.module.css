@@ -51,7 +51,7 @@
 
 /* Konten Utama */
 .mainContent {
-  padding: 0 20px 112px;
+  padding: 20px;
 }
 
 /* Filter Kategori */
@@ -126,7 +126,7 @@
 }
 
 .menuSection {
-  padding-bottom: 90px;
+  padding-bottom: 44px;
 }
 
 /* Daftar Menu */
@@ -188,6 +188,8 @@
   border-radius: 20px;
   cursor: pointer;
   font-weight: 600;
+  line-height: 1;
+  max-width: 100px;
   transition:
     background-color 0.3s,
     color 0.3s;
@@ -304,6 +306,11 @@
   padding-bottom: 10px;
   flex-shrink: 0;
   /* Prevent header from shrinking */
+}
+
+.cartPageHeader h3 {
+    color: white;
+
 }
 
 .cartPageTitle {
@@ -692,7 +699,7 @@
   }
 
   .mainContent {
-    padding: 0 30px 30px;
+    padding: 20px;
   }
 
   .menuList {

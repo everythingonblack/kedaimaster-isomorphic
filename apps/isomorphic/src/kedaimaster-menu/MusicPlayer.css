@@ -71,6 +71,8 @@
         position: relative;
         z-index: 2;
         border-radius: 0px 0px 12px 12px;
+        
+        box-sizing: unset;
     }
 
     .music-bar .state-2 .song-info {

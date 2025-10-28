@@ -73,8 +73,7 @@ const CartFAB = ({ cart, onIncreaseQuantity, onDecreaseQuantity, onResetCart, is
                 {totalItems > 0 && <button className={styles.editAllBtn} onClick={() => { setIsCheckout(false); setIsEditingCart(!isEditingCart) }}>{isEditingCart ? 'Selesai' : 'Edit'}</button>}
             </div>
             <div
-                className={styles.cartItemsList}
-                className={isEditingCart ? styles.isEditing : ''}
+                className={`${styles.cartItemsList} ${isEditingCart ? styles.isEditing : ''}`}
             >
                 {Object.keys(cart).length > 0 ? Object.values(cart).map(item => (
                     <div className={styles.cartListItem} key={item.id}>
@@ -85,9 +84,9 @@ const CartFAB = ({ cart, onIncreaseQuantity, onDecreaseQuantity, onResetCart, is
                         <div className={styles.cartItemEdit}>
                             <span>{item.name}</span>
                             <div className={styles.quantityControlCart}>
-                                <button className={styles.orderButton} onClick={() => onDecreaseQuantity(item.id)}>-</button>
+                                <button onClick={() => onDecreaseQuantity(item.id)}>-</button>
                                 <span>{item.quantity}</span>
-                                <button className={styles.orderButton} onClick={() => onIncreaseQuantity(item.id)}>+</button>
+                                <button onClick={() => onIncreaseQuantity(item.id)}>+</button>
                             </div>
                         </div>
                     </div>
