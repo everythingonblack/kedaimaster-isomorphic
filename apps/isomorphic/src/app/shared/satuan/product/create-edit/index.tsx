@@ -4,8 +4,6 @@ import { useEffect, useState } from 'react';
 
 import { routes } from '@/config/routes';
 
-import PageHeader from '@/app/shared/page-header';
-
 import toast from 'react-hot-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
@@ -15,10 +13,10 @@ import UomSummary from '@/app/shared/satuan/product/create-edit/product-summary'
 import UomMedia from '@/app/shared/satuan/product/create-edit/product-media';
 import FormFooter from '@core/components/form-footer';
 import uomApiHandlers, { CreateUomRequest, Uom } from '@/kedaimaster-api-handlers/uomApiHandlers';
-import { z } from 'zod'; // Import zod for schema definition
+import { z } from 'zod';
 import { useLayout } from '@/layouts/use-layout';
 import { LAYOUT_OPTIONS } from '@/config/enums';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 // Define UOM Form Schema
 const uomFormSchema = z.object({
@@ -32,23 +30,15 @@ interface IndexProps {
 
 export default function CreateEditUom({ className }: IndexProps) {
   const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
   const { layout } = useLayout();
   const [isLoading, setLoading] = useState(false);
   const [uom, setUom] = useState<Uom | undefined>(undefined);
   const [fetching, setFetching] = useState(true);
 
-  const pageHeader = {
-    title: slug ? 'Edit Satuan' : 'Create Satuan',
-    breadcrumb: [
-      { href: routes.dashboard.main, name: 'Dashboard' },
-      { href: routes.dashboard.products, name: 'Satuan' }, // Assuming products route will be changed to uoms
-      { name: `${uom?.name || 'New'}` },
-    ],
-  };
-
   const methods = useForm<CreateUomRequest>({
     resolver: zodResolver(uomFormSchema),
-    defaultValues: uom ?? {
+    defaultValues: {
       name: '',
       remarks: '',
     },
@@ -91,6 +81,13 @@ export default function CreateEditUom({ className }: IndexProps) {
         toast.success(
           <Text as="b">Satuan successfully {slug ? 'updated' : 'created'}</Text>
         );
+        
+        // Redirect to detail page after create to show proper breadcrumb
+        if (!slug && result.id) {
+          setTimeout(() => {
+            navigate(routes.dashboard.editUom(result.id));
+          }, 1000);
+        }
       } else {
         toast.error(<Text as="b">Failed to {slug ? 'update' : 'create'} satuan</Text>);
       }
@@ -108,8 +105,6 @@ export default function CreateEditUom({ className }: IndexProps) {
 
   return (
     <div className="@container">
-      <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb} />
-
       <FormProvider {...methods}>
         <form
           onSubmit={methods.handleSubmit(onSubmit)}
