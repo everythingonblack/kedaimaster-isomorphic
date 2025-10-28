@@ -1,4 +1,6 @@
+
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
 import LandingPage from '@/kedaimaster-landing/page';
 import HydrogenLayout from '@/layouts/hydrogen/layout';
 import DashboardPage from '@/app/shared/dashboard-page/dashboard/index';
@@ -10,6 +12,9 @@ import EditMaterialsPage from '@/app/shared/new-materials-page/product/create-ed
 import CreateMaterialPage from '@/app/shared/new-materials-page/product/create-edit/index';
 import AccountSettings from '@/app/shared/account-settings/page';
 
+import UomPage from '@/app/shared/satuan/products/page';
+import CreateUomPage from '@/app/shared/satuan/product/create-edit/index';
+import EditUomPage from '@/app/shared/satuan/products/[slug]/edit/page';
 
 import UsersPage from '@/app/shared/users-page/products/page';
 import EditUserPage from '@/app/shared/users-page/product/create-edit/index';
@@ -28,8 +33,6 @@ import MenuPage from '@/kedaimaster-menu/page';
 // Dummy pages
 const StorePage = () => <div>Store Page</div>;
 const DataPage = () => <div>Data Page</div>;
-const CategoriesPage = () => <div>Categories Page</div>;
-
 // ✅ Type Definitions
 interface DateRange {
   start: Date | null;
@@ -81,8 +84,9 @@ function App() {
           <Route path="/products/create" element={<CreateProductPage />} />
           <Route path="/products/:slug/edit" element={<EditProductPage />} />
           <Route path="/store" element={<StorePage />} />
-          <Route path="/uoms" element={<DataPage />} />
-          <Route path="/categories" element={<CategoriesPage />} />
+          <Route path="/uoms" element={<UomPage />} />
+          <Route path="/uoms/create" element={<CreateUomPage />} />
+          <Route path="/uoms/:slug/edit" element={<EditUomPage />} />
           <Route path="/profile" element={<AccountSettings />} />
 
           
