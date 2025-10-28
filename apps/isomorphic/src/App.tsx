@@ -12,6 +12,9 @@ import EditMaterialsPage from '@/app/shared/new-materials-page/product/create-ed
 import CreateMaterialPage from '@/app/shared/new-materials-page/product/create-edit/index';
 import AccountSettings from '@/app/shared/account-settings/page';
 
+import UomPage from '@/app/shared/satuan/products/page';
+import CreateUomPage from '@/app/shared/satuan/product/create-edit/index';
+import EditUomPage from '@/app/shared/satuan/products/[slug]/edit/page';
 
 import UsersPage from '@/app/shared/users-page/products/page';
 import EditUserPage from '@/app/shared/users-page/product/create-edit/index';
