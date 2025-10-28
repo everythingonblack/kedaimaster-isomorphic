@@ -16,6 +16,10 @@ import UomPage from '@/app/shared/satuan/products/page';
 import CreateUomPage from '@/app/shared/satuan/product/create-edit/index';
 import EditUomPage from '@/app/shared/satuan/products/[slug]/edit/page';
 
+import ProductCategoriesPage from '@/app/shared/product-category-pages/products/page';
+import CreateProductCategoryPage from '@/app/shared/product-category-pages/product/create-edit/index';
+import EditProductCategoryPage from '@/app/shared/product-category-pages/products/[slug]/edit/page';
+
 import UsersPage from '@/app/shared/users-page/products/page';
 import EditUserPage from '@/app/shared/users-page/product/create-edit/index';
 import CreateUserPage from '@/app/shared/users-page/product/create-edit/index';
@@ -25,7 +29,7 @@ import MenuPage from '@/kedaimaster-menu/page';
 // Dummy pages
 const StorePage = () => <div>Store Page</div>;
 const DataPage = () => <div>Data Page</div>;
-const CategoriesPage = () => <div>Categories Page</div>;
+// const CategoriesPage = () => <div>Categories Page</div>; // This dummy page is no longer needed
 
 // ✅ Type Definitions
 interface DateRange {
@@ -73,6 +77,11 @@ function App() {
           <Route path="/users" element={<UsersPage />} />
           <Route path="/users/create" element={<CreateUserPage />} />
           <Route path="/users/:slug/edit" element={<EditUserPage />} />
+
+          <Route path="/product-categories" element={<ProductCategoriesPage />} />
+          <Route path="/product-categories/create" element={<CreateProductCategoryPage />} />
+          <Route path="/product-categories/:slug/edit" element={<EditProductCategoryPage />} />
+          <Route path="/categories" element={<ProductCategoriesPage />} /> {/* Added route for /categories */}
         </Route>
       </Routes>
     </BrowserRouter>
