@@ -1,51 +1,26 @@
 'use client';
 
 import DeletePopover from '@core/components/delete-popover';
-import { getRatings } from '@core/components/table-utils/get-ratings';
-import { getStatusBadge } from '@core/components/table-utils/get-status-badge';
-import { getStockStatus } from '@core/components/table-utils/get-stock-status';
 import { routes } from '@/config/routes';
-import { ProductType } from '@/kedaimaster-api-handlers/productApiHandlers';
-import EyeIcon from '@core/components/icons/eye';
+import { ProductCategory } from '@/kedaimaster-api-handlers/productCategoriesApiHandlers';
 import PencilIcon from '@core/components/icons/pencil';
 import AvatarCard from '@core/ui/avatar-card';
 import { createColumnHelper } from '@tanstack/react-table';
-import {Link} from 'react-router-dom';
-import { ActionIcon, Checkbox, Flex, Text, Tooltip } from 'rizzui';
+import { Link } from 'react-router-dom';
+import { ActionIcon, Flex, Text, Tooltip } from 'rizzui';
 
-const columnHelper = createColumnHelper<ProductType>();
+const columnHelper = createColumnHelper<ProductCategory>();
 
-export const productsListColumns = [
-  columnHelper.display({
-    id: 'select',
-    size: 50,
-    header: ({ table }) => (
-      <Checkbox
-        className="ps-3.5"
-        aria-label="Select all rows"
-        checked={table.getIsAllPageRowsSelected()}
-        onChange={() => table.toggleAllPageRowsSelected()}
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        className="ps-3.5"
-        aria-label="Select row"
-        checked={row.getIsSelected()}
-        onChange={() => row.toggleSelected()}
-      />
-    ),
-  }),
+export const productCategoryColumns = [
   columnHelper.accessor('name', {
     id: 'name',
     size: 300,
-    header: 'Product',
-    enableSorting: false,
+    header: 'Category',
     cell: ({ row }) => (
       <AvatarCard
-        src={row.original.image}
+        src={row.original.imageUrl}
         name={row.original.name}
-        description={row.original.category}
+        description={`Created on ${new Date(row.original.createdOn).toLocaleDateString()}`}
         avatarProps={{
           name: row.original.name,
           size: 'lg',
@@ -54,74 +29,31 @@ export const productsListColumns = [
       />
     ),
   }),
-  columnHelper.accessor('stock', {
-    id: 'stock',
-    size: 200,
-    header: 'Stock',
-    cell: ({ row }) => getStockStatus(row.original.stock),
+  columnHelper.accessor('createdBy', {
+    header: 'Created By',
+    cell: ({ row }) => <Text>{row.original.createdBy}</Text>,
   }),
-  columnHelper.accessor('price', {
-    id: 'price',
-    size: 150,
-    header: 'Price',
+  columnHelper.accessor('updatedOn', {
+    header: 'Last Updated',
     cell: ({ row }) => (
-      <Text className="font-medium text-gray-700">${row.original.price}</Text>
+      <Text>{new Date(row.original.updatedOn).toLocaleDateString()}</Text>
     ),
-  }),
-  columnHelper.accessor('status', {
-    id: 'status',
-    size: 120,
-    header: 'Status',
-    enableSorting: false,
-    cell: ({ row }) => getStatusBadge(row.original.status),
   }),
   columnHelper.display({
     id: 'action',
     size: 120,
-    cell: ({
-      row,
-      table: {
-        options: { meta },
-      },
-    }) => (
+    cell: ({ row, table: { options: { meta } } }) => (
       <Flex align="center" justify="end" gap="3" className="pe-4">
-        <Tooltip
-          size="sm"
-          content={'Edit Product'}
-          placement="top"
-          color="invert"
-        >
-          <Link to={routes.dashboard.editProduct(row.original.id)}>
-            <ActionIcon
-              as="span"
-              size="sm"
-              variant="outline"
-              aria-label={'Edit Product'}
-            >
+        <Tooltip content="Edit Category" placement="top" color="invert">
+          <Link to={routes.dashboard.editCategories(row.original.id)}>
+            <ActionIcon as="span" size="sm" variant="outline" aria-label="Edit Category">
               <PencilIcon className="h-4 w-4" />
             </ActionIcon>
           </Link>
         </Tooltip>
-        <Tooltip
-          size="sm"
-          content={'View Product'}
-          placement="top"
-          color="invert"
-        >
-          <Link to={routes.dashboard.productDetails(row.original.id)}>
-            <ActionIcon
-              as="span"
-              size="sm"
-              variant="outline"
-              aria-label={'View Product'}
-            >
-              <EyeIcon className="h-4 w-4" />
-            </ActionIcon>
-          </Link>
-        </Tooltip>
         <DeletePopover
-          title={`Delete the product`}
-          description={`Are you sure you want to delete this #${row.original.id} product?`}
+          title="Delete Category"
+          description={`Are you sure you want to delete "${row.original.name}"?`}
           onDelete={() =>
             meta?.handleDeleteRow && meta?.handleDeleteRow(row.original)
           }

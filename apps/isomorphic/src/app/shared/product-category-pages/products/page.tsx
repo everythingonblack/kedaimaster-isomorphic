@@ -1,80 +1,53 @@
+'use client';
+
 import { Link } from 'react-router-dom';
-import { PiPlusBold } from 'react-icons/pi';
+import { PiPlusBold, PiMagnifyingGlassBold } from 'react-icons/pi';
 import { routes } from '@/config/routes';
-import { Button } from 'rizzui/button';
-import { deleteProduct, fetchProducts, ProductType } from '@/kedaimaster-api-handlers/productApiHandlers';
-import { useEffect } from 'react';
+import { Button, Input } from 'rizzui';
 import PageHeader from '@/app/shared/page-header';
 import ExportButton from '@/app/shared/export-button';
-import { useTanStackTable } from '@core/components/table/custom/use-TanStack-Table';
-import { productsListColumns } from '@/app/shared/ecommerce/product/product-list/columns';
+import { useEffect } from 'react';
+import WidgetCard from '@core/components/cards/widget-card';
 import Table from '@core/components/table';
 import TablePagination from '@core/components/table/pagination';
-import { Input } from 'rizzui';
-import { PiMagnifyingGlassBold } from 'react-icons/pi';
-import WidgetCard from '@core/components/cards/widget-card';
 import cn from '@core/utils/class-names';
+import { useTanStackTable } from '@core/components/table/custom/use-TanStack-Table';
+import { productCategoryColumns } from '@/app/shared/product-category-pages/product/product-list/columns';
+
+import productCategoriesApiHandlers, {
+  ProductCategory,
+} from '@/kedaimaster-api-handlers/productCategoriesApiHandlers';
 
 const pageHeader = {
-  title: 'Products',
+  title: 'Product Categories',
   breadcrumb: [
     { href: routes.dashboard.main, name: 'E-Commerce' },
-    { href: routes.dashboard.products, name: 'Products' },
+    { href: routes.dashboard.products, name: 'Product Categories' },
     { name: 'List' },
   ],
 };
 
-export default function ProductsPage() {
-  // gunakan useTanStackTable seperti script lama
-  const { table, setData } = useTanStackTable<ProductType>({
+export default function ProductCategoriesPage() {
+  const { table, setData } = useTanStackTable<ProductCategory>({
     tableData: [],
-    columnConfig: productsListColumns as any,
+    columnConfig: productCategoryColumns as any,
     options: {
-      initialState: {
-        pagination: { pageIndex: 0, pageSize: 10 },
-      },
+      initialState: { pagination: { pageIndex: 0, pageSize: 10 } },
       meta: {
-        handleDeleteRow: async (row: ProductType) => {
-          try {
-            await deleteProduct(row.id);
-            setData((prev) => prev.filter((r) => r.id !== row.id));
-            // Optionally refetch all products to ensure data consistency
-            const updatedProducts = await fetchProducts();
-            setData(updatedProducts);
-          } catch (error) {
-            console.error('Error deleting product:', error);
-            // Handle error, e.g., show a toast notification
-          }
-        },
-        handleMultipleDelete: async (rows: ProductType[]) => {
-          try {
-            await Promise.all(rows.map((row) => deleteProduct(row.id)));
-            setData((prev) => prev.filter((r) => !rows.some((s) => s.id === r.id)));
-            // Optionally refetch all products to ensure data consistency
-            const updatedProducts = await fetchProducts();
-            setData(updatedProducts);
-          } catch (error) {
-            console.error('Error deleting multiple products:', error);
-            // Handle error, e.g., show a toast notification
-          }
+        handleDeleteRow: async (row: ProductCategory) => {
+          await productCategoriesApiHandlers.delete(row.id);
+          setData((prev) => prev.filter((r) => r.id !== row.id));
         },
       },
-      enableColumnResizing: false,
     },
   });
 
-  // ambil data produk
   useEffect(() => {
-    const getProducts = async () => {
-      try {
-        const productData = await fetchProducts();
-        console.log('Fetched products:', productData);
-        setData(productData);
-      } catch (err) {
-        console.error('Error fetching products:', err);
-      }
+    const fetchCategories = async () => {
+      const data = await productCategoriesApiHandlers.getAll();
+      setData(data);
     };
-    getProducts();
+    fetchCategories();
   }, [setData]);
 
   return (
@@ -83,20 +56,20 @@ export default function ProductsPage() {
         <div className="mt-4 flex items-center gap-3 @lg:mt-0">
           <ExportButton
             data={table.getRowModel().rows.map((r) => r.original)}
-            fileName="product_data"
-            header="ID,Name,Category,Product Thumbnail,SKU,Stock,Price,Status,Rating"
+            fileName="product_categories"
+            header="ID,Name,CreatedBy,CreatedOn,UpdatedBy,UpdatedOn"
           />
-          <Link to={routes.dashboard.createProduct} className="w-full @lg:w-auto">
-            <Button as="span" className="w-full @lg:w-auto">
+         <Link to={routes.dashboard.createCategories}>
+            <Button>
               <PiPlusBold className="me-1.5 h-[17px] w-[17px]" />
-              Add Product
+              Add Category
             </Button>
           </Link>
         </div>
       </PageHeader>
 
       <WidgetCard
-        title="Product List"
+        title="Category List"
         className={cn('p-0 lg:p-0')}
         headerClassName="mb-6 px-5 pt-5 lg:px-7 lg:pt-7"
         action={
@@ -104,7 +77,7 @@ export default function ProductsPage() {
             type="search"
             clearable
             inputClassName="h-[36px]"
-            placeholder="Search product..."
+            placeholder="Search category..."
             onClear={() => table.setGlobalFilter('')}
             value={table.getState().globalFilter ?? ''}
             prefix={<PiMagnifyingGlassBold className="size-4" />}
@@ -113,13 +86,7 @@ export default function ProductsPage() {
           />
         }
       >
-        <Table
-          table={table}
-          variant="modern"
-          classNames={{
-            rowClassName: 'last:border-0',
-          }}
-        />
+        <Table table={table} variant="modern" />
         <TablePagination table={table} className="p-4" />
       </WidgetCard>
     </>

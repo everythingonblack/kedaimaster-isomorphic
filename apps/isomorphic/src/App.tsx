@@ -17,8 +17,9 @@ import CreateUomPage from '@/app/shared/satuan/product/create-edit/index';
 import EditUomPage from '@/app/shared/satuan/products/[slug]/edit/page';
 
 import ProductCategoriesPage from '@/app/shared/product-category-pages/products/page';
-import CreateProductCategoryPage from '@/app/shared/product-category-pages/product/create-edit/index';
+import CreateProductCategoryPage from '@/app/shared/product-category-pages/product/create-edit';
 import EditProductCategoryPage from '@/app/shared/product-category-pages/products/[slug]/edit/page';
+
 
 import UsersPage from '@/app/shared/users-page/products/page';
 import EditUserPage from '@/app/shared/users-page/product/create-edit/index';

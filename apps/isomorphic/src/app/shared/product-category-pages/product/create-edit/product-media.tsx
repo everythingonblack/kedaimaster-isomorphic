@@ -1,3 +1,5 @@
+'use client';
+
 import { Controller, useFormContext } from 'react-hook-form';
 import { useRef } from 'react';
 import FormGroup from '@/app/shared/form-group';
@@ -34,7 +36,7 @@ function SimpleUploadZone({
   };
 
   const handleDelete = () => {
-    onChange(null); // trigger perubahan di react-hook-form
+    onChange(null);
     if (inputRef.current) inputRef.current.value = '';
   };
 
@@ -51,7 +53,6 @@ function SimpleUploadZone({
             alt={value.name}
             className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
           />
-          {/* Overlay delete */}
           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
             <button
               type="button"
@@ -88,12 +89,12 @@ export default function ProductMedia({ className }: ProductMediaProps) {
 
   return (
     <FormGroup
-      title="Product Image"
-      description="Upload a single product image. You can delete and re-upload anytime."
+      title="Category Image"
+      description="Upload a representative image for this category."
       className={cn(className)}
     >
       <Controller
-        name="image"
+        name="imageUrl"
         control={control}
         render={({ field: { value, onChange } }) => (
           <SimpleUploadZone value={value} onChange={onChange} />
