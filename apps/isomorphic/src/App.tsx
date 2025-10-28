@@ -12,40 +12,23 @@ import EditMaterialsPage from '@/app/shared/new-materials-page/product/create-ed
 import CreateMaterialPage from '@/app/shared/new-materials-page/product/create-edit/index';
 import AccountSettings from '@/app/shared/account-settings/page';
 
-import UomPage from '@/app/shared/satuan/products/page';
-import CreateUomPage from '@/app/shared/satuan/product/create-edit/index';
-import EditUomPage from '@/app/shared/satuan/products/[slug]/edit/page';
 
 import UsersPage from '@/app/shared/users-page/products/page';
 import EditUserPage from '@/app/shared/users-page/product/create-edit/index';
 import CreateUserPage from '@/app/shared/users-page/product/create-edit/index';
-
-import { useEffect, useState } from 'react';
-
-import {
-  handleDashboardData,
-  handleDashboardAggregate,
-  getTransactionGraph, // <--- Tambahkan ini
-} from '@/kedaimaster-api-handlers/dashboardApiHandlers';
-
+import { useState } from 'react';
 import MenuPage from '@/kedaimaster-menu/page';
 
 // Dummy pages
 const StorePage = () => <div>Store Page</div>;
 const DataPage = () => <div>Data Page</div>;
+const CategoriesPage = () => <div>Categories Page</div>;
+
 // ✅ Type Definitions
 interface DateRange {
   start: Date | null;
   end: Date | null;
   type: string;
-}
-
-interface DashboardData {
-  [key: string]: any;
-}
-
-interface DashboardAggregate {
-  [key: string]: any;
 }
 
 function App() {
@@ -62,20 +45,14 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Landing Page */}
+        {/* Halaman tanpa layout */}
         <Route path="/" element={<LandingPage />} />
+        <Route path="/menu" element={<MenuPage />} /> {/* ✅ Standalone */}
 
-        {/* Layout Route untuk semua halaman dashboard */}
+        {/* Halaman dengan layout */}
         <Route element={<HydrogenLayout setDate={handleSetDate} />}>
-          <Route
-            path="/dashboard"
-            element={
-              <DashboardPage
-                dateRange={dateRange}
-              />
-            }
-          />
-          
+          <Route path="/dashboard" element={<DashboardPage dateRange={dateRange} />} />
+
           <Route path="/materials" element={<MaterialsPage />} />
           <Route path="/materials/create" element={<CreateMaterialPage />} />
           <Route path="/materials/:slug/edit" element={<EditMaterialsPage />} />
@@ -83,13 +60,13 @@ function App() {
           <Route path="/products" element={<ProductsPage />} />
           <Route path="/products/create" element={<CreateProductPage />} />
           <Route path="/products/:slug/edit" element={<EditProductPage />} />
+
           <Route path="/store" element={<StorePage />} />
           <Route path="/uoms" element={<UomPage />} />
           <Route path="/uoms/create" element={<CreateUomPage />} />
           <Route path="/uoms/:slug/edit" element={<EditUomPage />} />
           <Route path="/profile" element={<AccountSettings />} />
 
-          
           <Route path="/users" element={<UsersPage />} />
           <Route path="/users/create" element={<CreateUserPage />} />
           <Route path="/users/:slug/edit" element={<EditUserPage />} />

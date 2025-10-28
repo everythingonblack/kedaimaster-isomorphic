@@ -1,5 +1,6 @@
 // src/components/DeleteModal.jsx
 import React from 'react';
+import styles from './page.module.css';
 
 const DeleteModal = ({ isOpen, item, onConfirm, onCancel }) => {
   if (!isOpen) {
@@ -7,12 +8,12 @@ const DeleteModal = ({ isOpen, item, onConfirm, onCancel }) => {
   }
 
   return (
-    <div id="delete-confirm-modal" className="cart-modal-overlay">
-      <div className="cart-modal-content">
-        <p id="modal-item-name">Hapus "{item?.name}" dari keranjang?</p>
-        <div className="cart-modal-actions">
-          <button id="cancel-delete-btn" onClick={onCancel}>Batal</button>
-          <button id="confirm-delete-btn" onClick={onConfirm}>Ya, Hapus</button>
+    <div className={styles.cartModalOverlay}>
+      <div className={styles.cartModalContent}>
+        <p className={styles.modalItemName}>Hapus "{item?.name}" dari keranjang?</p>
+        <div className={styles.cartModalActions}>
+          <button className={styles.cancelDeleteBtn} onClick={onCancel}>Batal</button>
+          <button className={styles.confirmDeleteBtn} onClick={onConfirm}>Ya, Hapus</button>
         </div>
       </div>
     </div>
