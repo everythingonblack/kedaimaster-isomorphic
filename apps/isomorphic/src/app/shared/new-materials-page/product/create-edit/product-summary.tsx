@@ -72,12 +72,23 @@ export default function ProductSummary({ className, categoryOptions }: ProductSu
 
       {/* Price */}
       <Input
-        label="Price"
-        type="number"
-        placeholder="Material price"
-        {...register('price')}
-        error={errors.price?.message as string}
-      />
+  label="Satuan"
+  type="text"
+  placeholder="Masukkan nama satuan"
+  {...register('satuan', {
+    required: 'Satuan wajib diisi',
+    pattern: {
+      value: /^[A-Za-z\s]+$/,
+      message: 'Hanya huruf yang diperbolehkan',
+    },
+  })}
+  onInput={(e) => {
+    const target = e.target as HTMLInputElement;
+    target.value = target.value.replace(/[^A-Za-z\s]/g, '');
+  }}
+  error={errors.satuan?.message as string}
+/>
+
 
       {/* Stock */}
       <Input
