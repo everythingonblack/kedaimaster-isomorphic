@@ -11,11 +11,12 @@ interface PricingModalProps {
 }
 
 import React, { useState, useEffect } from "react";
-// import "./page.css";
+import "./page.css";
 import { useNavigate  } from "react-router-dom";
 // Impor AuthModal yang sudah dipisah
 // Impor fungsi API
 import { getTokens, clearTokens, getProfile } from "@/kedaimaster-api/authApi";
+import PricingModal from "./PricingModal"; // Import the PricingModal component
 
 
 const link = document.createElement("link");
@@ -181,20 +182,6 @@ const AuthModal: React.FC<AuthModalProps> = ({ show, onClose, initialMode }) => 
 };
 
 
-// --- Komponen Placeholder untuk PricingModal ---
-const PricingModal: React.FC<PricingModalProps> = ({ show, onClose, packageType }) => {
-  if (!show) return null;
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50" onClick={onClose}>
-        <div className="bg-white p-8 rounded-lg shadow-lg text-center" onClick={e => e.stopPropagation()}>
-            <h2 className="text-2xl font-bold mb-4">Pesan Paket {packageType.charAt(0).toUpperCase() + packageType.slice(1)}</h2>
-            <p className="mb-6">Anda akan segera dihubungi oleh tim kami untuk proses selanjutnya.</p>
-            <button onClick={onClose} className="bg-emerald-600 text-white font-semibold px-6 py-2 rounded-lg">Tutup</button>
-        </div>
-    </div>
-  );
-};
 
 // --- Komponen Halaman Utama ---
 const KedaiMasterPage = () => {
@@ -1102,7 +1089,7 @@ const KedaiMasterPage = () => {
               </h3>
 
               <img
-                src="https://placehold.co/120x40/ffffff/253142?text=KTP"
+                src="logo-white.png"
                 alt="Kediri Technopark Logo"
                 className="my-2 rounded-lg"
                 style={{ width: "120px", height: "auto" }}

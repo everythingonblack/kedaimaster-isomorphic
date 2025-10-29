@@ -1,8 +1,12 @@
 import { Link } from 'react-router-dom';
-import { PiPlusBold } from 'react-icons/pi';
+import { PiPlusBold, PiMagnifyingGlassBold } from 'react-icons/pi';
 import { routes } from '@/config/routes';
 import { Button } from 'rizzui/button';
-import { deleteProduct, fetchProducts, ProductType } from '@/kedaimaster-api-handlers/productApiHandlers';
+import {
+  deleteProduct,
+  fetchProducts,
+  ProductType,
+} from '@/kedaimaster-api-handlers/productApiHandlers';
 import { useEffect } from 'react';
 import PageHeader from '@/app/shared/page-header';
 import ExportButton from '@/app/shared/export-button';
@@ -11,7 +15,6 @@ import { productsListColumns } from '@/app/shared/ecommerce/product/product-list
 import Table from '@core/components/table';
 import TablePagination from '@core/components/table/pagination';
 import { Input } from 'rizzui';
-import { PiMagnifyingGlassBold } from 'react-icons/pi';
 import WidgetCard from '@core/components/cards/widget-card';
 import cn from '@core/utils/class-names';
 
@@ -25,7 +28,6 @@ const pageHeader = {
 };
 
 export default function ProductsPage() {
-  // gunakan useTanStackTable seperti script lama
   const { table, setData } = useTanStackTable<ProductType>({
     tableData: [],
     columnConfig: productsListColumns as any,
@@ -38,24 +40,22 @@ export default function ProductsPage() {
           try {
             await deleteProduct(row.id);
             setData((prev) => prev.filter((r) => r.id !== row.id));
-            // Optionally refetch all products to ensure data consistency
             const updatedProducts = await fetchProducts();
             setData(updatedProducts);
           } catch (error) {
             console.error('Error deleting product:', error);
-            // Handle error, e.g., show a toast notification
           }
         },
         handleMultipleDelete: async (rows: ProductType[]) => {
           try {
             await Promise.all(rows.map((row) => deleteProduct(row.id)));
-            setData((prev) => prev.filter((r) => !rows.some((s) => s.id === r.id)));
-            // Optionally refetch all products to ensure data consistency
+            setData((prev) =>
+              prev.filter((r) => !rows.some((s) => s.id === r.id))
+            );
             const updatedProducts = await fetchProducts();
             setData(updatedProducts);
           } catch (error) {
             console.error('Error deleting multiple products:', error);
-            // Handle error, e.g., show a toast notification
           }
         },
       },
@@ -113,13 +113,22 @@ export default function ProductsPage() {
           />
         }
       >
-        <Table
-          table={table}
-          variant="modern"
-          classNames={{
-            rowClassName: 'last:border-0',
-          }}
-        />
+        {/* ✅ Wrapper untuk tampilan tabel bergaya Excel */}
+        <div className="overflow-x-auto border border-gray-300 rounded-md shadow-sm">
+          <Table
+            table={table}
+            variant="modern"
+            classNames={{
+              headerClassName:
+                'bg-gray-100 text-gray-700 border-b border-gray-300',
+              rowClassName:
+                'hover:bg-gray-50 border-b border-gray-200 last:border-0',
+              cellClassName:
+                'px-4 py-2 text-sm border-r border-gray-200 last:border-r-0',
+            }}
+          />
+        </div>
+
         <TablePagination table={table} className="p-4" />
       </WidgetCard>
     </>

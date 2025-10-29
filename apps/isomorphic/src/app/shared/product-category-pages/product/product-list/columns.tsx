@@ -7,20 +7,46 @@ import PencilIcon from '@core/components/icons/pencil';
 import AvatarCard from '@core/ui/avatar-card';
 import { createColumnHelper } from '@tanstack/react-table';
 import { Link } from 'react-router-dom';
-import { ActionIcon, Flex, Text, Tooltip } from 'rizzui';
+import { ActionIcon, Checkbox, Flex, Text, Tooltip } from 'rizzui';
 
 const columnHelper = createColumnHelper<ProductCategory>();
 
 export const productCategoryColumns = [
+  // ✅ Checkbox Select Column
+  columnHelper.display({
+    id: 'select',
+    size: 50,
+    header: ({ table }) => (
+      <Checkbox
+        className="ps-3.5"
+        aria-label="Select all rows"
+        checked={table.getIsAllPageRowsSelected()}
+        onChange={() => table.toggleAllPageRowsSelected()}
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        className="ps-3.5"
+        aria-label="Select row"
+        checked={row.getIsSelected()}
+        onChange={() => row.toggleSelected()}
+      />
+    ),
+  }),
+
+  // ✅ Category Column
   columnHelper.accessor('name', {
     id: 'name',
     size: 300,
     header: 'Category',
+    enableSorting: false,
     cell: ({ row }) => (
       <AvatarCard
         src={row.original.imageUrl}
         name={row.original.name}
-        description={`Created on ${new Date(row.original.createdOn).toLocaleDateString()}`}
+        description={`Created on ${new Date(
+          row.original.createdOn
+        ).toLocaleDateString()}`}
         avatarProps={{
           name: row.original.name,
           size: 'lg',
@@ -29,24 +55,103 @@ export const productCategoryColumns = [
       />
     ),
   }),
+
+  // ✅ Created By
   columnHelper.accessor('createdBy', {
+    id: 'createdBy',
+    size: 180,
     header: 'Created By',
-    cell: ({ row }) => <Text>{row.original.createdBy}</Text>,
-  }),
-  columnHelper.accessor('updatedOn', {
-    header: 'Last Updated',
     cell: ({ row }) => (
-      <Text>{new Date(row.original.updatedOn).toLocaleDateString()}</Text>
+      <Text className="font-medium text-gray-700">{row.original.createdBy}</Text>
     ),
   }),
+
+  // ✅ Created On (tanggal + jam)
+  columnHelper.accessor('createdOn', {
+    id: 'createdOn',
+    size: 180,
+    header: 'Created On',
+    cell: ({ row }) => {
+      const createdOn = row.original.createdOn;
+      if (!createdOn) return null;
+
+      const date = new Date(createdOn);
+      const formattedDate = date.toLocaleDateString('sv-SE', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      });
+      const formattedTime = date.toLocaleTimeString('sv-SE', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+      });
+
+      return (
+        <div className="w-full h-full flex flex-col items-center justify-center text-center">
+          <Text className="font-medium text-gray-700">{formattedDate}</Text>
+          <Text className="font-medium text-gray-500 text-sm">{formattedTime}</Text>
+        </div>
+      );
+    },
+  }),
+
+  // ✅ Updated On (tanggal + jam)
+  columnHelper.accessor('updatedOn', {
+    id: 'updatedOn',
+    size: 180,
+    header: 'Last Updated',
+    cell: ({ row }) => {
+      const updatedOn = row.original.updatedOn;
+      if (!updatedOn) return null;
+
+      const date = new Date(updatedOn);
+      const formattedDate = date.toLocaleDateString('sv-SE', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      });
+      const formattedTime = date.toLocaleTimeString('sv-SE', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+      });
+
+      return (
+        <div className="w-full h-full flex flex-col items-center justify-center text-center">
+          <Text className="font-medium text-gray-700">{formattedDate}</Text>
+          <Text className="font-medium text-gray-500 text-sm">{formattedTime}</Text>
+        </div>
+      );
+    },
+  }),
+
+  // ✅ Actions Column
   columnHelper.display({
     id: 'action',
     size: 120,
-    cell: ({ row, table: { options: { meta } } }) => (
+    cell: ({
+      row,
+      table: {
+        options: { meta },
+      },
+    }) => (
       <Flex align="center" justify="end" gap="3" className="pe-4">
-        <Tooltip content="Edit Category" placement="top" color="invert">
+        <Tooltip
+          size="sm"
+          content="Edit Category"
+          placement="top"
+          color="invert"
+        >
           <Link to={routes.dashboard.editCategories(row.original.id)}>
-            <ActionIcon as="span" size="sm" variant="outline" aria-label="Edit Category">
+            <ActionIcon
+              as="span"
+              size="sm"
+              variant="outline"
+              aria-label="Edit Category"
+            >
               <PencilIcon className="h-4 w-4" />
             </ActionIcon>
           </Link>

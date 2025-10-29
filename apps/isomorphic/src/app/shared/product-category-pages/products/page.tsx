@@ -13,7 +13,6 @@ import TablePagination from '@core/components/table/pagination';
 import cn from '@core/utils/class-names';
 import { useTanStackTable } from '@core/components/table/custom/use-TanStack-Table';
 import { productCategoryColumns } from '@/app/shared/product-category-pages/product/product-list/columns';
-
 import productCategoriesApiHandlers, {
   ProductCategory,
 } from '@/kedaimaster-api-handlers/productCategoriesApiHandlers';
@@ -35,17 +34,38 @@ export default function ProductCategoriesPage() {
       initialState: { pagination: { pageIndex: 0, pageSize: 10 } },
       meta: {
         handleDeleteRow: async (row: ProductCategory) => {
-          await productCategoriesApiHandlers.delete(row.id);
-          setData((prev) => prev.filter((r) => r.id !== row.id));
+          try {
+            await productCategoriesApiHandlers.delete(row.id);
+            setData((prev) => prev.filter((r) => r.id !== row.id));
+            const updatedCategories = await productCategoriesApiHandlers.getAll();
+            setData(updatedCategories);
+          } catch (error) {
+            console.error('Error deleting category:', error);
+          }
+        },
+        handleMultipleDelete: async (rows: ProductCategory[]) => {
+          try {
+            await Promise.all(rows.map((row) => productCategoriesApiHandlers.delete(row.id)));
+            setData((prev) => prev.filter((r) => !rows.some((s) => s.id === r.id)));
+            const updatedCategories = await productCategoriesApiHandlers.getAll();
+            setData(updatedCategories);
+          } catch (error) {
+            console.error('Error deleting multiple categories:', error);
+          }
         },
       },
+      enableColumnResizing: false,
     },
   });
 
   useEffect(() => {
     const fetchCategories = async () => {
-      const data = await productCategoriesApiHandlers.getAll();
-      setData(data);
+      try {
+        const data = await productCategoriesApiHandlers.getAll();
+        setData(data);
+      } catch (err) {
+        console.error('Error fetching categories:', err);
+      }
     };
     fetchCategories();
   }, [setData]);
@@ -59,8 +79,8 @@ export default function ProductCategoriesPage() {
             fileName="product_categories"
             header="ID,Name,CreatedBy,CreatedOn,UpdatedBy,UpdatedOn"
           />
-         <Link to={routes.dashboard.createCategories}>
-            <Button>
+          <Link to={routes.dashboard.createCategories} className="w-full @lg:w-auto">
+            <Button as="span" className="w-full @lg:w-auto">
               <PiPlusBold className="me-1.5 h-[17px] w-[17px]" />
               Add Category
             </Button>
@@ -86,7 +106,22 @@ export default function ProductCategoriesPage() {
           />
         }
       >
-        <Table table={table} variant="modern" />
+        {/* ✅ Wrapper untuk tampilan tabel bergaya Excel */}
+        <div className="overflow-x-auto border border-gray-300 rounded-md shadow-sm">
+          <Table
+            table={table}
+            variant="modern"
+            classNames={{
+              headerClassName:
+                'bg-gray-100 text-gray-700 border-b border-gray-300',
+              rowClassName:
+                'hover:bg-gray-50 border-b border-gray-200 last:border-0',
+              cellClassName:
+                'px-4 py-2 text-sm border-r border-gray-200 last:border-r-0',
+            }}
+          />
+        </div>
+
         <TablePagination table={table} className="p-4" />
       </WidgetCard>
     </>

@@ -1,25 +1,23 @@
 import { Link } from 'react-router-dom';
-import { PiPlusBold } from 'react-icons/pi';
+import { PiPlusBold, PiMagnifyingGlassBold } from 'react-icons/pi';
 import { routes } from '@/config/routes';
-import { Button } from 'rizzui/button';
-import uomApiHandlers, { Uom } from '@/kedaimaster-api-handlers/uomApiHandlers';
-import { useEffect } from 'react';
+import { Button, Input } from 'rizzui';
 import PageHeader from '@/app/shared/page-header';
 import ExportButton from '@/app/shared/export-button';
-import { useTanStackTable } from '@core/components/table/custom/use-TanStack-Table';
-import { uomListColumns } from '@/app/shared/satuan/product/product-list/columns';
+import { useEffect } from 'react';
+import WidgetCard from '@core/components/cards/widget-card';
 import Table from '@core/components/table';
 import TablePagination from '@core/components/table/pagination';
-import { Input } from 'rizzui';
-import { PiMagnifyingGlassBold } from 'react-icons/pi';
-import WidgetCard from '@core/components/cards/widget-card';
 import cn from '@core/utils/class-names';
+import { useTanStackTable } from '@core/components/table/custom/use-TanStack-Table';
+import { uomListColumns } from '@/app/shared/satuan/product/product-list/columns';
+import uomApiHandlers, { Uom } from '@/kedaimaster-api-handlers/uomApiHandlers';
 
 const pageHeader = {
   title: 'Satuan',
   breadcrumb: [
-    { href: routes.dashboard.main, name: 'Dashboard' },
-    { href: routes.dashboard.products, name: 'Satuan' }, // Assuming products route will be changed to uoms
+    { href: routes.dashboard.main, name: 'E-Commerce' },
+    { href: routes.dashboard.main, name: 'Satuan' },
     { name: 'List' },
   ],
 };
@@ -37,20 +35,20 @@ export default function UomPage() {
           try {
             await uomApiHandlers.delete(row.id);
             setData((prev) => prev.filter((r) => r.id !== row.id));
-            const updatedUoms = await uomApiHandlers.getAll();
-            setData(updatedUoms);
+            const updated = await uomApiHandlers.getAll();
+            setData(updated);
           } catch (error) {
-            console.error('Error deleting UOM:', error);
+            console.error('Error deleting satuan:', error);
           }
         },
         handleMultipleDelete: async (rows: Uom[]) => {
           try {
             await Promise.all(rows.map((row) => uomApiHandlers.delete(row.id)));
             setData((prev) => prev.filter((r) => !rows.some((s) => s.id === r.id)));
-            const updatedUoms = await uomApiHandlers.getAll();
-            setData(updatedUoms);
+            const updated = await uomApiHandlers.getAll();
+            setData(updated);
           } catch (error) {
-            console.error('Error deleting multiple UOMs:', error);
+            console.error('Error deleting multiple satuan:', error);
           }
         },
       },
@@ -61,11 +59,11 @@ export default function UomPage() {
   useEffect(() => {
     const getUoms = async () => {
       try {
-        const uomData = await uomApiHandlers.getAll();
-        console.log('Fetched UOMs:', uomData);
-        setData(uomData);
+        const data = await uomApiHandlers.getAll();
+        console.log('Fetched UOMs:', data);
+        setData(data);
       } catch (err) {
-        console.error('Error fetching UOMs:', err);
+        console.error('Error fetching satuan:', err);
       }
     };
     getUoms();
@@ -73,12 +71,13 @@ export default function UomPage() {
 
   return (
     <>
+      {/* 🧭 HEADER */}
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb}>
         <div className="mt-4 flex items-center gap-3 @lg:mt-0">
           <ExportButton
             data={table.getRowModel().rows.map((r) => r.original)}
             fileName="uom_data"
-            header="ID,Name,Remarks"
+            header="ID,Name,Remarks,CreatedBy,CreatedOn,UpdatedBy,UpdatedOn"
           />
           <Link to={routes.dashboard.createUom} className="w-full @lg:w-auto">
             <Button as="span" className="w-full @lg:w-auto">
@@ -89,6 +88,7 @@ export default function UomPage() {
         </div>
       </PageHeader>
 
+      {/* 📦 TABLE WRAPPER */}
       <WidgetCard
         title="Satuan List"
         className={cn('p-0 lg:p-0')}
@@ -107,13 +107,22 @@ export default function UomPage() {
           />
         }
       >
-        <Table
-          table={table}
-          variant="modern"
-          classNames={{
-            rowClassName: 'last:border-0',
-          }}
-        />
+        {/* ✅ Wrapper dengan border dan shadow biar konsisten */}
+        <div className="overflow-x-auto border border-gray-300 rounded-md shadow-sm">
+          <Table
+            table={table}
+            variant="modern"
+            classNames={{
+              headerClassName:
+                'bg-gray-100 text-gray-700 border-b border-gray-300',
+              rowClassName:
+                'hover:bg-gray-50 border-b border-gray-200 last:border-0',
+              cellClassName:
+                'px-4 py-2 text-sm border-r border-gray-200 last:border-r-0',
+            }}
+          />
+        </div>
+
         <TablePagination table={table} className="p-4" />
       </WidgetCard>
     </>

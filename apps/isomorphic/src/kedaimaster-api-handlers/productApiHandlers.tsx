@@ -19,6 +19,8 @@ type ApiProduct = {
     unitPrice: number;
   };
   description?: string;
+  createdBy?: string;
+  createdOn?: string;
 };
 
 /**
@@ -32,6 +34,8 @@ export type ProductType = {
   stock: number;
   price: string;
   status: string;
+  createdBy: string;
+  createdOn: string;
 };
 
 /**
@@ -84,6 +88,8 @@ function mapApiProductToProductType(item: ApiProduct): ProductType {
       ? item.price.unitPrice.toLocaleString('id-ID')
       : '0',
     status: (item.stock ?? 0) > 0 ? 'Available' : 'Out of Stock',
+    createdBy: item.createdBy || '-',
+    createdOn: item.createdOn || '-',
   };
 }
 
