@@ -83,6 +83,8 @@ function App() {
           <Route path="/product-categories/create" element={<CreateProductCategoryPage />} />
           <Route path="/product-categories/:slug/edit" element={<EditProductCategoryPage />} />
           <Route path="/categories" element={<ProductCategoriesPage />} /> {/* Added route for /categories */}
+          <Route path="/categories/create" element={<CreateProductCategoryPage />} />
+          <Route path="/categories/:slug/edit" element={<EditProductCategoryPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

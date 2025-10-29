@@ -1,11 +1,20 @@
 'use client';
 
-import { useFormContext } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import { Input } from 'rizzui';
-import FormGroup from '@/app/shared/form-group';
 import cn from '@core/utils/class-names';
+import FormGroup from '@/app/shared/form-group';
+import { lazy, Suspense } from 'react';
+import QuillLoader from '@core/components/loader/quill-loader';
 
-export default function ProductCategorySummary({ className }: { className?: string }) {
+// Lazy load QuillEditor untuk performa
+const QuillEditor = lazy(() => import('@core/ui/quill-editor'));
+
+interface ProductSummaryProps {
+  className?: string;
+}
+
+export default function ProductSummary({ className }: ProductSummaryProps) {
   const {
     register,
     formState: { errors },
@@ -14,12 +23,13 @@ export default function ProductCategorySummary({ className }: { className?: stri
   return (
     <FormGroup
       title="Category Details"
-      description="Enter the category name and upload its image below."
+      description="Edit your product category details and necessary information from here"
       className={cn(className)}
     >
+      {/* Category Name */}
       <Input
-        label="Category Name"
-        placeholder="e.g. Electronics"
+        label="Name"
+        placeholder="Category name"
         {...register('name')}
         error={errors.name?.message as string}
       />

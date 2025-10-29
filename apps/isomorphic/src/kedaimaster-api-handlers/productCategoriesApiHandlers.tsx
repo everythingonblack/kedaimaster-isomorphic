@@ -12,7 +12,13 @@ import {
 } from '@/kedaimaster-api/productCategoriesApi';
 
 // Define the types based on the productCategoriesApi.js
-export type ProductCategory = { id: string; name: string; imageUrl: string; createdBy: string; createdOn: string; updatedBy: string; updatedOn: string; };
+export type ProductCategory = {
+  images: { name: string; url: string; size: number; }[] | ({ name?: string | undefined; url?: string | undefined; size?: number | undefined; } | undefined)[] | undefined;
+  description: string;
+  parentCategory: string;
+  type: string;
+  slug: string | undefined; id: string; name: string; imageUrl: string; createdBy: string; createdOn: string; updatedBy: string; updatedOn: string; 
+};
 export type ProductCategoryDropdown = { id: string; code: string; name: string; imageUrl: string; };
 export type Product = { id: string; name: string; imageUrl: string; category: { id: string; code: string; name: string; imageUrl: string; }; price: { id: string; effectiveDate: string; unitPrice: number; active: boolean; createdBy: string; createdOn: string; updatedBy: string; updatedOn: string; }; stocking: boolean; stock: number; createdBy: string; createdOn: string; updatedBy: string; updatedOn: string; };
 export type DatatableResponse = { draw: number; recordsTotal: number; recordsFiltered: number; data: any[]; };

@@ -19,6 +19,11 @@ export const routes = {
     categoryDetails: (slug: string) => `/categories/${slug}`,
     editCategories: (slug: string) => `/categories/${slug}/edit`,
 
+    productCategories: '/product-categories',
+    createProductCategories: '/product-categories/create',
+    productCategoryDetails: (slug: string) => `/product-categories/${slug}`,
+    editProductCategories: (slug: string) => `/product-categories/${slug}/edit`,
+
     
     uoms: '/uoms',
     createUom: '/uoms/create',

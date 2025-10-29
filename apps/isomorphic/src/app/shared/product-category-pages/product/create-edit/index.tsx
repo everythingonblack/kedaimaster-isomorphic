@@ -1,31 +1,28 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+
 import { routes } from '@/config/routes';
+
 import PageHeader from '@/app/shared/page-header';
+
 import toast from 'react-hot-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
 import { Text } from 'rizzui';
 import cn from '@core/utils/class-names';
+import ProductSummary from '@/app/shared/product-category-pages/product/create-edit/product-summary';
+import ProductMedia from '@/app/shared/product-category-pages/product/create-edit/product-media';
 import FormFooter from '@core/components/form-footer';
+import productCategoriesApiHandlers from '@/kedaimaster-api-handlers/productCategoriesApiHandlers';
+import {
+  CategoryFormInput as CreateProductCategoryInput,
+  categoryFormSchema as productCategoryFormSchema,
+} from '@/validators/create-category.schema';
 import { useLayout } from '@/layouts/use-layout';
 import { LAYOUT_OPTIONS } from '@/config/enums';
+import { ProductCategory } from '@/kedaimaster-api-handlers/productCategoriesApiHandlers';
 import { useParams } from 'react-router-dom';
-import productCategoriesApiHandlers, {
-  ProductCategory,
-} from '@/kedaimaster-api-handlers/productCategoriesApiHandlers';
-import ProductCategorySummary from './product-summary';
-import ProductMedia from './product-media';
-import { z } from 'zod';
-
-// ✅ Schema validasi form
-const productCategorySchema = z.object({
-  name: z.string().min(1, 'Category name is required'),
-  imageUrl: z.any().optional(),
-});
-
-export type ProductCategoryInput = z.infer<typeof productCategorySchema>;
 
 interface IndexProps {
   className?: string;
@@ -35,48 +32,58 @@ export default function CreateEditProductCategory({ className }: IndexProps) {
   const { slug } = useParams<{ slug: string }>();
   const { layout } = useLayout();
   const [isLoading, setLoading] = useState(false);
-  const [category, setCategory] = useState<ProductCategory | undefined>(undefined);
+  const [productCategory, setProductCategory] = useState<ProductCategory | undefined>(undefined);
   const [fetching, setFetching] = useState(true);
 
   const pageHeader = {
     title: slug ? 'Edit Product Category' : 'Create Product Category',
     breadcrumb: [
       { href: routes.dashboard.main, name: 'Dashboard' },
-      { href: routes.dashboard.products, name: 'Product Categories' },
-      { name: slug ? `${category?.name}` : 'New Category' },
+      { href: routes.dashboard.productCategories, name: 'Product Categories' },
+      { name: slug ? `${productCategory?.name}` : 'Create' },
     ],
   };
 
-  const methods = useForm<ProductCategoryInput>({
-    resolver: zodResolver(productCategorySchema),
-    defaultValues: {
+  const methods = useForm<CreateProductCategoryInput>({
+    resolver: zodResolver(productCategoryFormSchema),
+    defaultValues: productCategory ?? {
       name: '',
-      imageUrl: undefined,
+      imageUrl: '',
+      slug: '',
     },
   });
 
-  // Fetch existing category if slug exists
+  // Fetch existing product category if slug exists
   useEffect(() => {
-    async function fetchCategory() {
+    async function fetchProductCategory() {
       if (!slug) {
         setFetching(false);
         return;
       }
       try {
         const data = await productCategoriesApiHandlers.getById(slug);
-        setCategory(data);
-        methods.reset(data);
+        setProductCategory(data);
+        methods.reset({
+          name: data.name,
+          imageUrl: data.imageUrl,
+          slug: data.slug,
+          type: data.type || '',
+          parentCategory: data.parentCategory || '',
+          description: data.description || '',
+          images: data.images,
+        }); // langsung reset dengan data dari API
       } catch (error) {
-        console.error('Failed to fetch category:', error);
-        toast.error(<Text as="b">Failed to load category</Text>);
+        console.error('Failed to fetch product category:', error);
+        toast.error(<Text as="b">Failed to load product category</Text>);
       } finally {
         setFetching(false);
       }
     }
-    fetchCategory();
+    fetchProductCategory();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
 
-  const onSubmit: SubmitHandler<ProductCategoryInput> = async (data) => {
+  const onSubmit: SubmitHandler<CreateProductCategoryInput> = async (data) => {
     setLoading(true);
     try {
       let result;
@@ -87,21 +94,17 @@ export default function CreateEditProductCategory({ className }: IndexProps) {
       }
 
       if (result) {
-        setCategory(result);
+        // Update state product category agar breadcrumb ikut berubah
+        setProductCategory(result);
+
         toast.success(
-          <Text as="b">
-            Category successfully {slug ? 'updated' : 'created'}
-          </Text>
+          <Text as="b">Product category successfully {slug ? 'updated' : 'created'}</Text>
         );
       } else {
-        toast.error(
-          <Text as="b">
-            Failed to {slug ? 'update' : 'create'} category
-          </Text>
-        );
+        toast.error(<Text as="b">Failed to {slug ? 'update' : 'create'} product category</Text>);
       }
     } catch (error) {
-      console.error('Error during category creation/update:', error);
+      console.error('Error during product category creation/update:', error);
       toast.error(<Text as="b">An error occurred</Text>);
     } finally {
       setLoading(false);
@@ -109,28 +112,33 @@ export default function CreateEditProductCategory({ className }: IndexProps) {
   };
 
   if (fetching) {
-    return <div className="p-6 text-gray-500">Loading category data...</div>;
+    return <div className="p-6 text-gray-500">Loading product category data...</div>;
   }
 
   return (
     <div className="@container">
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb} />
+
       <FormProvider {...methods}>
         <form
           onSubmit={methods.handleSubmit(onSubmit)}
-          className={cn('relative z-[19] [&_label.block>span]:font-medium', className)}
+          className={cn(
+            'relative z-[19] [&_label.block>span]:font-medium',
+            className
+          )}
         >
           <div className="mb-10 grid gap-7 divide-y divide-dashed divide-gray-200 @2xl:gap-9 @3xl:gap-11">
             <div>
-              <ProductCategorySummary />
+              <ProductSummary className="" />
             </div>
             <div>
               <ProductMedia className="pt-7 @2xl:pt-9 @3xl:pt-11" />
             </div>
           </div>
+
           <FormFooter
             isLoading={isLoading}
-            submitBtnText={slug ? 'Update Category' : 'Create Category'}
+            submitBtnText={slug ? 'Update Product Category' : 'Create Product Category'}
           />
         </form>
       </FormProvider>
