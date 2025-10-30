@@ -1,28 +1,28 @@
-'use client';
+"use client";
 
-import { Link } from 'react-router-dom';
-import { PiPlusBold, PiMagnifyingGlassBold } from 'react-icons/pi';
-import { routes } from '@/config/routes';
-import { Button, Input } from 'rizzui';
-import PageHeader from '@/app/shared/page-header';
-import ExportButton from '@/app/shared/export-button';
-import { useEffect } from 'react';
-import WidgetCard from '@core/components/cards/widget-card';
-import Table from '@core/components/table';
-import TablePagination from '@core/components/table/pagination';
-import cn from '@core/utils/class-names';
-import { useTanStackTable } from '@core/components/table/custom/use-TanStack-Table';
-import { productCategoryColumns } from '@/app/shared/product-category-pages/product/product-list/columns';
+import { Link } from "react-router-dom";
+import { PiPlusBold, PiMagnifyingGlassBold } from "react-icons/pi";
+import { routes } from "@/config/routes";
+import { Button, Input } from "rizzui";
+import PageHeader from "@/app/shared/page-header";
+import ExportButton from "@/app/shared/export-button";
+import { useEffect } from "react";
+import WidgetCard from "@core/components/cards/widget-card";
+import Table from "@core/components/table";
+import TablePagination from "@core/components/table/pagination";
+import cn from "@core/utils/class-names";
+import { useTanStackTable } from "@core/components/table/custom/use-TanStack-Table";
+import { productCategoryColumns } from "@/app/shared/product-category-pages/product/product-list/columns";
 import productCategoriesApiHandlers, {
   ProductCategory,
-} from '@/kedaimaster-api-handlers/productCategoriesApiHandlers';
+} from "@/kedaimaster-api-handlers/productCategoriesApiHandlers";
 
 const pageHeader = {
-  title: 'Product Categories',
+  title: "Product Categories",
   breadcrumb: [
-    { href: routes.dashboard.main, name: 'E-Commerce' },
-    { href: routes.dashboard.products, name: 'Product Categories' },
-    { name: 'List' },
+    { href: routes.dashboard.main, name: "E-Commerce" },
+    { href: routes.dashboard.products, name: "Product Categories" },
+    { name: "List" },
   ],
 };
 
@@ -37,20 +37,26 @@ export default function ProductCategoriesPage() {
           try {
             await productCategoriesApiHandlers.delete(row.id);
             setData((prev) => prev.filter((r) => r.id !== row.id));
-            const updatedCategories = await productCategoriesApiHandlers.getAll();
+            const updatedCategories =
+              await productCategoriesApiHandlers.getAll();
             setData(updatedCategories);
           } catch (error) {
-            console.error('Error deleting category:', error);
+            console.error("Error deleting category:", error);
           }
         },
         handleMultipleDelete: async (rows: ProductCategory[]) => {
           try {
-            await Promise.all(rows.map((row) => productCategoriesApiHandlers.delete(row.id)));
-            setData((prev) => prev.filter((r) => !rows.some((s) => s.id === r.id)));
-            const updatedCategories = await productCategoriesApiHandlers.getAll();
+            await Promise.all(
+              rows.map((row) => productCategoriesApiHandlers.delete(row.id))
+            );
+            setData((prev) =>
+              prev.filter((r) => !rows.some((s) => s.id === r.id))
+            );
+            const updatedCategories =
+              await productCategoriesApiHandlers.getAll();
             setData(updatedCategories);
           } catch (error) {
-            console.error('Error deleting multiple categories:', error);
+            console.error("Error deleting multiple categories:", error);
           }
         },
       },
@@ -64,7 +70,7 @@ export default function ProductCategoriesPage() {
         const data = await productCategoriesApiHandlers.getAll();
         setData(data);
       } catch (err) {
-        console.error('Error fetching categories:', err);
+        console.error("Error fetching categories:", err);
       }
     };
     fetchCategories();
@@ -79,8 +85,14 @@ export default function ProductCategoriesPage() {
             fileName="product_categories"
             header="ID,Name,CreatedBy,CreatedOn,UpdatedBy,UpdatedOn"
           />
-          <Link to={routes.dashboard.createCategories} className="w-full @lg:w-auto">
-            <Button as="span" className="w-full @lg:w-auto">
+          <Link
+            to={routes.dashboard.createCategories}
+            className="w-full @lg:w-auto"
+          >
+            <Button
+              as="span"
+              className="w-full @lg:w-auto bg-[#2F7F7A] text-white hover:bg-[#276B67]"
+            >
               <PiPlusBold className="me-1.5 h-[17px] w-[17px]" />
               Add Category
             </Button>
@@ -90,7 +102,7 @@ export default function ProductCategoriesPage() {
 
       <WidgetCard
         title="Category List"
-        className={cn('p-0 lg:p-0')}
+        className={cn("p-0 lg:p-0")}
         headerClassName="mb-6 px-5 pt-5 lg:px-7 lg:pt-7"
         action={
           <Input
@@ -98,8 +110,8 @@ export default function ProductCategoriesPage() {
             clearable
             inputClassName="h-[36px]"
             placeholder="Search category..."
-            onClear={() => table.setGlobalFilter('')}
-            value={table.getState().globalFilter ?? ''}
+            onClear={() => table.setGlobalFilter("")}
+            value={table.getState().globalFilter ?? ""}
             prefix={<PiMagnifyingGlassBold className="size-4" />}
             onChange={(e) => table.setGlobalFilter(e.target.value)}
             className="w-full @3xl:order-3 @3xl:ms-auto @3xl:max-w-72"
@@ -113,11 +125,11 @@ export default function ProductCategoriesPage() {
             variant="modern"
             classNames={{
               headerClassName:
-                'bg-gray-100 text-gray-700 border-b border-gray-300',
+                "bg-gray-100 text-gray-700 border-b border-gray-300",
               rowClassName:
-                'hover:bg-gray-50 border-b border-gray-200 last:border-0',
+                "hover:bg-gray-50 border-b border-gray-200 last:border-0",
               cellClassName:
-                'px-4 py-2 text-sm border-r border-gray-200 last:border-r-0',
+                "px-4 py-2 text-sm border-r border-gray-200 last:border-r-0",
             }}
           />
         </div>

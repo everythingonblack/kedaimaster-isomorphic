@@ -129,40 +129,46 @@ export const productCategoryColumns = [
 
   // ✅ Actions Column
   columnHelper.display({
-    id: 'action',
-    size: 120,
-    cell: ({
-      row,
-      table: {
-        options: { meta },
-      },
-    }) => (
-      <Flex align="center" justify="end" gap="3" className="pe-4">
-        <Tooltip
-          size="sm"
-          content="Edit Category"
-          placement="top"
-          color="invert"
-        >
-          <Link to={routes.dashboard.editCategories(row.original.id)}>
-            <ActionIcon
-              as="span"
-              size="sm"
-              variant="outline"
-              aria-label="Edit Category"
-            >
-              <PencilIcon className="h-4 w-4" />
-            </ActionIcon>
-          </Link>
-        </Tooltip>
-        <DeletePopover
-          title="Delete Category"
-          description={`Are you sure you want to delete "${row.original.name}"?`}
-          onDelete={() =>
-            meta?.handleDeleteRow && meta?.handleDeleteRow(row.original)
-          }
-        />
-      </Flex>
-    ),
-  }),
+  id: 'action',
+  size: 120,
+  cell: ({
+    row,
+    table: {
+      options: { meta },
+    },
+  }) => (
+    <Flex
+      align="center"
+      justify="center"  // ubah dari "end" ke "center"
+      gap="3"
+      className="pe-4 h-full" // tambahkan h-full biar vertikalnya tengah
+    >
+      <Tooltip
+        size="sm"
+        content="Edit Category"
+        placement="top"
+        color="invert"
+      >
+        <Link to={routes.dashboard.editCategories(row.original.id)}>
+          <ActionIcon
+            as="span"
+            size="sm"
+            variant="outline"
+            aria-label="Edit Category"
+          >
+            <PencilIcon className="h-4 w-4" />
+          </ActionIcon>
+        </Link>
+      </Tooltip>
+
+      <DeletePopover
+        title="Delete Category"
+        description={`Are you sure you want to delete "${row.original.id}"?`}
+        onDelete={() =>
+          meta?.handleDeleteRow && meta?.handleDeleteRow(row.original)
+        }
+      />
+    </Flex>
+  ),
+}),
 ];

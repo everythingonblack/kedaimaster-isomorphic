@@ -8,6 +8,7 @@ import { Text, Button } from 'rizzui';
 import toast from 'react-hot-toast';
 import PageHeader from '@/app/shared/page-header';
 import { routes } from '@/config/routes';
+import FormFooter from '@core/components/form-footer';
 import usersApiHandlers, {
   User,
   CreateUserRequest,
@@ -17,9 +18,19 @@ import { useParams, useNavigate } from 'react-router-dom';
 import UserSummary from '@/app/shared/users-page/product/create-edit/product-summary';
 
 const userFormSchema = z.object({
+  id: z.string().optional(), // Add id to schema
   email: z.string().email('Invalid email address'),
-  password: z.string().optional(),
+  password: z.string().optional(), // Keep optional for initial schema
   role: z.string().min(1, 'Role is required'),
+}).superRefine((data, ctx) => {
+  // Conditionally make password required for creation
+  if (!data.id && !data.password) { // Check data.id for new user
+    ctx.addIssue({
+      path: ['password'],
+      code: z.ZodIssueCode.custom,
+      message: 'Password is required for new users',
+    });
+  }
 });
 
 export type UserFormInput = z.infer<typeof userFormSchema>;
@@ -33,7 +44,7 @@ export default function CreateEditUser() {
 
   const methods = useForm<UserFormInput>({
     resolver: zodResolver(userFormSchema),
-    defaultValues: { email: '', password: '', role: '' },
+    defaultValues: { id: undefined, email: '', password: '', role: '' }, // Add id to defaultValues
   });
 
   useEffect(() => {
@@ -45,7 +56,7 @@ export default function CreateEditUser() {
       try {
         const data = await usersApiHandlers.getById(id);
         setUser(data);
-        methods.reset({ email: data.email, role: data.role });
+        methods.reset({ id: data.id, email: data.email, role: data.role }); // Set id in form data
       } catch (error) {
         toast.error('Failed to load user');
       } finally {
@@ -99,11 +110,10 @@ export default function CreateEditUser() {
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-8">
           <UserSummary />
-          <div className="flex justify-end">
-            <Button type="submit" isLoading={loading}>
-              {id ? 'Update User' : 'Create User'}
-            </Button>
-          </div>
+          <FormFooter
+            isLoading={loading}
+            submitBtnText={id ? 'Update User' : 'Create User'}
+          />
         </form>
       </FormProvider>
     </div>

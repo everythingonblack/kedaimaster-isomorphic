@@ -35,9 +35,14 @@ export default function FormFooter({
       >
         {altBtnText}
       </Button>
-      <Button type="submit" isLoading={isLoading} className="w-full @xl:w-auto">
-        {submitBtnText}
-      </Button>
+      <Button
+  type="submit"
+  isLoading={isLoading}
+  className="w-full @xl:w-auto bg-[#2E8074] hover:bg-[#25675E] text-white data-[loading=true]:[&>svg]:text-black"
+>
+  {submitBtnText}
+</Button>
+
     </div>
   );
 }

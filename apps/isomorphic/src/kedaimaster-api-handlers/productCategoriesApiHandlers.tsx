@@ -10,18 +10,33 @@ import {
   getProductCategoryDropdown,
   getProductCategoryDatatable,
 } from '@/kedaimaster-api/productCategoriesApi';
+import { z } from 'zod';
+import { messages } from '@/config/messages';
 
 // Define the types based on the productCategoriesApi.js
 export type ProductCategory = {
-  images: { name: string; url: string; size: number; }[] | ({ name?: string | undefined; url?: string | undefined; size?: number | undefined; } | undefined)[] | undefined;
-  description: string;
-  parentCategory: string;
-  type: string;
-  slug: string | undefined; id: string; name: string; imageUrl: string; createdBy: string; createdOn: string; updatedBy: string; updatedOn: string; 
+  id: string;
+  name: string;
+  imageUrl: string;
+  createdBy: string;
+  createdOn: string;
+  updatedBy: string;
+  updatedOn: string;
 };
 export type ProductCategoryDropdown = { id: string; code: string; name: string; imageUrl: string; };
 export type Product = { id: string; name: string; imageUrl: string; category: { id: string; code: string; name: string; imageUrl: string; }; price: { id: string; effectiveDate: string; unitPrice: number; active: boolean; createdBy: string; createdOn: string; updatedBy: string; updatedOn: string; }; stocking: boolean; stock: number; createdBy: string; createdOn: string; updatedBy: string; updatedOn: string; };
 export type DatatableResponse = { draw: number; recordsTotal: number; recordsFiltered: number; data: any[]; };
+
+export const productCategoryFormSchema = z.object({
+  name: z.string().min(1, { message: messages.productCategoryNameIsRequired }),
+  description: z.string().optional(),
+  parentCategory: z.string().optional(),
+  type: z.string().optional(),
+  image: fileSchema.optional(), // single file upload
+});
+
+
+export type CreateProductCategoryInput = z.infer<typeof productCategoryFormSchema>;
 
 const productCategoriesApiHandlers = {
   async getAll(): Promise<ProductCategory[]> {
@@ -41,17 +56,19 @@ const productCategoriesApiHandlers = {
       throw error;
     }
   },
-  async create(data: any): Promise<ProductCategory> {
+  async create(data: CreateProductCategoryInput): Promise<ProductCategory> {
     try {
-      return await createProductCategory(data) as ProductCategory;
+      const payload = { ...data, image: data.image?.raw ?? undefined };
+      return await createProductCategory(payload) as ProductCategory;
     } catch (error) {
       console.error("Failed to create product category:", error);
       throw error;
     }
   },
-  async update(id: string, data: any): Promise<ProductCategory> {
+  async update(id: string, data: CreateProductCategoryInput): Promise<ProductCategory> {
     try {
-      return await updateProductCategory(id, data) as ProductCategory;
+      const payload = { ...data, image: data.image?.raw ?? undefined };
+      return await updateProductCategory(id, payload) as ProductCategory;
     } catch (error) {
       console.error("Failed to update product category:", error);
       throw error;

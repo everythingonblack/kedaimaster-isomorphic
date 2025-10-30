@@ -67,6 +67,7 @@ export const messages = {
   folderNameLengthMin: 'Folder name must be at least 3 letters',
   productColorRequired: 'Product Color is Required',
   productCategoryIsRequired: 'Product Category is Required',
+  productCategoryNameIsRequired: 'Product Category Name is Required',
   productSizeRequired: 'Product Size is Required',
   descriptionIsRequired: 'Description is Required',
   locationIsRequired: 'Location is Required',
@@ -84,6 +85,4 @@ export const messages = {
   priceTypeIsRequired: "Price Type is required",
   pricePerSquareRequired: "Price Per Square is required",
   totalPriceIsRequired: "Total Price is required",
-  materialNameIsRequired: 'Material name is required',
-  materialCategoryIsRequired: 'Material Category is required',
 };

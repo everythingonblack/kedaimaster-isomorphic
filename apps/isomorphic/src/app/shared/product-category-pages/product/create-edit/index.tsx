@@ -85,6 +85,7 @@ export default function CreateEditProductCategory({ className }: IndexProps) {
 
   const onSubmit: SubmitHandler<CreateProductCategoryInput> = async (data) => {
     setLoading(true);
+    
     try {
       let result;
       if (slug) {
