@@ -38,7 +38,7 @@ export default function ProductSummary({ className, categoryOptions }: ProductSu
         render={({ field: { onChange, value } }) => (
           <div className="flex flex-col">
             <label className="font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Categories
+              Satuan
             </label>
             <select
               className={cn(

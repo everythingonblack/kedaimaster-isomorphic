@@ -9,7 +9,6 @@ import {
   deleteUser,
 } from '@/kedaimaster-api/usersApi';
 
-<<<<<<< HEAD
 export type User = {
   id: string;
   email: string;
@@ -31,13 +30,6 @@ export type UpdateUserPasswordRequest = {
   newPassword: string;
   confPassword: string;
 };
-=======
-// Define the types based on the usersApi.js
-export type User = { id: string; email: string; role: 'CASHIER' | 'BUSSINESS_OWNER'; };
-export type CreateUserRequest = { email: string; password: string; role: string; };
-export type UpdateUserRequest = { email: string; role: string; };
-export type UpdateUserPasswordRequest = { newPassword: string; confPassword: string; };
->>>>>>> 80d24e5b8371aa620545c5dfa766cdb460e347af
 
 const usersApiHandlers = {
   async getAll(): Promise<User[]> {
