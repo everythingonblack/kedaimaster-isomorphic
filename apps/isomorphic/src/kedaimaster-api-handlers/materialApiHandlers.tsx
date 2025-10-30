@@ -244,3 +244,25 @@ export async function updateMaterial(id: string, data: CreateMaterialInput, oldD
 
   return result;
 }
+
+/**
+ * Handler untuk mengambil riwayat mutasi material
+ */
+export async function fetchMaterialMutationHistory(): Promise<any[]> {
+  try {
+    const response = await materialsApi.getMaterialMutationHistory();
+    const res: any = response;
+
+    // Support different possible shapes from the API:
+    // - response is an array
+    // - response.materialHistory is an array
+    // - response.data is an array
+    if (Array.isArray(res)) return res;
+    if (Array.isArray(res?.materialHistory)) return res.materialHistory;
+    if (Array.isArray(res?.data)) return res.data;
+    return [];
+  } catch (error) {
+    console.error('❌ Failed to fetch material mutation history:', error);
+    return [];
+  }
+}

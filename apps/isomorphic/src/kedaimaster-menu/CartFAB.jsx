@@ -1,6 +1,9 @@
 // src/components/CartFAB.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './page.module.css';
+import CartFormPage from './CartFormPage';
+import { createTransaction } from '@/kedaimaster-api/transactionsApi';
+import OrderDetails from './OrderDetails';
 
 const CartFAB = ({ cart, onIncreaseQuantity, onDecreaseQuantity, onResetCart, isDeleteModalOpen }) => {
     const [isCartExpanded, setIsCartExpanded] = useState(false);
@@ -12,14 +15,39 @@ const CartFAB = ({ cart, onIncreaseQuantity, onDecreaseQuantity, onResetCart, is
     const [customerName, setCustomerName] = useState('');
     const [customerPhone, setCustomerPhone] = useState('');
     const [orderNotes, setOrderNotes] = useState('');
+    const [transactionStatus, setTransactionStatus] = useState(null);
+    const [newestTransactionId, setNewestTransactionId] = useState(null);
     const [showCancelConfirmation, setShowCancelConfirmation] = useState(false);
+    const [showOrderDetails, setShowOrderDetails] = useState(false);
 
     const cartFabRef = useRef(null);
     const paymentDropdownRef = useRef(null);
 
+    // ==============================
+    // Hitung total
+    // ==============================
     const totalItems = Object.values(cart).reduce((sum, item) => sum + item.quantity, 0);
     const totalPrice = Object.values(cart).reduce((sum, item) => sum + item.price * item.quantity, 0);
 
+    // ==============================
+    // Format waktu ke "YYYY-MM-DD HH:mm:ss"
+    // ==============================
+    const formatDateTime = (date) => {
+        const pad = (num) => String(num).padStart(2, '0');
+        return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+    };
+
+    // ==============================
+    // Restore transactionList dari localStorage
+    // ==============================
+    useEffect(() => {
+        const saved = JSON.parse(localStorage.getItem('transactionList') || '[]');
+        if (saved.length > 0) setNewestTransactionId(saved[0].id);
+    }, []);
+
+    // ==============================
+    // Handle klik luar FAB & dropdown
+    // ==============================
     useEffect(() => {
         const handleOutsideClick = (event) => {
             if (cartFabRef.current && !cartFabRef.current.contains(event.target) && !isDeleteModalOpen) {
@@ -30,16 +58,15 @@ const CartFAB = ({ cart, onIncreaseQuantity, onDecreaseQuantity, onResetCart, is
                 setIsPaymentDropdownOpen(false);
             }
         };
-
         if (isCartExpanded || isPaymentDropdownOpen) {
             document.addEventListener('mousedown', handleOutsideClick);
         }
-
-        return () => {
-            document.removeEventListener('mousedown', handleOutsideClick);
-        };
+        return () => document.removeEventListener('mousedown', handleOutsideClick);
     }, [isCartExpanded, isPaymentDropdownOpen, isDeleteModalOpen]);
 
+    // ==============================
+    // Reset kalau keranjang kosong
+    // ==============================
     useEffect(() => {
         if (totalItems === 0) {
             setIsCartExpanded(false);
@@ -49,49 +76,101 @@ const CartFAB = ({ cart, onIncreaseQuantity, onDecreaseQuantity, onResetCart, is
         }
     }, [totalItems]);
 
-    const handleFinishOrder = () => {
-        alert(`Terima kasih telah memesan, ${customerName}! Pesanan akan segera kami proses.`);
-        onResetCart();
-        setIsCartExpanded(false);
-        setCartPage(1);
-        setCustomerName('');
-        setCustomerPhone('');
-        setOrderNotes('');
+    // ==============================
+    // Buat transaksi
+    // ==============================
+    const handleCreateTransaction = async () => {
+        const transactionData = {
+            deviceTime: formatDateTime(new Date()),
+            paymentType: selectedPaymentMethod === 'QRIS' ? 'QRIS' : 'CASH',
+            servingType: 'PICKUP',
+            orderType: 'DINE_IN',
+            notes: orderNotes,
+            customerName,
+            customerPhone,
+            items: Object.values(cart).map((item) => ({
+                productId: item.id,
+                qty: item.quantity,
+                unitPrice: item.price,
+            })),
+        };
+
+        try {
+            const response = await createTransaction(transactionData);
+
+            // simpan ke localStorage
+            const savedList = JSON.parse(localStorage.getItem('transactionList') || '[]');
+            const updatedList = [response, ...savedList];
+            localStorage.setItem('transactionList', JSON.stringify(updatedList));
+
+            setNewestTransactionId(response.id);
+            setTransactionStatus('success');
+
+            // ✅ tampilkan halaman pembayaran (page 4)
+            setCartPage(3);
+        } catch (error) {
+            console.error('Gagal membuat transaksi:', error);
+            setTransactionStatus('failure');
+            setCartPage(4);
+        }
     };
 
+
+    // ==============================
+    // FAB tampil/hidden
+    // ==============================
+    const shouldHideFab =
+        totalItems === 0 &&
+        !newestTransactionId &&
+        !(JSON.parse(localStorage.getItem('transactionList') || '[]').length > 0);
+
+    // ==============================
+    // PAGE 1: KERANJANG
+    // ==============================
     const renderPage1 = () => (
         <div className={`${styles.cartPage1} ${cartPage === 1 ? styles.active : ''}`}>
             <div className={styles.cartSummary} onClick={() => totalItems > 0 && setIsCartExpanded(!isCartExpanded)}>
                 <span className={styles.cartItemsCount}>{totalItems} item</span>
                 <div className={styles.cartTotalDisplay}>
                     <span className={styles.cartTotalPrice}>Rp {totalPrice.toLocaleString('id-ID')}</span>
-                    <svg viewBox="0 0 34 34" style={{ fill: 'white', height: '30px' }}><path d="M9.79175 24.75C8.09591 24.75 6.72383 26.1375 6.72383 27.8333C6.72383 29.5292 8.09591 30.9167 9.79175 30.9167C11.4876 30.9167 12.8751 29.5292 12.8751 27.8333C12.8751 26.1375 11.4876 24.75 9.79175 24.75ZM0.541748 0.0833435V3.16668H3.62508L9.17508 14.8679L7.09383 18.645C6.84717 19.0767 6.70842 19.5854 6.70842 20.125C6.70842 21.8208 8.09591 23.2083 9.79175 23.2083H28.2917V20.125H10.4392C10.2234 20.125 10.0538 19.9554 10.0538 19.7396L10.1001 19.5546L11.4876 17.0417H22.973C24.1292 17.0417 25.1467 16.4096 25.6709 15.4538L31.1901 5.44834C31.3134 5.23251 31.3751 4.97043 31.3751 4.70834C31.3751 3.86043 30.6813 3.16668 29.8334 3.16668H7.03217L5.583 0.0833435H0.541748ZM25.2084 24.75C23.5126 24.75 22.1405 26.1375 22.1405 27.8333C22.1405 29.5292 23.5126 30.9167 25.2084 30.9167C26.9042 30.9167 28.2917 29.5292 28.2917 27.8333C28.2917 26.1375 26.9042 24.75 25.2084 24.75Z"></path></svg>
+                    <svg viewBox="0 0 34 34" style={{ fill: 'white', height: '30px' }}>
+                        <path d="M9.79175 24.75C8.09591 24.75 6.72383 26.1375 6.72383 27.8333C6.72383 29.5292 8.09591 30.9167 9.79175 30.9167C11.4876 30.9167 12.8751 29.5292 12.8751 27.8333C12.8751 26.1375 11.4876 24.75 9.79175 24.75ZM0.541748 0.0833435V3.16668H3.62508L9.17508 14.8679L7.09383 18.645C6.84717 19.0767 6.70842 19.5854 6.70842 20.125C6.70842 21.8208 8.09591 23.2083 9.79175 23.2083H28.2917V20.125H10.4392C10.2234 20.125 10.0538 19.9554 10.0538 19.7396L10.1001 19.5546L11.4876 17.0417H22.973C24.1292 17.0417 25.1467 16.4096 25.6709 15.4538L31.1901 5.44834C31.3134 5.23251 31.3751 4.97043 31.3751 4.70834C31.3751 3.86043 30.6813 3.16668 29.8334 3.16668H7.03217L5.583 0.0833435H0.541748ZM25.2084 24.75C23.5126 24.75 22.1405 26.1375 22.1405 27.8333C22.1405 29.5292 23.5126 30.9167 25.2084 30.9167C26.9042 30.9167 28.2917 29.5292 28.2917 27.8333C28.2917 26.1375 26.9042 24.75 25.2084 24.75Z"></path>
+                    </svg>
                 </div>
             </div>
+
             <div className={styles.cartPageHeader}>
                 <h3 className={styles.cartPageTitle}>Detail Pesanan</h3>
-                {totalItems > 0 && <button className={styles.editAllBtn} onClick={() => { setIsCheckout(false); setIsEditingCart(!isEditingCart) }}>{isEditingCart ? 'Selesai' : 'Edit'}</button>}
+                {totalItems > 0 && (
+                    <button className={styles.editAllBtn} onClick={() => setIsEditingCart(!isEditingCart)}>
+                        {isEditingCart ? 'Selesai' : 'Edit'}
+                    </button>
+                )}
             </div>
-            <div
-                className={`${styles.cartItemsList} ${isEditingCart ? styles.isEditing : ''}`}
-            >
-                {Object.keys(cart).length > 0 ? Object.values(cart).map(item => (
-                    <div className={styles.cartListItem} key={item.id}>
-                        <div className={styles.cartItemView}>
-                            <span>{item.quantity}x {item.name}</span>
-                            <span>Rp {(item.price * item.quantity).toLocaleString('id-ID')}</span>
-                        </div>
-                        <div className={styles.cartItemEdit}>
-                            <span>{item.name}</span>
-                            <div className={styles.quantityControlCart}>
-                                <button onClick={() => onDecreaseQuantity(item.id)}>-</button>
-                                <span>{item.quantity}</span>
-                                <button onClick={() => onIncreaseQuantity(item.id)}>+</button>
+
+            <div className={`${styles.cartItemsList} ${isEditingCart ? styles.isEditing : ''}`}>
+                {Object.keys(cart).length > 0 ? (
+                    Object.values(cart).map(item => (
+                        <div className={styles.cartListItem} key={item.id}>
+                            <div className={styles.cartItemView}>
+                                <span>{item.quantity}x {item.name}</span>
+                                <span>Rp {(item.price * item.quantity).toLocaleString('id-ID')}</span>
+                            </div>
+                            <div className={styles.cartItemEdit}>
+                                <span>{item.name}</span>
+                                <div className={styles.quantityControlCart}>
+                                    <button onClick={() => onDecreaseQuantity(item.id)}>-</button>
+                                    <span>{item.quantity}</span>
+                                    <button onClick={() => onIncreaseQuantity(item.id)}>+</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                )) : <p style={{ textAlign: 'center', margin: '20px 0', color: 'white' }}>Keranjangmu masih kosong.</p>}
+                    ))
+                ) : (
+                    <p style={{ textAlign: 'center', margin: '20px 0', color: 'white' }}>Keranjangmu masih kosong.</p>
+                )}
             </div>
+
             <div className={styles.checkoutSection}>
                 <div className={`${styles.checkoutOption} ${isCheckOut ? styles.transitionActive : ''}`}>
                     <span className={styles.label}>Metode Pembayaran</span>
@@ -127,145 +206,167 @@ const CartFAB = ({ cart, onIncreaseQuantity, onDecreaseQuantity, onResetCart, is
         </div>
     );
 
+    // ==============================
+    // PAGE 2: FORM PEMESANAN
+    // ==============================
     const renderPage2 = () => (
         <div className={`${styles.cartPage2} ${cartPage === 2 ? styles.active : ''}`}>
-            <div className={styles.cartPageHeader}>
-                <button className={styles.cartBackBtn} onClick={() => setCartPage(1)}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            <CartFormPage
+                icon="https://i.ibb.co.com/Kc4Kc5Ss/catat.png"
+                title="Detail Pemesan"
+                fields={[
+                    { placeholder: 'Masukkan nama Anda', value: customerName, onChange: (e) => setCustomerName(e.target.value) },
+                    { type: 'tel', placeholder: 'Masukkan nomor WA', value: customerPhone, onChange: (e) => setCustomerPhone(e.target.value) },
+                    { type: 'text', placeholder: 'Catatan tambahan (opsional)', value: orderNotes, onChange: (e) => setOrderNotes(e.target.value), required: false },
+                ]}
+                buttonText="Pesan"
+                onSubmit={handleCreateTransaction}
+                onBack={() => setCartPage(1)}
+            />
+        </div>
+    );
+
+    // ==============================
+    // PAGE 3: STATUS TRANSAKSI
+    // ==============================
+    const renderPageStatus = () => (
+        <div className={`${styles.cartPage4} ${cartPage === 4 ? styles.active : ''}`}>
+            <CartFormPage
+                icon={transactionStatus === 'success'
+                    ? "https://i.ibb.co.com/4Z3FpCX2/hubungi.png"
+                    : "https://i.ibb.co.com/ynPSwdhZ/maaf.png"}
+                title={transactionStatus === 'success' ? "Transaksi Berhasil" : "Transaksi Gagal"}
+                description={transactionStatus === 'success'
+                    ? "Kita bakal hubungi kalo pesananmu dah siap"
+                    : "Terjadi kesalahan, silakan coba lagi."}
+                buttonText="OK"
+                onSubmit={() => setCartPage(1)}
+            />
+            {transactionStatus === 'success' && (
+                <button
+                    className={styles.cartActionButton}
+                    onClick={() => {
+                        setCartPage(3);
+                        setShowOrderDetails(true);
+                    }}
+                >
+                    Lihat Detail Pesanan
                 </button>
-                <h3 className={styles.cartPageTitle}>Detail Pesanan</h3>
-                <div style={{ width: '24px' }}></div>
-            </div>
-            <form className={styles.customerForm} onSubmit={(e) => { e.preventDefault(); setCartPage(3); }}>
-                <div className={styles.formGroup}>
-                    <img className={styles.icon} src="https://i.ibb.co.com/SDCy0bq1/bingung.png" alt="icon" />
-                    <label htmlFor="customer-name">Orderannya atas nama siapa nih?</label>
-                    <input type="text" id="customer-name" placeholder="Masukkan nama Anda" value={customerName} onChange={(e) => setCustomerName(e.target.value)} required />
-                </div>
-                <button type="submit" className={styles.cartActionButton}>Lanjut</button>
-            </form>
+            )}
         </div>
     );
 
     const renderPage3 = () => (
         <div className={`${styles.cartPage3} ${cartPage === 3 ? styles.active : ''}`}>
-            <div className={styles.cartPageHeader}>
-                <button className={styles.cartBackBtn} onClick={() => setCartPage(2)}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-                </button>
-                <h3 className={styles.cartPageTitle}>Detail Pesanan</h3>
-                <div style={{ width: '24px' }}></div>
-            </div>
-            <form className={styles.customerForm} onSubmit={(e) => { e.preventDefault(); setCartPage(4); }}>
-                <div className={styles.formGroup}>
-                    <img className={styles.icon} src="https://i.ibb.co.com/4Z3FpCX2/hubungi.png" alt="icon" />
-                    <label htmlFor="customer-phone">Kita bakal hubungi kalo pesananmu dah siap</label>
-                    <input type="tel" id="customer-phone" placeholder="Masukkan nomor WhatsApp mu" value={customerPhone} onChange={(e) => setCustomerPhone(e.target.value)} required />
-                </div>
-                <button type="submit" className={styles.cartActionButton}>Lanjut</button>
-            </form>
-        </div>
-    );
-
-    const renderPage4 = () => (
-        <div className={`${styles.cartPage4} ${cartPage === 4 ? styles.active : ''}`}>
-            <div className={styles.cartPageHeader}>
-                <button className={styles.cartBackBtn} onClick={() => setCartPage(3)}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-                </button>
-                <h3 className={styles.cartPageTitle}>Detail Pesanan</h3>
-                <div style={{ width: '24px' }}></div>
-            </div>
-            <form className={styles.customerForm} onSubmit={(e) => { e.preventDefault(); setCartPage(5); }}>
-                <div className={styles.formGroup}>
-                    <img className={styles.icon} src="https://i.ibb.co.com/Kc4Kc5Ss/catat.png" alt="icon" />
-                    <label htmlFor="order-notes">Ada catatan tambahan?</label>
-                    <input type="text" id="order-notes" placeholder="Contoh: jangan pake es" value={orderNotes} onChange={(e) => setOrderNotes(e.target.value)} />
-                </div>
-                <button type="submit" className={styles.cartActionButton}>Pesan</button>
-            </form>
-        </div>
-    );
-
-    const renderPage5 = () => (
-        <div className={`${styles.cartPage5} ${cartPage === 5 ? styles.active : ''}`}>
             {showCancelConfirmation ? (
                 <>
                     <div className={styles.cartPageHeader}>
-                        <button className={styles.cartBackBtn} onClick={() => setShowCancelConfirmation(false)}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                        <button
+                            className={styles.cartBackBtn}
+                            onClick={() => setShowCancelConfirmation(false)}
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <line x1="19" y1="12" x2="5" y2="12"></line>
+                                <polyline points="12 19 5 12 12 5"></polyline>
+                            </svg>
                         </button>
                         <h3 className={styles.cartPageTitle}>Konfirmasi</h3>
                         <div style={{ width: '24px' }}></div>
                     </div>
+
                     <div className={styles.paymentDetails}>
                         <p style={{ textAlign: 'center', fontSize: '1.1rem' }}>
                             Mau batalkan pesanan ini?
                         </p>
                     </div>
+
                     <button
                         className={styles.cartActionButton}
                         style={{ marginBottom: '15px' }}
                         onClick={() => {
                             setShowCancelConfirmation(false);
-                            setCartPage(4);
+                            setCartPage(3);
                         }}
                     >
                         Ya, Batalkan Pesanan
                     </button>
+
                     <button
                         className={styles.cartActionButton}
-                        onClick={() => {
-                            setShowCancelConfirmation(false);
-                        }}
+                        onClick={() => setShowCancelConfirmation(false)}
                     >
                         Tidak
                     </button>
                 </>
+            ) : showOrderDetails ? (
+                <OrderDetails
+                    cart={cart}
+                    customerName={customerName}
+                    customerPhone={customerPhone}
+                    orderNotes={orderNotes}
+                    totalPrice={totalPrice}
+                    onBack={() => setShowOrderDetails(false)}
+                />
             ) : (
                 <>
                     <div className={styles.cartPageHeader}>
                         <h3 className={styles.cartPageTitle}>Pembayaran {selectedPaymentMethod}</h3>
-                        <div style={{ lineHeight: '2.2', height: '35px' }} onClick={() => setShowCancelConfirmation(true)}>Batalkan</div>
+                        <div
+                            style={{ lineHeight: '2.7', height: '35px' }}
+                            onClick={() => setShowCancelConfirmation(true)}
+                        >
+                            Batalkan
+                        </div>
                     </div>
+
                     <div className={styles.paymentDetails}>
                         {selectedPaymentMethod === 'QRIS' ? (
                             <>
                                 <p>Silakan pindai kode QRIS di bawah ini</p>
-                                <img src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=...`} alt="QR Code" />
-                                <p className={styles.totalAmount}>Total: Rp {totalPrice.toLocaleString('id-ID')}</p>
+                                <img
+                                    src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${newestTransactionId}`}
+                                    alt="QR Code"
+                                />
+                                <p className={styles.totalAmount}>
+                                    Total: Rp {totalPrice.toLocaleString('id-ID')}
+                                </p>
                             </>
                         ) : (
                             <>
                                 <p>Silakan lakukan pembayaran di kasir sebesar</p>
-                                <p className={styles.totalAmount}>Rp {totalPrice.toLocaleString('id-ID')}</p>
+                                <p className={styles.totalAmount}>
+                                    Rp {totalPrice.toLocaleString('id-ID')}
+                                </p>
                                 <p>atas nama <span>{customerName}</span></p>
                             </>
                         )}
                     </div>
-                    <button className={styles.cartActionButton} onClick={handleFinishOrder}>
-                        {selectedPaymentMethod === 'QRIS' ? 'Saya Sudah Bayar' : 'Lihat detail pesanan'}
+
+                    <button
+                        className={styles.cartActionButton}
+                        onClick={() => setShowOrderDetails(true)} // ✅ buka detail pesanan
+                    >
+                        Lihat Detail Pesanan
                     </button>
                 </>
             )}
         </div>
     );
 
+
     return (
         <div
             ref={cartFabRef}
-            className={`${styles.cartFab} ${totalItems === 0 ? styles.hidden : ''} ${isCartExpanded ? styles.expanded : ''}`}
+            className={`${styles.cartFab} ${shouldHideFab ? styles.hidden : ''} ${isCartExpanded ? styles.expanded : ''}`}
         >
             <div className={styles.cartExpandedContent}>
-                <div
-                    className={styles.cartPageSlider}
-                    style={{ transform: `translateX(-${(cartPage - 1) * 100}%)` }}
-                >
+                <div className={styles.cartPageSlider} style={{ transform: `translateX(-${(cartPage - 1) * 100}%)` }}>
                     {renderPage1()}
                     {renderPage2()}
                     {renderPage3()}
-                    {renderPage4()}
-                    {renderPage5()}
+                    {renderPageStatus()}
                 </div>
             </div>
         </div>

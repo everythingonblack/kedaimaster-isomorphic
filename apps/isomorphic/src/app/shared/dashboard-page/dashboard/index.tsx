@@ -3,14 +3,15 @@ import {
   handleDashboardData,
   handleDashboardAggregate,
   getTransactionGraph,
+  getDateRanges,
 } from '@/kedaimaster-api-handlers/dashboardApiHandlers';
+import { fetchMaterialMutationHistory } from '@/kedaimaster-api-handlers/materialApiHandlers';
 import AppointmentStats from '@/app/shared/dashboard-page/dashboard/appointment-stats';
 import AppointmentDiseases from '@/app/shared/dashboard-page/dashboard/appointment-diseases';
 import Department from '@/app/shared/dashboard-page/dashboard/department';
 import TotalAppointment from '@/app/shared/dashboard-page/dashboard/total-appointment';
 import Patients from '@/app/shared/dashboard-page/dashboard/patients';
 import PatientAppointment from '@/app/shared/dashboard-page/dashboard/patient-appointment';
-import ScheduleList from '@/app/shared/dashboard-page/dashboard/schedule-list';
 import AppointmentTodo from '@/app/shared/dashboard-page/dashboard/appointment-todo';
 
 // =======================
@@ -53,6 +54,7 @@ export default function AppointmentDashboard({
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
   const [dashboardAggregate, setDashboardAggregate] = useState<DashboardAggregate[]>([]);
   const [transactionGraph, setTransactionGraph] = useState<any>(null);
+  const [materialMutations, setMaterialMutations] = useState<any[]>([]); // State untuk mutasi material
 
   // Fetch dashboard data
   const fetchDashboardData = async (
@@ -74,8 +76,16 @@ export default function AppointmentDashboard({
     intervalHour = 2
   ) => {
     const dateStr = date.toISOString().slice(0, 10);
-    const data = await handleDashboardAggregate(dateStr, type, intervalHour);
-    setDashboardAggregate(data);
+    const { nowStart, nowEnd, cmpStart, cmpEnd } = getDateRanges(dateStr, dateStr, type);
+    const data = await handleDashboardAggregate(
+      nowStart,
+      nowEnd,
+      cmpStart,
+      cmpEnd,
+      type,
+      intervalHour
+    );
+    setDashboardAggregate(data.current);
   };
 
   // Fetch transaction graph
@@ -91,13 +101,20 @@ export default function AppointmentDashboard({
     const data = await getTransactionGraph(startStr, endStr, type as any);
     setTransactionGraph(data);
   };
+
+  // Fetch material mutation history
+  const fetchMaterialMutations = async () => {
+    const data = await fetchMaterialMutationHistory();
+    setMaterialMutations(data);
+  };
+
   // Fetch all data when dateRange changes
   useEffect(() => {
     if (dateRange.start && dateRange.end) {
       console.log('Fetching dashboard data with range:', dateRange);
       fetchDashboardData(dateRange.start, dateRange.end, dateRange.type);
       fetchTransactionGraph(dateRange.start, dateRange.end, dateRange.type);
-      // fetchDashboardAggregate bisa dipanggil sesuai kebutuhan
+      fetchMaterialMutations(); // Panggil fetchMaterialMutations
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dateRange.start, dateRange.end, dateRange.type]);
@@ -114,7 +131,10 @@ export default function AppointmentDashboard({
       <TotalAppointment className="col-span-full order-2 @[59rem]:col-span-12 @[59rem]:order-2 @[90rem]:col-span-8 @[90rem]:order-2" />
 
       {/* Daftar todo dan patients */}
-      <AppointmentTodo className="col-span-full order-3 @[59rem]:col-span-6 @[59rem]:order-3 @[90rem]:col-span-4 @[90rem]:order-3" />
+      <AppointmentTodo
+        className="col-span-full order-3 @[59rem]:col-span-6 @[59rem]:order-3 @[90rem]:col-span-4 @[90rem]:order-3"
+        materialMutations={materialMutations} // Kirim data mutasi material ke AppointmentTodo
+      />
       <Patients
         className="col-span-full order-4 @[59rem]:col-span-6 @[59rem]:order-4 @[90rem]:col-span-4 @[90rem]:order-4"
         dashboardData={dashboardData}

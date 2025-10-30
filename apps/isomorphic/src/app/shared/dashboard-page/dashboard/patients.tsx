@@ -68,12 +68,11 @@ export default function Patients({ className, dashboardData }: { className?: str
                 paddingAngle={5}
                 stroke="rgba(0,0,0,0)"
                 dataKey="value"
-                activeIndex={activeIndex}
                 activeShape={renderActiveShape}
                 onMouseOver={onMouseOver}
                 onMouseLeave={onMouseLeave}
               >
-                {chartData.map((_, index) => (
+                {chartData.map((_item: any, index: number) => (
                   <Cell
                     key={`cell-${index}`}
                     fill={COLORS[index % COLORS.length]}

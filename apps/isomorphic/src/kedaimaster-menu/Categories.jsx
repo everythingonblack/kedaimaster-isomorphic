@@ -6,16 +6,7 @@ const Categories = () => {
   return (
     <section className={styles.categories}>
       <a href="#" className={styles.categoryItem}>
-        <div
-          className={`${styles.categoryIcon} ${styles.iconSemua}`}
-          style={{ backgroundImage: "url('https://cdn-icons-png.flaticon.com/512/82/82226.png')" }}
-        >
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/82/82226.png"
-            style={{ width: '50%', height: '50%' }}
-            alt="semua"
-          />
-        </div>
+        <div className={`${styles.categoryIcon} ${styles.iconSemua}`}></div>
         <span>semua</span>
       </a>
       <a href="#" className={styles.categoryItem}>

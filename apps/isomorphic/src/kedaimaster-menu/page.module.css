@@ -84,7 +84,7 @@
 
 /* Warna ikon kategori */
 .iconSemua {
-  background-color: #e0e0e0;
+  background-color: #d3f8fb;
   color: #333;
 }
 
@@ -101,6 +101,10 @@
 .iconSnack {
   background-color: #ffe3e3;
   color: #dc2626;
+}
+
+.iconSemua::before {
+  content: '✨';
 }
 
 .iconCoffe::before {
@@ -570,7 +574,7 @@
   flex-direction: column;
 }
 
-.formGroup label {
+.customerForm label {
   margin-top: 5px;
   margin-bottom: 5px;
   font-size: 26px;
@@ -599,7 +603,7 @@
 }
 
 .paymentDetails {
-  text-align: center;
+  text-align: left;
   padding: 20px 0;
   flex-grow: 1;
   /* Allow details to take space */

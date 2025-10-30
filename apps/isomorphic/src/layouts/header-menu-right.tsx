@@ -134,7 +134,7 @@ const isDashboard = location.pathname === '/dashboard';
       prevRange.current.end?.getTime() === end.getTime();
 
     if (!isSame) {
-      setDate(start, end);
+      setDate(start, end, viewType);
       prevRange.current = { start, end };
     }
   }, [viewType, setDate]);
@@ -147,7 +147,7 @@ const isDashboard = location.pathname === '/dashboard';
         prevRange.current.end?.getTime() === endDate.getTime();
 
       if (!isSame) {
-        setDate(startDate, endDate);
+        setDate(startDate, endDate, 'Kustom');
         prevRange.current = { start: startDate, end: endDate };
       }
     }

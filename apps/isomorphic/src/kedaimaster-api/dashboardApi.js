@@ -64,7 +64,13 @@ export async function getDashboard(startDate, endDate) {
  * ❌ Kemungkinan error:
  * 403 Forbidden, 404 Not Found, 409 Conflict, 422 Unprocessable Entity
  */
-export async function getDashboardAggregate(date, intervalHour) {
-  const endpoint = `/api/v1/dashboard/aggregate/${date}/${intervalHour}`;
+export async function getDashboardAggregate(startDate, endDate, type, intervalHour) {
+  let endpoint = `/api/v1/dashboard/aggregate/${startDate}/${endDate}`;
+  if (type) {
+    endpoint += `?type=${type}`;
+  }
+  if (intervalHour) {
+    endpoint += `${type ? '&' : '?'}intervalHour=${intervalHour}`;
+  }
   return apiRequest(endpoint, 'GET');
 }
