@@ -1,61 +1,56 @@
+'use client';
+
 import { Link } from 'react-router-dom';
 import { PiPlusBold, PiMagnifyingGlassBold } from 'react-icons/pi';
 import { routes } from '@/config/routes';
-import { Button } from 'rizzui/button';
-import {
-  deleteProduct,
-  fetchProducts,
-  ProductType,
-} from '@/kedaimaster-api-handlers/productApiHandlers';
-import { useEffect } from 'react';
+import { Button, Input } from 'rizzui';
 import PageHeader from '@/app/shared/page-header';
 import ExportButton from '@/app/shared/export-button';
-import { useTanStackTable } from '@core/components/table/custom/use-TanStack-Table';
-import { productsListColumns } from '@/app/shared/ecommerce/product/product-list/columns';
+import { useEffect } from 'react';
+import WidgetCard from '@core/components/cards/widget-card';
 import Table from '@core/components/table';
 import TablePagination from '@core/components/table/pagination';
-import { Input } from 'rizzui';
-import WidgetCard from '@core/components/cards/widget-card';
 import cn from '@core/utils/class-names';
+import { useTanStackTable } from '@core/components/table/custom/use-TanStack-Table';
+import { productCategoryColumns } from '@/app/shared/product-category-pages/product/product-list/columns';
+import productCategoriesApiHandlers, {
+  ProductCategory,
+} from '@/kedaimaster-api-handlers/productCategoriesApiHandlers';
 
 const pageHeader = {
-  title: 'Products',
+  title: 'Product Categories',
   breadcrumb: [
     { href: routes.dashboard.main, name: 'E-Commerce' },
-    { href: routes.dashboard.products, name: 'Products' },
+    { href: routes.dashboard.products, name: 'Product Categories' },
     { name: 'List' },
   ],
 };
 
-export default function ProductsPage() {
-  const { table, setData } = useTanStackTable<ProductType>({
+export default function ProductCategoriesPage() {
+  const { table, setData } = useTanStackTable<ProductCategory>({
     tableData: [],
-    columnConfig: productsListColumns as any,
+    columnConfig: productCategoryColumns as any,
     options: {
-      initialState: {
-        pagination: { pageIndex: 0, pageSize: 10 },
-      },
+      initialState: { pagination: { pageIndex: 0, pageSize: 10 } },
       meta: {
-        handleDeleteRow: async (row: ProductType) => {
+        handleDeleteRow: async (row: ProductCategory) => {
           try {
-            await deleteProduct(row.id);
+            await productCategoriesApiHandlers.delete(row.id);
             setData((prev) => prev.filter((r) => r.id !== row.id));
-            const updatedProducts = await fetchProducts();
-            setData(updatedProducts);
+            const updatedCategories = await productCategoriesApiHandlers.getAll();
+            setData(updatedCategories);
           } catch (error) {
-            console.error('Error deleting product:', error);
+            console.error('Error deleting category:', error);
           }
         },
-        handleMultipleDelete: async (rows: ProductType[]) => {
+        handleMultipleDelete: async (rows: ProductCategory[]) => {
           try {
-            await Promise.all(rows.map((row) => deleteProduct(row.id)));
-            setData((prev) =>
-              prev.filter((r) => !rows.some((s) => s.id === r.id))
-            );
-            const updatedProducts = await fetchProducts();
-            setData(updatedProducts);
+            await Promise.all(rows.map((row) => productCategoriesApiHandlers.delete(row.id)));
+            setData((prev) => prev.filter((r) => !rows.some((s) => s.id === r.id)));
+            const updatedCategories = await productCategoriesApiHandlers.getAll();
+            setData(updatedCategories);
           } catch (error) {
-            console.error('Error deleting multiple products:', error);
+            console.error('Error deleting multiple categories:', error);
           }
         },
       },
@@ -63,18 +58,16 @@ export default function ProductsPage() {
     },
   });
 
-  // ambil data produk
   useEffect(() => {
-    const getProducts = async () => {
+    const fetchCategories = async () => {
       try {
-        const productData = await fetchProducts();
-        console.log('Fetched products:', productData);
-        setData(productData);
+        const data = await productCategoriesApiHandlers.getAll();
+        setData(data);
       } catch (err) {
-        console.error('Error fetching products:', err);
+        console.error('Error fetching categories:', err);
       }
     };
-    getProducts();
+    fetchCategories();
   }, [setData]);
 
   return (
@@ -83,20 +76,20 @@ export default function ProductsPage() {
         <div className="mt-4 flex items-center gap-3 @lg:mt-0">
           <ExportButton
             data={table.getRowModel().rows.map((r) => r.original)}
-            fileName="product_data"
-            header="ID,Name,Category,Product Thumbnail,SKU,Stock,Price,Status,Rating"
+            fileName="product_categories"
+            header="ID,Name,CreatedBy,CreatedOn,UpdatedBy,UpdatedOn"
           />
-          <Link to={routes.dashboard.createProduct} className="w-full @lg:w-auto">
+          <Link to={routes.dashboard.createCategories} className="w-full @lg:w-auto">
             <Button as="span" className="w-full @lg:w-auto">
               <PiPlusBold className="me-1.5 h-[17px] w-[17px]" />
-              Add Product
+              Add Category
             </Button>
           </Link>
         </div>
       </PageHeader>
 
       <WidgetCard
-        title="Product List"
+        title="Category List"
         className={cn('p-0 lg:p-0')}
         headerClassName="mb-6 px-5 pt-5 lg:px-7 lg:pt-7"
         action={
@@ -104,7 +97,7 @@ export default function ProductsPage() {
             type="search"
             clearable
             inputClassName="h-[36px]"
-            placeholder="Search product..."
+            placeholder="Search category..."
             onClear={() => table.setGlobalFilter('')}
             value={table.getState().globalFilter ?? ''}
             prefix={<PiMagnifyingGlassBold className="size-4" />}

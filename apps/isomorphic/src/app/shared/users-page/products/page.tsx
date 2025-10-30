@@ -1,5 +1,7 @@
+'use client';
+
 import { Link } from 'react-router-dom';
-import { PiPlusBold } from 'react-icons/pi';
+import { PiPlusBold, PiMagnifyingGlassBold, PiPencilBold } from 'react-icons/pi';
 import { routes } from '@/config/routes';
 import { Button } from 'rizzui/button';
 import usersApiHandlers, { User } from '@/kedaimaster-api-handlers/usersApiHandlers';
@@ -9,50 +11,63 @@ import ExportButton from '@/app/shared/export-button';
 import { useTanStackTable } from '@core/components/table/custom/use-TanStack-Table';
 import Table from '@core/components/table';
 import TablePagination from '@core/components/table/pagination';
-import { Input } from 'rizzui';
-import { PiMagnifyingGlassBold } from 'react-icons/pi';
+import { Input, ActionIcon, Checkbox, Flex, Text, Tooltip } from 'rizzui';
 import WidgetCard from '@core/components/cards/widget-card';
 import cn from '@core/utils/class-names';
-
-// Kolom untuk tabel user
 import { createColumnHelper } from '@tanstack/react-table';
-import { ActionIcon, Checkbox, Flex, Text, Tooltip } from 'rizzui';
+import DeletePopover from '@core/components/delete-popover';
 
 const columnHelper = createColumnHelper<User>();
 
+// ✅ Kolom tabel — Email, Role, Action
 const userListColumns = [
+  // Checkbox Select
   columnHelper.display({
     id: 'select',
     size: 50,
     header: ({ table }) => (
-      <Checkbox
-        className="ps-3.5"
-        aria-label="Select all rows"
-        checked={table.getIsAllPageRowsSelected()}
-        onChange={() => table.toggleAllPageRowsSelected()}
-      />
+      <div className="w-full h-full flex justify-center items-center text-center">
+        <Checkbox
+          aria-label="Select all rows"
+          checked={table.getIsAllPageRowsSelected()}
+          onChange={() => table.toggleAllPageRowsSelected()}
+        />
+      </div>
     ),
     cell: ({ row }) => (
-      <Checkbox
-        className="ps-3.5"
-        aria-label="Select row"
-        checked={row.getIsSelected()}
-        onChange={() => row.toggleSelected()}
-      />
+      <div className="w-full h-full flex justify-center items-center text-center">
+        <Checkbox
+          aria-label="Select row"
+          checked={row.getIsSelected()}
+          onChange={() => row.toggleSelected()}
+        />
+      </div>
     ),
   }),
+
+  // Email Column
   columnHelper.accessor('email', {
     id: 'email',
+    size: 300,
     header: 'Email',
-    cell: ({ row }) => <Text>{row.original.email}</Text>,
-  }),
-  columnHelper.accessor('role', {
-    id: 'role',
-    header: 'Role',
+    enableSorting: false,
     cell: ({ row }) => (
-      <Text className="capitalize">{row.original.role.replace('_', ' ').toLowerCase()}</Text>
+      <Text className="font-medium text-gray-700">{row.original.email}</Text>
     ),
   }),
+
+  // Role Column
+  columnHelper.accessor('role', {
+    id: 'role',
+    size: 200,
+    header: 'Role',
+    enableSorting: false,
+    cell: ({ row }) => (
+      <Text className="text-gray-600">{row.original.role}</Text>
+    ),
+  }),
+
+  // Action Column
   columnHelper.display({
     id: 'action',
     size: 120,
@@ -62,7 +77,7 @@ const userListColumns = [
         options: { meta },
       },
     }) => (
-      <Flex align="center" justify="end" gap="3" className="pe-4">
+      <Flex align="center" justify="center" gap="3" className="w-full h-full">
         <Tooltip size="sm" content={'Edit User'} placement="top" color="invert">
           <Link to={routes.dashboard.editUser(row.original.id)}>
             <ActionIcon
@@ -71,12 +86,12 @@ const userListColumns = [
               variant="outline"
               aria-label={'Edit User'}
             >
-              <PiPlusBold className="h-4 w-4" />
+              <PiPencilBold className="h-4 w-4" />
             </ActionIcon>
           </Link>
         </Tooltip>
         <DeletePopover
-          title={`Delete the user`}
+          title={`Delete User`}
           description={`Are you sure you want to delete user ${row.original.email}?`}
           onDelete={() =>
             meta?.handleDeleteRow && meta?.handleDeleteRow(row.original)
@@ -109,23 +124,21 @@ export default function UsersPage() {
           try {
             await usersApiHandlers.delete(row.id);
             setData((prev) => prev.filter((r) => r.id !== row.id));
-            // Optionally refetch all users to ensure data consistency
             const updatedUsers = await usersApiHandlers.getAll();
             setData(updatedUsers);
           } catch (error) {
-            // Handle error, e.g., show a toast notification
             console.error('Error deleting user:', error);
           }
         },
         handleMultipleDelete: async (rows: User[]) => {
           try {
             await Promise.all(rows.map((row) => usersApiHandlers.delete(row.id)));
-            setData((prev) => prev.filter((r) => !rows.some((s) => s.id === r.id)));
-            // Optionally refetch all users to ensure data consistency
+            setData((prev) =>
+              prev.filter((r) => !rows.some((s) => s.id === r.id))
+            );
             const updatedUsers = await usersApiHandlers.getAll();
             setData(updatedUsers);
           } catch (error) {
-            // Handle error, e.g., show a toast notification
             console.error('Error deleting multiple users:', error);
           }
         },
@@ -148,6 +161,7 @@ export default function UsersPage() {
 
   return (
     <>
+      {/* ✅ Header */}
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb}>
         <div className="mt-4 flex items-center gap-3 @lg:mt-0">
           <ExportButton
@@ -164,6 +178,7 @@ export default function UsersPage() {
         </div>
       </PageHeader>
 
+      {/* ✅ Tabel dengan style kayak Excel */}
       <WidgetCard
         title="User List"
         className={cn('p-0 lg:p-0')}
@@ -182,18 +197,25 @@ export default function UsersPage() {
           />
         }
       >
-        <Table
-          table={table}
-          variant="modern"
-          classNames={{
-            rowClassName: 'last:border-0',
-          }}
-        />
+        {/* ✅ Wrapper Excel Style */}
+        <div className="overflow-x-auto border border-gray-300 rounded-md shadow-sm">
+          <Table
+            table={table}
+            variant="modern"
+            classNames={{
+              headerClassName:
+                'bg-gray-100 text-gray-700 border-b border-gray-300',
+              rowClassName:
+                'hover:bg-gray-50 border-b border-gray-200 last:border-0',
+              cellClassName:
+                'px-4 py-2 text-sm border-r border-gray-200 last:border-r-0',
+            }}
+          />
+        </div>
+
+        {/* ✅ Pagination */}
         <TablePagination table={table} className="p-4" />
       </WidgetCard>
     </>
   );
 }
-
-// Komponen DeletePopover bisa pakai yang sama seperti produk
-import DeletePopover from '@core/components/delete-popover';
