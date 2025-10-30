@@ -12,7 +12,6 @@ import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
 import { Text } from 'rizzui';
 import cn from '@core/utils/class-names';
 import ProductSummary from '@/app/shared/new-materials-page/product/create-edit/product-summary';
-import ProductMedia from '@/app/shared/new-materials-page/product/create-edit/product-media';
 import FormFooter from '@core/components/form-footer';
 import { createMaterial, updateMaterial, fetchMaterialById, CreateMaterialInput, materialFormSchema } from '@/kedaimaster-api-handlers/materialApiHandlers';
 import { useLayout } from '@/layouts/use-layout';
@@ -145,9 +144,7 @@ export default function CreateEditMaterial({ className }: IndexProps) {
                 categoryOptions={categoryOptions}
               />
             </div>
-            <div>
-              <ProductMedia className="pt-7 @2xl:pt-9 @3xl:pt-11" />
-            </div>
+            
           </div>
 
           <FormFooter

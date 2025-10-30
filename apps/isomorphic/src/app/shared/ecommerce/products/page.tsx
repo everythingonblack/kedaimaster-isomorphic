@@ -114,20 +114,22 @@ export default function ProductsPage() {
         }
       >
         {/* ✅ Wrapper untuk tampilan tabel bergaya Excel */}
-        <div className="overflow-x-auto border border-gray-300 rounded-md shadow-sm">
-          <Table
-            table={table}
-            variant="modern"
-            classNames={{
-              headerClassName:
-                'bg-gray-100 text-gray-700 border-b border-gray-300',
-              rowClassName:
-                'hover:bg-gray-50 border-b border-gray-200 last:border-0',
-              cellClassName:
-                'px-4 py-2 text-sm border-r border-gray-200 last:border-r-0',
-            }}
-          />
-        </div>
+        <div className="w-full overflow-x-auto border border-gray-300 rounded-md shadow-sm">
+  <Table
+    table={table}
+    variant="modern"
+    classNames={{
+      tableClassName: 'min-w-full',
+      headerClassName:
+        'bg-gray-100 text-gray-700 border-b border-gray-300',
+      rowClassName:
+        'hover:bg-gray-50 border-b border-gray-200 last:border-0',
+      cellClassName:
+        'px-4 py-2 text-sm border-r border-gray-200 last:border-r-0',
+    }}
+  />
+</div>
+
 
         <TablePagination table={table} className="p-4" />
       </WidgetCard>

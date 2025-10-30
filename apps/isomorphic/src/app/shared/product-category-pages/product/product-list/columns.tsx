@@ -17,20 +17,22 @@ export const productCategoryColumns = [
     id: 'select',
     size: 50,
     header: ({ table }) => (
-      <Checkbox
-        className="ps-3.5"
-        aria-label="Select all rows"
-        checked={table.getIsAllPageRowsSelected()}
-        onChange={() => table.toggleAllPageRowsSelected()}
-      />
+      <div className="w-full h-full flex justify-center items-center text-center">
+        <Checkbox
+          aria-label="Select all rows"
+          checked={table.getIsAllPageRowsSelected()}
+          onChange={() => table.toggleAllPageRowsSelected()}
+        />
+      </div>
     ),
     cell: ({ row }) => (
-      <Checkbox
-        className="ps-3.5"
-        aria-label="Select row"
-        checked={row.getIsSelected()}
-        onChange={() => row.toggleSelected()}
-      />
+      <div className="w-full h-full flex justify-center items-center text-center">
+        <Checkbox
+          aria-label="Select row"
+          checked={row.getIsSelected()}
+          onChange={() => row.toggleSelected()}
+        />
+      </div>
     ),
   }),
 
@@ -44,9 +46,6 @@ export const productCategoryColumns = [
       <AvatarCard
         src={row.original.imageUrl}
         name={row.original.name}
-        description={`Created on ${new Date(
-          row.original.createdOn
-        ).toLocaleDateString()}`}
         avatarProps={{
           name: row.original.name,
           size: 'lg',

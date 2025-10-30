@@ -126,9 +126,16 @@ export async function createMaterial(data) {
  *   "updatedOn": "2025-10-23T09:09:09.989Z"
  * }
  */
-export async function updateMaterial(id, data) {
+export async function updateMaterial(id, data, imageFile) {
   if (!id || !data) throw new Error('Material ID and data are required');
-  return apiRequest(`/api/v1/materials/${id}`, 'PUT', data);
+  const formData = new FormData();
+  for (const key in data) {
+    formData.append(key, data[key]);
+  }
+  if (imageFile) {
+    formData.append('image', imageFile);
+  }
+  return apiRequest(`/api/v1/materials/${id}`, 'PUT', formData, true); // true for multipart/form-data
 }
 
 /**

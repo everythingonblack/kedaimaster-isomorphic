@@ -24,6 +24,8 @@ export const messages = {
   teamIsRequired: 'New member must be assigned to a team',
   productNameIsRequired: 'Product name is required',
   productTypeIsRequired: 'Product type is required',
+  materialNameIsRequired: 'Material name is required',
+  materialCategoryIsRequired: 'Material category is required',
   stockMustBePositive: 'Stock must be a positive number',
   priceIsRequired: 'Product price is required',
   priceMustBePositive: 'Price must be a positive number',

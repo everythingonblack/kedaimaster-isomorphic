@@ -1,102 +1,79 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { routes } from '@/config/routes';
-import PageHeader from '@/app/shared/page-header';
-import toast from 'react-hot-toast';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
-import { Text, Select, Input } from 'rizzui';
-import cn from '@core/utils/class-names';
-import FormFooter from '@core/components/form-footer';
-import usersApiHandlers, { User } from '@/kedaimaster-api-handlers/usersApiHandlers';
-import { useParams } from 'react-router-dom';
 import { z } from 'zod';
-
-interface IndexProps {
-  className?: string;
-}
-
-const ROLES = [
-  { value: 'CASHIER', label: 'Cashier' },
-  { value: 'BUSSINESS_OWNER', label: 'Business Owner' },
-];
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Text, Button } from 'rizzui';
+import toast from 'react-hot-toast';
+import PageHeader from '@/app/shared/page-header';
+import { routes } from '@/config/routes';
+import usersApiHandlers, {
+  User,
+  CreateUserRequest,
+  UpdateUserRequest,
+} from '@/kedaimaster-api-handlers/usersApiHandlers';
+import { useParams, useNavigate } from 'react-router-dom';
+import UserSummary from '@/app/shared/users-page/product/create-edit/product-summary';
 
 const userFormSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6, 'Password minimal 6 karakter').optional(),
-  role: z.enum(['CASHIER', 'BUSSINESS_OWNER']),
+  email: z.string().email('Invalid email address'),
+  password: z.string().optional(),
+  role: z.string().min(1, 'Role is required'),
 });
 
-type UserFormInput = z.infer<typeof userFormSchema>;
+export type UserFormInput = z.infer<typeof userFormSchema>;
 
-export default function CreateEditUser({ className }: IndexProps) {
-  const { slug } = useParams<{ slug: string }>();
-  const [isLoading, setLoading] = useState(false);
-  const [user, setUser] = useState<User | undefined>(undefined);
+export default function CreateEditUser() {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
-
-  const pageHeader = {
-    title: slug ? 'Edit User' : 'Create User',
-    breadcrumb: [
-      { href: routes.dashboard.main, name: 'Dashboard' },
-      { href: routes.dashboard.users, name: 'Users' },
-      { name: slug ? user?.email : 'Create' },
-    ],
-  };
+  const [user, setUser] = useState<User | null>(null);
 
   const methods = useForm<UserFormInput>({
     resolver: zodResolver(userFormSchema),
-    defaultValues: user
-      ? { email: user.email, role: user.role }
-      : { email: '', password: '', role: 'CASHIER' },
+    defaultValues: { email: '', password: '', role: '' },
   });
 
-  // Fetch existing user if slug exists
   useEffect(() => {
-    async function fetchUser() {
-      if (!slug) {
+    const fetchUser = async () => {
+      if (!id) {
         setFetching(false);
         return;
       }
       try {
-        const data = await usersApiHandlers.getById(slug);
+        const data = await usersApiHandlers.getById(id);
         setUser(data);
         methods.reset({ email: data.email, role: data.role });
       } catch (error) {
-        toast.error(<Text as="b">Failed to load user</Text>);
+        toast.error('Failed to load user');
       } finally {
         setFetching(false);
       }
-    }
+    };
     fetchUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slug]);
+  }, [id]);
 
   const onSubmit: SubmitHandler<UserFormInput> = async (data) => {
     setLoading(true);
     try {
-      let result;
-      if (slug) {
-        // Update user (email & role)
-        result = await usersApiHandlers.update(slug, {
-          email: data.email,
-          role: data.role,
-        });
+      if (id) {
+        const payload: UpdateUserRequest = { email: data.email, role: data.role };
+        await usersApiHandlers.update(id, payload);
+        toast.success('User updated successfully');
       } else {
-        // Create user (email, password, role)
-        result = await usersApiHandlers.create({
+        const payload: CreateUserRequest = {
           email: data.email,
-          password: data.password || '',
+          password: data.password ?? '',
           role: data.role,
-        });
+        };
+        await usersApiHandlers.create(payload);
+        toast.success('User created successfully');
       }
-      setUser(result);
-      toast.success(
-        <Text as="b">User successfully {slug ? 'updated' : 'created'}</Text>
-      );
+      navigate(routes.dashboard.users);
     } catch (error) {
-      toast.error(<Text as="b">Failed to {slug ? 'update' : 'create'} user</Text>);
+      toast.error('Error saving user');
     } finally {
       setLoading(false);
     }
@@ -106,60 +83,27 @@ export default function CreateEditUser({ className }: IndexProps) {
     return <div className="p-6 text-gray-500">Loading user data...</div>;
   }
 
+  const pageHeader = {
+    title: id ? 'Edit User' : 'Create User',
+    breadcrumb: [
+      { href: routes.dashboard.main, name: 'Dashboard' },
+      { href: routes.dashboard.users, name: 'Users' },
+      { name: id ? user?.email || 'Edit' : 'Create' },
+    ],
+  };
+
   return (
     <div className="@container">
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb} />
 
       <FormProvider {...methods}>
-        <form
-          onSubmit={methods.handleSubmit(onSubmit)}
-          className={cn(
-            'relative z-[19] [&_label.block>span]:font-medium',
-            className
-          )}
-        >
-          <div className="mb-10 grid gap-7 divide-y divide-dashed divide-gray-200 @2xl:gap-9 @3xl:gap-11">
-            <div className="space-y-6">
-              <div>
-                <label className="block mb-1">
-                  <span>Email</span>
-                </label>
-                <Input
-                  {...methods.register('email')}
-                  type="email"
-                  placeholder="Enter email"
-                  disabled={!!slug}
-                />
-              </div>
-              {!slug && (
-                <div>
-                  <label className="block mb-1">
-                    <span>Password</span>
-                  </label>
-                  <Input
-                    {...methods.register('password')}
-                    type="password"
-                    placeholder="Enter password"
-                  />
-                </div>
-              )}
-              <div>
-                <label className="block mb-1">
-                  <span>Role</span>
-                </label>
-                <Select
-                  {...methods.register('role')}
-                  options={ROLES}
-                  defaultValue={methods.getValues('role')}
-                />
-              </div>
-            </div>
+        <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-8">
+          <UserSummary />
+          <div className="flex justify-end">
+            <Button type="submit" isLoading={loading}>
+              {id ? 'Update User' : 'Create User'}
+            </Button>
           </div>
-
-          <FormFooter
-            isLoading={isLoading}
-            submitBtnText={slug ? 'Update User' : 'Create User'}
-          />
         </form>
       </FormProvider>
     </div>

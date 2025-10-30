@@ -4,88 +4,80 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { Input } from 'rizzui';
 import cn from '@core/utils/class-names';
 import FormGroup from '@/app/shared/form-group';
-import { lazy, Suspense } from 'react';
-import QuillLoader from '@core/components/loader/quill-loader';
 
-// Lazy load QuillEditor untuk performa
-const QuillEditor = lazy(() => import('@core/ui/quill-editor'));
-
-interface ProductSummaryProps {
+interface UserSummaryProps {
   className?: string;
-  categoryOptions: { value: string; label: string }[];
 }
 
-export default function ProductSummary({ className, categoryOptions }: ProductSummaryProps) {
+export default function UserSummary({ className }: UserSummaryProps) {
   const {
     register,
     control,
     formState: { errors },
   } = useFormContext();
 
+  const roleOptions = [
+    { value: 'Sistem Administrator', label: 'Sistem Administrator' },
+    { value: 'Cashier', label: 'Cashier' },
+    { value: 'Business Owner', label: 'Business Owner' },
+    { value: 'Supervisor', label: 'Supervisor' },
+  ];
+
   return (
     <FormGroup
-      title=""
+      title="User Information"
       description=""
       className={cn(className)}
     >
-      {/* Product Name */}
+      {/* Email */}
       <Input
-        label="Name"
-        placeholder="Product name"
-        {...register('name')}
-        error={errors.name?.message as string}
+        label="Email"
+        type="email"
+        placeholder="example@mail.com"
+        {...register('email')}
+        error={errors.email?.message as string}
       />
 
-      {/* Categories (Custom Select) */}
+      {/* Password */}
+      <Input
+        label="Password"
+        placeholder="Enter password"
+        {...register('password')}
+        error={errors.password?.message as string}
+      />
+
+      {/* Role (Custom Select) */}
       <Controller
-        name="categoryId"
+        name="role"
         control={control}
         render={({ field: { onChange, value } }) => (
           <div className="flex flex-col">
             <label className="font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Categories
+              Role
             </label>
             <select
               className={cn(
                 'border rounded-md px-3 py-2 text-sm bg-white dark:bg-gray-800',
                 'focus:outline-none focus:ring-2 focus:ring-primary',
-                errors.categoryId ? 'border-red-500' : 'border-gray-300'
+                errors.role ? 'border-red-500' : 'border-gray-300'
               )}
               value={value || ''}
               onChange={(e) => onChange(e.target.value)}
             >
-              <option value="">Select category...</option>
-              {categoryOptions.map((option) => (
+              <option value="">Select role...</option>
+              {roleOptions.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
                 </option>
               ))}
             </select>
-            {errors.categoryId && (
+            {errors.role && (
               <p className="text-red-500 text-xs mt-1">
-                {errors.categoryId.message as string}
+                {errors.role.message as string}
               </p>
             )}
           </div>
         )}
-      />
-
-      {/* Price */}
-      <Input
-        label="Price"
-        type="number"
-        placeholder="Product price"
-        {...register('price')}
-        error={errors.price?.message as string}
-      />
-
-      {/* Stock */}
-      <Input
-        label="Stock"
-        type="number"
-        placeholder="Product stock"
-        {...register('stock')}
-        error={errors.stock?.message as string}
       />
     </FormGroup>
   );

@@ -80,14 +80,6 @@ const userListColumns = [
       <Flex align="center" justify="center" gap="3" className="w-full h-full">
         <Tooltip size="sm" content={'Edit User'} placement="top" color="invert">
           <Link to={routes.dashboard.editUser(row.original.id)}>
-            <ActionIcon
-              as="span"
-              size="sm"
-              variant="outline"
-              aria-label={'Edit User'}
-            >
-              <PiPencilBold className="h-4 w-4" />
-            </ActionIcon>
           </Link>
         </Tooltip>
         <DeletePopover

@@ -22,11 +22,10 @@ import EditProductCategoryPage from '@/app/shared/product-category-pages/product
 
 
 import UsersPage from '@/app/shared/users-page/products/page';
-import EditUserPage from '@/app/shared/users-page/product/create-edit/index';
 import CreateUserPage from '@/app/shared/users-page/product/create-edit/index';
 import { useState } from 'react';
 import MenuPage from '@/kedaimaster-menu/page';
-
+``
 // Dummy pages
 const StorePage = () => <div>Store Page</div>;
 const DataPage = () => <div>Data Page</div>;
@@ -77,7 +76,6 @@ function App() {
 
           <Route path="/users" element={<UsersPage />} />
           <Route path="/users/create" element={<CreateUserPage />} />
-          <Route path="/users/:slug/edit" element={<EditUserPage />} />
 
           <Route path="/product-categories" element={<ProductCategoriesPage />} />
           <Route path="/product-categories/create" element={<CreateProductCategoryPage />} />

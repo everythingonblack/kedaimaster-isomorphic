@@ -10,7 +10,6 @@ import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
 import { Text } from 'rizzui';
 import cn from '@core/utils/class-names';
 import UomSummary from '@/app/shared/satuan/product/create-edit/product-summary';
-import UomMedia from '@/app/shared/satuan/product/create-edit/product-media';
 import FormFooter from '@core/components/form-footer';
 import uomApiHandlers, { CreateUomRequest, Uom } from '@/kedaimaster-api-handlers/uomApiHandlers';
 import { z } from 'zod';
@@ -118,9 +117,6 @@ export default function CreateEditUom({ className }: IndexProps) {
               <UomSummary
                 className=""
               />
-            </div>
-            <div>
-              <UomMedia className="pt-7 @2xl:pt-9 @3xl:pt-11" />
             </div>
           </div>
 

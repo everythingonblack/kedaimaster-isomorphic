@@ -108,14 +108,12 @@ function mapApiMaterialToCreateMaterialInput(item: ApiMaterial): CreateMaterialI
     price: item.price?.unitPrice ?? 0,
     stock: item.stock ?? 0,
     remarks: item.remarks ?? '',
-    image: item.uom?.imageUrl || item.imageUrl
-      ? {
-          name: (item.uom?.imageUrl || item.imageUrl)?.split('/').pop() || 'image',
-          url: item.uom?.imageUrl || item.imageUrl || '',
-          size: 0,
-          raw: undefined,
-        }
-      : undefined,
+    image: {
+      name: (item.uom?.imageUrl || item.imageUrl)?.split('/').pop() || 'placeholder.png',
+      url: item.uom?.imageUrl || item.imageUrl || '/placeholder.png',
+      size: 0,
+      raw: undefined,
+    },
   };
 }
 
@@ -159,6 +157,9 @@ export async function createMaterial(data: CreateMaterialInput) {
   try {
     const payload: any = { name: data.name, uomId: data.categoryId };
     if (data.remarks !== undefined) payload.remarks = data.remarks;
+    if (data.image?.raw) {
+      payload.image = data.image.raw; // Assuming API can handle raw file upload
+    }
     return await materialsApi.createMaterial(payload);
   } catch (error) {
     console.error('❌ Failed to create material:', error);
@@ -221,8 +222,8 @@ export async function updateMaterial(id: string, data: CreateMaterialInput, oldD
   payload.uomId = data.categoryId;
 
   let result = null;
-  if (Object.keys(payload).length > 0) {
-    result = await materialsApi.updateMaterial(id, payload);
+  if (Object.keys(payload).length > 0 || data.image?.raw) {
+    result = await materialsApi.updateMaterial(id, payload, data.image?.raw);
   }
 
   // Update stok jika ada field dan berubah

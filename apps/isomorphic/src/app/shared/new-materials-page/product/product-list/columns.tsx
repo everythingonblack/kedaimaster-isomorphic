@@ -6,7 +6,6 @@ import { getStockStatus } from '@core/components/table-utils/get-stock-status';
 import { routes } from '@/config/routes';
 import { MaterialType } from '@/kedaimaster-api-handlers/materialApiHandlers';
 import PencilIcon from '@core/components/icons/pencil';
-import AvatarCard from '@core/ui/avatar-card';
 import { createColumnHelper } from '@tanstack/react-table';
 import { Link } from 'react-router-dom';
 import { ActionIcon, Checkbox, Flex, Text, Tooltip } from 'rizzui';
@@ -46,16 +45,9 @@ export const materialsListColumns = [
     header: 'Material',
     enableSorting: false,
     cell: ({ row }) => (
-      <AvatarCard
-        src={row.original.uomImage} // material image
-        name={row.original.name}
-        description={row.original.uomName} // satuan atau kategori
-        avatarProps={{
-          name: row.original.name,
-          size: 'lg',
-          className: 'rounded-lg',
-        }}
-      />
+      <div className="flex flex-col">
+        <Text className="font-medium text-gray-700">{row.original.name}</Text>
+      </div>
     ),
   }),
 

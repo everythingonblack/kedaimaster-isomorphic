@@ -4,11 +4,6 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { Input } from 'rizzui';
 import cn from '@core/utils/class-names';
 import FormGroup from '@/app/shared/form-group';
-import { lazy, Suspense } from 'react';
-import QuillLoader from '@core/components/loader/quill-loader';
-
-// Lazy load QuillEditor untuk performa
-const QuillEditor = lazy(() => import('@core/ui/quill-editor'));
 
 interface ProductSummaryProps {
   className?: string;
@@ -69,25 +64,6 @@ export default function ProductSummary({ className, categoryOptions }: ProductSu
           </div>
         )}
       />
-
-      {/* Price */}
-      <Input
-  label="Satuan"
-  type="text"
-  placeholder="Masukkan nama satuan"
-  {...register('satuan', {
-    required: 'Satuan wajib diisi',
-    pattern: {
-      value: /^[A-Za-z\s]+$/,
-      message: 'Hanya huruf yang diperbolehkan',
-    },
-  })}
-  onInput={(e) => {
-    const target = e.target as HTMLInputElement;
-    target.value = target.value.replace(/[^A-Za-z\s]/g, '');
-  }}
-  error={errors.satuan?.message as string}
-/>
 
 
       {/* Stock */}
