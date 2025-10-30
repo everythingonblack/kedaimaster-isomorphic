@@ -5,21 +5,29 @@ import MenuItem from './MenuItem';
 
 const MenuList = ({ menuItems, cart, onAddToCart, onIncreaseQuantity, onDecreaseQuantity }) => {
   return (
-    <section className={styles.menuSection}>
-      <h2 className={styles.sectionTitle}>Coffee</h2>
-      <div className={styles.menuList}>
-        {menuItems.map((item) => (
-          <MenuItem
-            key={item.id}
-            item={item}
-            cartItem={cart[item.id]}
-            onAddToCart={onAddToCart}
-            onIncreaseQuantity={onIncreaseQuantity}
-            onDecreaseQuantity={onDecreaseQuantity}
-          />
-        ))}
-      </div>
-    </section>
+    <div>
+      {menuItems.map((category) => (
+        <section key={category.categoryId} className={styles.menuSection}>
+          <h2 className={styles.sectionTitle}>{category.categoryName}</h2>
+          <div className={styles.menuList}>
+            {category.items && category.items.length > 0 ? (
+              category.items.map((item) => (
+                <MenuItem
+                  key={item.id}
+                  item={item}
+                  cartItem={cart[item.id]}
+                  onAddToCart={onAddToCart}
+                  onIncreaseQuantity={onIncreaseQuantity}
+                  onDecreaseQuantity={onDecreaseQuantity}
+                />
+              ))
+            ) : (
+              <p className={styles.emptyText}>Tidak ada produk di kategori ini.</p>
+            )}
+          </div>
+        </section>
+      ))}
+    </div>
   );
 };
 

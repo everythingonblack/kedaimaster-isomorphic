@@ -10,12 +10,13 @@ interface PricingModalProps {
   packageType: string;
 }
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 // import "./page.css";
 import { useNavigate  } from "react-router-dom";
 // Impor AuthModal yang sudah dipisah
 // Impor fungsi API
 import { getTokens, clearTokens, getProfile } from "@/kedaimaster-api/authApi";
+import { AuthContext } from "@/context/AuthContext";
 
 
 const link = document.createElement("link");
@@ -198,13 +199,14 @@ const PricingModal: React.FC<PricingModalProps> = ({ show, onClose, packageType 
 
 // --- Komponen Halaman Utama ---
 const KedaiMasterPage = () => {
+  const { isAuthenticated, user, logout } = useContext(AuthContext);
+
   const [showPricingModal, setShowPricingModal] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState("");
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState('login'); // 'login' or 'register'
 
   // State baru untuk status otentikasi
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAuthLoading, setIsAuthLoading] = useState(true); // Mulai dengan loading
   const [userData, setUserData] = useState<UserData | null>(null);
 
@@ -345,12 +347,7 @@ const KedaiMasterPage = () => {
               Kedai Master
             </span>
           </div>
-          <button
-            onClick={() => openAuthModal('login')}
-            className="bg-slate-200 text-slate-700 font-semibold px-4 py-2 rounded-lg hover:bg-slate-300 transition-colors text-sm"
-          >
-            Masuk
-          </button>
+          {renderAuthButton()}
         </div>
       </header>
 
@@ -611,6 +608,9 @@ const KedaiMasterPage = () => {
                             }}
                           ></div>
                         </div>
+                        <div style={{ animation: "bodyDown 20s infinite" }}>
+                          <img
+                           
                         <div style={{ animation: "bodyDown 20s infinite" }}>
                           <img
                             src="https://i.ibb.co.com/4z5zdsS/body.jpg"

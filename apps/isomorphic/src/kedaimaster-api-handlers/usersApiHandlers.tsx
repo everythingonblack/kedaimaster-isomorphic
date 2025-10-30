@@ -3,7 +3,7 @@
 import { getAllUsers, getUserById, createUser, updateUser, updateUserPassword, deleteUser } from '@/kedaimaster-api/usersApi';
 
 // Define the types based on the usersApi.js
-export type User = { id: string; email: string; role: string; };
+export type User = { id: string; email: string; role: 'CASHIER' | 'BUSSINESS_OWNER'; };
 export type CreateUserRequest = { email: string; password: string; role: string; };
 export type UpdateUserRequest = { email: string; role: string; };
 export type UpdateUserPasswordRequest = { newPassword: string; confPassword: string; };

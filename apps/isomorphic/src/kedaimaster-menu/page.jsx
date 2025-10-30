@@ -22,13 +22,34 @@ const App = () => {
     const fetchProducts = async () => {
       try {
         const products = await getAllProducts();
-        setMenuItemsData(products.map(product => ({
-          id: product.id,
-          name: product.name,
-          price: product.price?.unitPrice || 0, // Default to 0 if unitPrice is undefined
-          image: product.imageUrl,
-          description: product.description || '',
-        })));
+
+        // --- Kelompokkan produk berdasarkan category.id ---
+        const groupedProducts = products.reduce((acc, product) => {
+          const categoryId = product.category?.id || "uncategorized";
+          const categoryName = product.category?.name || "Uncategorized";
+
+          if (!acc[categoryId]) {
+            acc[categoryId] = {
+              categoryId,
+              categoryName,
+              items: [],
+            };
+          }
+
+          acc[categoryId].items.push({
+            id: product.id,
+            name: product.name,
+            price: product.price?.unitPrice || 0,
+            image: product.imageUrl,
+            description: product.description || '',
+            stock: product.stock || 0,
+          });
+
+          return acc;
+        }, {});
+
+        // Ubah ke array agar mudah di-render
+        setMenuItemsData(Object.values(groupedProducts));
       } catch (err) {
         setError(err);
       } finally {
@@ -117,11 +138,11 @@ const App = () => {
             onIncreaseQuantity={handleIncreaseQuantity}
             onDecreaseQuantity={handleDecreaseQuantity}
           />
-          
-      <div className="
-    h-[46px]
-    text-center
-">©KEDAIMASTER.COM</div>
+
+          <div className="
+              h-[46px]
+              text-center
+          ">© KEDAIMASTER.COM</div>
         </main>
       </div>
 

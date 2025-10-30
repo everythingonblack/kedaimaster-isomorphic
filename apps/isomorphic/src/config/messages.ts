@@ -82,4 +82,6 @@ export const messages = {
   priceTypeIsRequired: "Price Type is required",
   pricePerSquareRequired: "Price Per Square is required",
   totalPriceIsRequired: "Total Price is required",
+  materialNameIsRequired: 'Material name is required',
+  materialCategoryIsRequired: 'Material Category is required',
 };

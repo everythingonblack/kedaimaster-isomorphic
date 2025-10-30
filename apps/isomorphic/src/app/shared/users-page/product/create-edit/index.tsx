@@ -41,7 +41,7 @@ export default function CreateEditUser({ className }: IndexProps) {
     breadcrumb: [
       { href: routes.dashboard.main, name: 'Dashboard' },
       { href: routes.dashboard.users, name: 'Users' },
-      { name: slug ? user?.email : 'Create' },
+      { name: slug ? user?.email ?? 'Loading...' : 'Create' },
     ],
   };
 
@@ -138,7 +138,7 @@ export default function CreateEditUser({ className }: IndexProps) {
                   </label>
                   <Input
                     {...methods.register('password')}
-                    type="password"
+                    type="text"
                     placeholder="Enter password"
                   />
                 </div>

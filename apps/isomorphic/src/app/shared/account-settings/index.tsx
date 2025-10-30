@@ -110,13 +110,13 @@ export default function ResetPasswordPage({ className }: { className?: string })
                     {/* PASSWORD FIELDS (SELALU DIBAWAH EMAIL) */}
                     <Input
                       label="Old Password"
-                      type="password"
+                      type="text"
                       {...methods.register('old_password', { required: 'Old password required' })}
                       error={methods.formState.errors.old_password?.message}
                     />
                     <Input
                       label="New Password"
-                      type="password"
+                      type="text"
                       {...methods.register('new_password', { required: 'New password required' })}
                       error={methods.formState.errors.new_password?.message}
                     />
