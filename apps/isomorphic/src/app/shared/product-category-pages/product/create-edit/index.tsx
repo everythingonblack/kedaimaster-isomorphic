@@ -1,11 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-
 import { routes } from '@/config/routes';
-
 import PageHeader from '@/app/shared/page-header';
-
 import toast from 'react-hot-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
@@ -14,14 +11,12 @@ import cn from '@core/utils/class-names';
 import ProductSummary from '@/app/shared/product-category-pages/product/create-edit/product-summary';
 import ProductMedia from '@/app/shared/product-category-pages/product/create-edit/product-media';
 import FormFooter from '@core/components/form-footer';
-import productCategoriesApiHandlers from '@/kedaimaster-api-handlers/productCategoriesApiHandlers';
-import {
-  CategoryFormInput as CreateProductCategoryInput,
-  categoryFormSchema as productCategoryFormSchema,
-} from '@/validators/create-category.schema';
+import productCategoriesApiHandlers, {
+  ProductCategory,
+  CreateProductCategoryInput,
+  productCategoryFormSchema,
+} from '@/kedaimaster-api-handlers/productCategoriesApiHandlers';
 import { useLayout } from '@/layouts/use-layout';
-import { LAYOUT_OPTIONS } from '@/config/enums';
-import { ProductCategory } from '@/kedaimaster-api-handlers/productCategoriesApiHandlers';
 import { useParams } from 'react-router-dom';
 
 interface IndexProps {
@@ -40,16 +35,15 @@ export default function CreateEditProductCategory({ className }: IndexProps) {
     breadcrumb: [
       { href: routes.dashboard.main, name: 'Dashboard' },
       { href: routes.dashboard.productCategories, name: 'Product Categories' },
-      { name: slug ? `${productCategory?.name}` : 'Create' },
+      { name: slug ? productCategory?.name ?? 'Edit' : 'Create' },
     ],
   };
 
   const methods = useForm<CreateProductCategoryInput>({
     resolver: zodResolver(productCategoryFormSchema),
-    defaultValues: productCategory ?? {
+    defaultValues: {
       name: '',
-      imageUrl: '',
-      slug: '',
+      image: undefined,
     },
   });
 
@@ -63,15 +57,12 @@ export default function CreateEditProductCategory({ className }: IndexProps) {
       try {
         const data = await productCategoriesApiHandlers.getById(slug);
         setProductCategory(data);
+
+        // reset the form with API data
         methods.reset({
           name: data.name,
-          imageUrl: data.imageUrl,
-          slug: data.slug,
-          type: data.type || '',
-          parentCategory: data.parentCategory || '',
-          description: data.description || '',
-          images: data.images,
-        }); // langsung reset dengan data dari API
+          image: undefined, // imageUrl is for display, not part of form upload
+        });
       } catch (error) {
         console.error('Failed to fetch product category:', error);
         toast.error(<Text as="b">Failed to load product category</Text>);
@@ -79,13 +70,14 @@ export default function CreateEditProductCategory({ className }: IndexProps) {
         setFetching(false);
       }
     }
+
     fetchProductCategory();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
 
   const onSubmit: SubmitHandler<CreateProductCategoryInput> = async (data) => {
     setLoading(true);
-    
+
     try {
       let result;
       if (slug) {
@@ -95,14 +87,18 @@ export default function CreateEditProductCategory({ className }: IndexProps) {
       }
 
       if (result) {
-        // Update state product category agar breadcrumb ikut berubah
         setProductCategory(result);
-
         toast.success(
-          <Text as="b">Product category successfully {slug ? 'updated' : 'created'}</Text>
+          <Text as="b">
+            Product category successfully {slug ? 'updated' : 'created'}
+          </Text>
         );
       } else {
-        toast.error(<Text as="b">Failed to {slug ? 'update' : 'create'} product category</Text>);
+        toast.error(
+          <Text as="b">
+            Failed to {slug ? 'update' : 'create'} product category
+          </Text>
+        );
       }
     } catch (error) {
       console.error('Error during product category creation/update:', error);

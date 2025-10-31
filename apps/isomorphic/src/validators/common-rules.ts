@@ -5,6 +5,7 @@ export const fileSchema = z.object({
   name: z.string(),
   url: z.string(),
   size: z.number(),
+  raw: z.any().optional(), // Add raw file data
 });
 
 export type FileSchema = z.infer<typeof fileSchema>;
@@ -49,3 +50,4 @@ export const validateConfirmPassword = z
     message: messages.passwordOneLowercase,
   })
   .regex(new RegExp('.*\\d.*'), { message: messages.passwordOneNumeric });
+
