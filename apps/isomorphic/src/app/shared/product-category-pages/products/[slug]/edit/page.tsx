@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom';
 import { PiPlusBold } from 'react-icons/pi';
-import CreateEditProduct from '@/app/shared/ecommerce/product/create-edit';
+import CreateEditProduct from '@/app/shared/product-category-pages/product/create-edit';
 import PageHeader from '@/app/shared/page-header';
 import { Button } from 'rizzui/button';
 import { routes } from '@/config/routes';
