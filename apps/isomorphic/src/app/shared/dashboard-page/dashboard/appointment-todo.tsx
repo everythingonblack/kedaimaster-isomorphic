@@ -87,7 +87,7 @@ export default function AppointmentTodo({
                   </div>
                   <div className="text-sm text-gray-500">{mutation.description}</div>
                   <div className="text-sm text-gray-500">
-                    {mutation.qty} {mutation.material.uom.name} (Sebelum: {mutation.stockBefore}, Setelah: {mutation.stockAfter})
+                    {mutation.qty} {mutation.material.uom.name} {mutation.type != 'CREATE' && `(Sebelum: ${mutation.stockBefore}, Setelah: ${mutation.stockAfter})`}
                   </div>
                   <div className="flex flex-wrap items-center gap-1.5 pt-1.5">
                     <PiCalendarBlank className="shrink-0 text-base text-gray-400" />
