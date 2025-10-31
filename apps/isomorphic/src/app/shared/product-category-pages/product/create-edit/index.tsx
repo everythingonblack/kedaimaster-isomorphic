@@ -9,7 +9,7 @@ import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
 import { Text } from 'rizzui';
 import cn from '@core/utils/class-names';
 import ProductSummary from '@/app/shared/product-category-pages/product/create-edit/product-summary';
-import ProductMedia from '@/app/shared/product-category-pages/product/create-edit/product-media';
+import ProductMedia from '@/app/shared/ecommerce/product/create-edit/product-media';
 import FormFooter from '@core/components/form-footer';
 import productCategoriesApiHandlers, {
   ProductCategory,
@@ -43,7 +43,6 @@ export default function CreateEditProductCategory({ className }: IndexProps) {
     resolver: zodResolver(productCategoryFormSchema),
     defaultValues: {
       name: '',
-      image: undefined,
     },
   });
 
@@ -61,7 +60,6 @@ export default function CreateEditProductCategory({ className }: IndexProps) {
         // reset the form with API data
         methods.reset({
           name: data.name,
-          image: undefined, // imageUrl is for display, not part of form upload
         });
       } catch (error) {
         console.error('Failed to fetch product category:', error);
@@ -88,6 +86,12 @@ export default function CreateEditProductCategory({ className }: IndexProps) {
 
       if (result) {
         setProductCategory(result);
+
+        // Reset form supaya image preview tetap konsisten
+        methods.reset({
+          name: result.name,
+        });
+
         toast.success(
           <Text as="b">
             Product category successfully {slug ? 'updated' : 'created'}
@@ -129,7 +133,7 @@ export default function CreateEditProductCategory({ className }: IndexProps) {
               <ProductSummary className="" />
             </div>
             <div>
-              <ProductMedia className="pt-7 @2xl:pt-9 @3xl:pt-11" />
+              <ProductMedia className="pt-7 @2xl:pt-9 @3xl:pt-11"/>
             </div>
           </div>
 

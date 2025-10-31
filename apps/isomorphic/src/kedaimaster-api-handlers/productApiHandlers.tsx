@@ -229,7 +229,7 @@ export async function updateProduct(id: string, data: CreateProductInput, oldDat
   const payload: any = {};
   payload.name = data.name;
   payload.categoryId = data.categoryId;
-  if (data.image) payload.image = data.image;
+  if (data.image) payload.image = data.image.raw;
 
   let result = null;
   if (Object.keys(payload).length > 0) {
@@ -253,6 +253,7 @@ export async function updateProduct(id: string, data: CreateProductInput, oldDat
 
   return result;
 }
+
 
 
 

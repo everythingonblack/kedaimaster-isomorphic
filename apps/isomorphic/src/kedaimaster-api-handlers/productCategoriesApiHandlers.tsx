@@ -1,5 +1,3 @@
-// apps/isomorphic/src/kedaimaster-api-handlers/productCategoriesApiHandlers.tsx
-
 import {
   getAllProductCategories,
   getProductCategoryById,
@@ -14,11 +12,17 @@ import { z } from 'zod';
 import { messages } from '@/config/messages';
 import { fileSchema } from '@/validators/common-rules';
 
+export type ImageFormValue = {
+  name: string;
+  url: string;
+  size: number;
+  raw?: File;
+};
+
 // ================================
 // ✅ TYPES (matched to API)
 // ================================
-
-export type ProductCategory = {
+export type ApiProductCategory = {
   id: string;
   name: string;
   imageUrl?: string;
@@ -27,6 +31,8 @@ export type ProductCategory = {
   updatedBy: string;
   updatedOn: string;
 };
+
+export type ProductCategory = ApiProductCategory;
 
 export type ProductCategoryDropdown = {
   id: string;
@@ -71,14 +77,36 @@ export type DatatableResponse = {
 };
 
 // ================================
-// ✅ FORM SCHEMA (matched to API)
+// ✅ FORM SCHEMA (with image support)
 // ================================
 export const productCategoryFormSchema = z.object({
   name: z.string().min(1, { message: messages.productCategoryNameIsRequired }),
-  image: fileSchema.optional(), // single file upload
+  image: fileSchema.optional(),
 });
 
+export type ImageFormValue = {
+  name: string;
+  url: string;
+  size: number;
+  raw?: File;
+};
+
 export type CreateProductCategoryInput = z.infer<typeof productCategoryFormSchema>;
+
+// ================================
+// ✅ MAPPERS (for form binding)
+// ================================
+function mapApiCategoryToFormInput(item: ApiProductCategory): CreateProductCategoryInput {
+  return {
+    name: item.name,
+    image: item.imageUrl ? {
+      name: item.imageUrl.split('/').pop() || 'image',
+      url: item.imageUrl,
+      size: 0,
+      raw: undefined,
+    } : undefined,
+  };
+}
 
 // ================================
 // ✅ API HANDLERS
@@ -88,19 +116,25 @@ const productCategoriesApiHandlers = {
     return await getAllProductCategories() as ProductCategory[];
   },
 
-  async getById(id: string): Promise<ProductCategory> {
-    return await getProductCategoryById(id) as ProductCategory;
+  async getById(id: string): Promise<CreateProductCategoryInput | undefined> {
+    try {
+      const category = await getProductCategoryById(id) as ApiProductCategory;
+      return mapApiCategoryToFormInput(category);
+    } catch (error) {
+      console.error(`❌ Failed to fetch category by ID (${id}):`, error);
+      return undefined;
+    }
   },
 
   async create(data: CreateProductCategoryInput): Promise<ProductCategory> {
-    const payload = { ...data, image: data.image?.raw ?? undefined };
-    return await createProductCategory(payload) as ProductCategory;
-  },
+      const payload = { ...data, image: data.image?.raw };
+      return await createProductCategory(payload) as ProductCategory;
+    },
 
   async update(id: string, data: CreateProductCategoryInput): Promise<ProductCategory> {
-    const payload = { ...data, image: data.image?.raw ?? undefined };
-    return await updateProductCategory(id, payload) as ProductCategory;
-  },
+      const payload = { ...data, image: data.image?.raw };
+      return await updateProductCategory(id, payload) as ProductCategory;
+    },
 
   async delete(id: string): Promise<void> {
     await deleteProductCategory(id);
