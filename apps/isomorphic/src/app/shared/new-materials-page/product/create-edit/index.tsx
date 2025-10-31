@@ -1,11 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-
 import { routes } from '@/config/routes';
-
 import PageHeader from '@/app/shared/page-header';
-
 import toast from 'react-hot-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
@@ -13,11 +10,16 @@ import { Text } from 'rizzui';
 import cn from '@core/utils/class-names';
 import ProductSummary from '@/app/shared/new-materials-page/product/create-edit/product-summary';
 import FormFooter from '@core/components/form-footer';
-import { createMaterial, updateMaterial, fetchMaterialById, CreateMaterialInput, materialFormSchema } from '@/kedaimaster-api-handlers/materialApiHandlers';
+import {
+  createMaterial,
+  updateMaterial,
+  fetchMaterialById,
+  CreateMaterialInput,
+  materialFormSchema,
+} from '@/kedaimaster-api-handlers/materialApiHandlers';
 import { useLayout } from '@/layouts/use-layout';
-import { LAYOUT_OPTIONS } from '@/config/enums';
-import { useParams } from 'react-router-dom';
-import {getAllUoms} from '@/kedaimaster-api/uomApi'; // Assuming a similar handler for material categories
+import { useParams, useNavigate } from 'react-router-dom';
+import { getAllUoms } from '@/kedaimaster-api/uomApi';
 
 interface IndexProps {
   className?: string;
@@ -25,45 +27,47 @@ interface IndexProps {
 
 export default function CreateEditMaterial({ className }: IndexProps) {
   const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
   const { layout } = useLayout();
+
   const [isLoading, setLoading] = useState(false);
-  const [material, setMaterial] = useState<CreateMaterialInput | undefined>(undefined);
+  const [material, setMaterial] = useState<CreateMaterialInput | undefined>();
   const [fetching, setFetching] = useState(true);
   const [categoryOptions, setCategoryOptions] = useState<
     { value: string; label: string }[]
   >([]);
 
   const pageHeader = {
-    title: 'Edit Material',
+    title: slug ? 'Edit Material' : 'Create Material',
     breadcrumb: [
       { href: routes.dashboard.main, name: 'Dashboard' },
-      { href: routes.dashboard.material, name: 'Materials' }, // Assuming a new route for materials
-      { name: `${material?.name}` },
+      { href: routes.dashboard.material, name: 'Materials' },
+      { name: slug ? 'Edit' : 'Create' },
     ],
   };
 
   const methods = useForm<CreateMaterialInput>({
     resolver: zodResolver(materialFormSchema),
-    defaultValues: material ?? {
+    defaultValues: {
       name: '',
-      categoryId: '', // Assuming categoryId for materials
-      price: 0, // Assuming price for materials
+      categoryId: '',
+      price: 0,
       stock: 0,
-      image: undefined, // Assuming image for materials
+      image: undefined,
     },
   });
 
-
-  // Fetch categories for dropdown
+  // ✅ Fetch UOM (Category)
   useEffect(() => {
     async function fetchCategories() {
       try {
         const categories = await getAllUoms();
-        const options = categories.map((category: any) => ({
-          value: category.id,
-          label: category.name,
-        }));
-        setCategoryOptions(options);
+        setCategoryOptions(
+          categories.map((c: any) => ({
+            value: c.id,
+            label: c.name,
+          }))
+        );
       } catch (error) {
         console.error('Failed to fetch categories:', error);
       }
@@ -71,7 +75,7 @@ export default function CreateEditMaterial({ className }: IndexProps) {
     fetchCategories();
   }, []);
 
-  // Fetch existing material if slug exists
+  // ✅ Fetch material for edit
   useEffect(() => {
     async function fetchMaterial() {
       if (!slug) {
@@ -80,10 +84,11 @@ export default function CreateEditMaterial({ className }: IndexProps) {
       }
       try {
         const data = await fetchMaterialById(slug);
-        setMaterial(data);
-        methods.reset(data); // langsung reset dengan data dari API
+        if (data) {
+          setMaterial(data);
+          methods.reset(data);
+        }
       } catch (error) {
-        console.error('Failed to fetch material:', error);
         toast.error(<Text as="b">Failed to load material</Text>);
       } finally {
         setFetching(false);
@@ -93,26 +98,32 @@ export default function CreateEditMaterial({ className }: IndexProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
 
+  // ✅ Submit form
   const onSubmit: SubmitHandler<CreateMaterialInput> = async (data) => {
     setLoading(true);
     try {
-      let result;
       if (slug) {
-        result = await updateMaterial(slug, data, material);
+        // ✏️ UPDATE
+        const result = await updateMaterial(slug, data, material);
+        if (result) {
+          toast.success(<Text as="b">Material successfully updated</Text>);
+        } else {
+          toast.error(<Text as="b">Failed to update material</Text>);
+          return;
+        }
       } else {
-        result = await createMaterial(data);
+        // ➕ CREATE
+        const result = await createMaterial(data);
+        if (result) {
+          toast.success(<Text as="b">Material successfully created</Text>);
+        } else {
+          toast.error(<Text as="b">Failed to create material</Text>);
+          return;
+        }
       }
 
-      if (result) {
-        // Update state material agar breadcrumb ikut berubah
-        setMaterial(result as CreateMaterialInput);
-
-        toast.success(
-          <Text as="b">Material successfully {slug ? 'updated' : 'created'}</Text>
-        );
-      } else {
-        toast.error(<Text as="b">Failed to {slug ? 'update' : 'create'} material</Text>);
-      }
+      // ✅ Redirect langsung setelah sukses
+      navigate(routes.dashboard.material);
     } catch (error) {
       console.error('Error during material creation/update:', error);
       toast.error(<Text as="b">An error occurred</Text>);
@@ -138,13 +149,7 @@ export default function CreateEditMaterial({ className }: IndexProps) {
           )}
         >
           <div className="mb-10 grid gap-7 divide-y divide-dashed divide-gray-200 @2xl:gap-9 @3xl:gap-11">
-            <div>
-              <ProductSummary
-                className=""
-                categoryOptions={categoryOptions}
-              />
-            </div>
-            
+            <ProductSummary className="" categoryOptions={categoryOptions} />
           </div>
 
           <FormFooter

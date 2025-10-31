@@ -155,11 +155,15 @@ export async function fetchMaterialById(id: string): Promise<CreateMaterialInput
  */
 export async function createMaterial(data: CreateMaterialInput) {
   try {
-    const payload: any = { name: data.name, uomId: data.categoryId };
+    const payload: any = {
+      name: data.name,
+      uomId: data.categoryId,
+      price: data.price,
+      stock: data.stock,
+    };
     if (data.remarks !== undefined) payload.remarks = data.remarks;
-    if (data.image?.raw) {
-      payload.image = data.image.raw; // Assuming API can handle raw file upload
-    }
+    // materialsApi.createMaterial does not currently support image upload directly in the payload.
+    // If image upload is needed for creation, the API or its handler needs to be adjusted.
     return await materialsApi.createMaterial(payload);
   } catch (error) {
     console.error('❌ Failed to create material:', error);
@@ -220,6 +224,8 @@ export async function updateMaterial(id: string, data: CreateMaterialInput, oldD
   console.log(oldData)
   payload.name = data.name;
   payload.uomId = data.categoryId;
+  payload.price = data.price; // Add price to payload
+  payload.stock = data.stock; // Add stock to payload
 
   let result = null;
   if (Object.keys(payload).length > 0 || data.image?.raw) {

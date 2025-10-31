@@ -9,6 +9,8 @@ interface FormFooterProps {
   submitBtnText?: string;
   isLoading?: boolean;
   handleAltBtn?: () => void;
+  deleteBtn?: boolean;
+  handleDelete?: () => void;
 }
 
 export const negMargin = "-mx-4 md:-mx-5 lg:-mx-6 3xl:-mx-8 4xl:-mx-10";
@@ -19,6 +21,8 @@ export default function FormFooter({
   submitBtnText = "Submit",
   className,
   handleAltBtn,
+  deleteBtn = false,
+  handleDelete,
 }: FormFooterProps) {
   return (
     <div
@@ -28,6 +32,15 @@ export default function FormFooter({
         negMargin
       )}
     >
+      {deleteBtn && (
+        <Button
+          variant="outline"
+          className="w-full @xl:w-auto"
+          onClick={handleDelete}
+        >
+          Delete
+        </Button>
+      )}
       <Button
         variant="outline"
         className="w-full @xl:w-auto"
@@ -36,13 +49,12 @@ export default function FormFooter({
         {altBtnText}
       </Button>
       <Button
-  type="submit"
-  isLoading={isLoading}
-  className="w-full @xl:w-auto bg-[#2E8074] hover:bg-[#25675E] text-white data-[loading=true]:[&>svg]:text-black"
->
-  {submitBtnText}
-</Button>
-
+        type="submit"
+        isLoading={isLoading}
+        className="w-full @xl:w-auto bg-[#2E8074] hover:bg-[#25675E] text-white data-[loading=true]:[&>svg]:text-black"
+      >
+        {submitBtnText}
+      </Button>
     </div>
   );
 }
