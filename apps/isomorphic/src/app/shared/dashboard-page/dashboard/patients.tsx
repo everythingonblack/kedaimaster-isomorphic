@@ -38,7 +38,7 @@ export default function Patients({ className, dashboardData }: { className?: str
   const chartData = topProducts.map((item: any) => ({
     name: item.name,
     value: item.total,
-    percentage: item.percentage,
+percentage: parseInt(item.percentage)
   }));
 
   // Untuk show all
@@ -56,7 +56,7 @@ export default function Patients({ className, dashboardData }: { className?: str
 
   return (
     <WidgetCard className={cn('@container', className)}>
-      <div className="h-full items-center gap-4 @sm:flex">
+      <div className="h-full items-center @sm:flex">
         <div className="relative h-[300px] w-full after:absolute after:inset-1/2 after:h-20 after:w-20 after:-translate-x-1/2 after:-translate-y-1/2 after:rounded-full after:border after:border-dashed after:border-gray-300 @sm:w-3/5 @sm:py-3 rtl:after:translate-x-1/2">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
@@ -86,7 +86,7 @@ export default function Patients({ className, dashboardData }: { className?: str
           <div className="mb-4 mt-1">
             <div className="mb-1.5 text-gray-700">Total Penjualan</div>
             <Title as="h2" className="font-inter font-bold text-gray-900">
-              {totalAll.toLocaleString('id-ID')}
+              {totalAll.toLocaleString('id-ID')} item
             </Title>
           </div>
           <div>
@@ -96,6 +96,7 @@ export default function Patients({ className, dashboardData }: { className?: str
                 color={COLORS[idx % COLORS.length]}
                 value={item.percentage}
                 text={item.name}
+                total={item.value}
               />
             ))}
             {chartData.length > 5 && (
@@ -119,15 +120,17 @@ function Detail({
   color,
   value,
   text,
+  total,
 }: {
   color: string;
   value: string | number;
   text: string;
+  total: string | number;
 }) {
   return (
     <div className="flex justify-between gap-2 border-b border-gray-100 py-3 last:border-b-0">
       <div className="col-span-3 flex items-center justify-start gap-1.5">
-        <span style={{ background: color }} className="block h-3 w-3 rounded" />
+        <span style={{ background: color }} className="block h-4 w-10 leading-4 text-center text-white rounded" >{total+'x '}</span>
         <p className="text-gray-500">{text}</p>
       </div>
       <span className="flex items-center">

@@ -12,6 +12,8 @@ import {
 } from '@/kedaimaster-api/productCategoriesApi';
 import { z } from 'zod';
 import { messages } from '@/config/messages';
+import { fileSchema } from '@/validators/common-rules';
+
 
 // Define the types based on the productCategoriesApi.js
 export type ProductCategory = {

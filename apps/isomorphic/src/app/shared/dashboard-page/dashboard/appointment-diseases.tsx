@@ -56,8 +56,8 @@ export default function AppointmentDiseases({
         <div className="custom-scrollbar overflow-x-auto scroll-smooth w-full @sm:w-3/5">
           <div className="flex h-80 w-full justify-center @sm:h-80">
             <ResponsiveContainer
-              width="100%"
-              height="100%"
+              width="90%"
+              height="90%"
               className="[&_.recharts-default-legend]:flex [&_.recharts-default-legend]:flex-col [&_.recharts-default-legend]:flex-wrap [&_.recharts-legend-wrapper]:!static [&_.recharts-legend-wrapper]:!-mt-[22px] [&_.recharts-legend-wrapper]:!leading-[22px] @xs:[&_.recharts-legend-wrapper]:!mt-0 @xl:[&_.recharts-legend-wrapper]:!absolute @xl:[&_.recharts-legend-wrapper]:!end-0 @xl:[&_.recharts-legend-wrapper]:!start-auto @xl:[&_.recharts-legend-wrapper]:!top-1/2 @xl:[&_.recharts-legend-wrapper]:!-translate-y-1/2 @xl:[&_.recharts-legend-wrapper]:!translate-x-0 @xl:[&_.recharts-legend-wrapper]:!leading-9"
             >
               <RadialBarChart
