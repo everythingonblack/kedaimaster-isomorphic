@@ -1,7 +1,7 @@
 "use client";
 
 import { Link } from "react-router-dom";
-import { PiPlusBold, PiMagnifyingGlassBold } from "react-icons/pi";
+import { PiPlusBold, PiMagnifyingGlassBold, PiTrashBold } from "react-icons/pi";
 import { routes } from "@/config/routes";
 import { Button, Input } from "rizzui";
 import PageHeader from "@/app/shared/page-header";
@@ -79,24 +79,40 @@ export default function ProductCategoriesPage() {
   return (
     <>
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb}>
-        <div className="mt-4 flex items-center gap-3 @lg:mt-0">
-          <ExportButton
-            data={table.getRowModel().rows.map((r) => r.original)}
-            fileName="product_categories"
-            header="ID,Name,CreatedBy,CreatedOn,UpdatedBy,UpdatedOn"
-          />
-          <Link
-            to={routes.dashboard.createCategories}
-            className="w-full @lg:w-auto"
-          >
+        <div className="mt-4 flex flex-wrap items-center gap-3 @lg:mt-0">
+          {table.getSelectedRowModel().rows.length > 0 ? (
             <Button
-              as="span"
-              className="w-full @lg:w-auto bg-[#2F7F7A] text-white hover:bg-[#276B67]"
+              onClick={() =>
+                table.options.meta?.handleMultipleDelete?.(
+                  table.getSelectedRowModel().rows.map((r) => r.original)
+                )
+              }
+              className="flex items-center gap-2 bg-[#C7362B] hover:bg-[#A42C22] text-white transition-all duration-200"
             >
-              <PiPlusBold className="me-1.5 h-[17px] w-[17px]" />
-              Add Category
+              <PiTrashBold className="h-4 w-4" />
+              Delete Selected ({table.getSelectedRowModel().rows.length})
             </Button>
-          </Link>
+          ) : (
+            <>
+              <ExportButton
+                data={table.getRowModel().rows.map((r) => r.original)}
+                fileName="product_categories"
+                header="ID,Name,CreatedBy,CreatedOn,UpdatedBy,UpdatedOn"
+              />
+              <Link
+                to={routes.dashboard.createCategories}
+                className="w-full @lg:w-auto"
+              >
+                <Button
+                  as="span"
+                  className="w-full @lg:w-auto bg-[#2F7F7A] text-white hover:bg-[#276B67]"
+                >
+                  <PiPlusBold className="me-1.5 h-[17px] w-[17px]" />
+                  Add Category
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
       </PageHeader>
 

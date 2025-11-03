@@ -104,7 +104,7 @@ export default function CreateEditMaterial({ className }: IndexProps) {
     try {
       if (slug) {
         // ✏️ UPDATE
-        const result = await updateMaterial(slug, data, data.image?.raw);
+        const result = await updateMaterial(slug, data, material);
         if (result) {
           toast.success(<Text as="b">Material successfully updated</Text>);
         } else {

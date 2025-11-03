@@ -153,7 +153,7 @@ export async function fetchProductById(id: string): Promise<CreateProductInput |
  */
 export async function createProduct(data: CreateProductInput) {
   try {
-    const payload = { ...data, image: data.image?.raw ?? undefined };
+    const payload = { ...data, image: data.image ?? undefined };
     return await productsApi.createProduct(payload);
   } catch (error) {
     console.error('❌ Failed to create product:', error);
@@ -229,7 +229,7 @@ export async function updateProduct(id: string, data: CreateProductInput, oldDat
   const payload: any = {};
   payload.name = data.name;
   payload.categoryId = data.categoryId;
-  if (data.image) payload.image = data.image.raw;
+  if (data.image) payload.image = data.image;
 
   let result = null;
   if (Object.keys(payload).length > 0) {

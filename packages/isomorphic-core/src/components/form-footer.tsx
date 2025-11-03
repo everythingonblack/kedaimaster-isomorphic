@@ -11,6 +11,7 @@ interface FormFooterProps {
   handleAltBtn?: () => void;
   deleteBtn?: boolean;
   handleDelete?: () => void;
+  children?: React.ReactNode; // Add children prop
 }
 
 export const negMargin = "-mx-4 md:-mx-5 lg:-mx-6 3xl:-mx-8 4xl:-mx-10";
@@ -23,6 +24,7 @@ export default function FormFooter({
   handleAltBtn,
   deleteBtn = false,
   handleDelete,
+  children, // Destructure children prop
 }: FormFooterProps) {
   return (
     <div
@@ -32,17 +34,7 @@ export default function FormFooter({
         negMargin
       )}
     >
-      {deleteBtn && (
-        <Button
-          variant="solid"
-          className="w-full @xl:w-auto bg-[#2E8074] hover:bg-[#25675E] text-white"
-          onClick={handleDelete}
-          disabled={isLoading}
-        >
-          Yes
-        </Button>
-      )}
-
+      {children} {/* Render children here */}
       <Button
         variant="outline"
         className="w-full @xl:w-auto"
@@ -66,3 +58,4 @@ export default function FormFooter({
     </div>
   );
 }
+
