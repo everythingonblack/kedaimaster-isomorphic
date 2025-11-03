@@ -104,11 +104,12 @@ export default function CreateEditMaterial({ className }: IndexProps) {
     try {
       if (slug) {
         // ✏️ UPDATE
-        const result = await updateMaterial(slug, data, material);
+        const result = await updateMaterial(slug, data, data.image?.raw);
         if (result) {
           toast.success(<Text as="b">Material successfully updated</Text>);
         } else {
           toast.error(<Text as="b">Failed to update material</Text>);
+          setLoading(false);
           return;
         }
       } else {
@@ -118,11 +119,15 @@ export default function CreateEditMaterial({ className }: IndexProps) {
           toast.success(<Text as="b">Material successfully created</Text>);
         } else {
           toast.error(<Text as="b">Failed to create material</Text>);
+          setLoading(false);
           return;
         }
       }
 
-      // ✅ Redirect langsung setelah sukses
+      // 🌀 Delay supaya spinner kelihatan mutar dulu
+      await new Promise((resolve) => setTimeout(resolve, 1200));
+
+      // ✅ Redirect setelah spinner sempat muncul
       navigate(routes.dashboard.material);
     } catch (error) {
       console.error('Error during material creation/update:', error);

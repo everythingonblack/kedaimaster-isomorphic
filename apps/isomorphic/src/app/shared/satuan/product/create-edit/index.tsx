@@ -86,10 +86,12 @@ export default function CreateEditUom({ className }: IndexProps) {
           toast.success(<Text as="b">Satuan created successfully</Text>);
         }
       }
+
+      // 🌀 Tambahkan sedikit delay supaya spinner terlihat mutar dulu
+      await new Promise((resolve) => setTimeout(resolve, 1200));
+
       // ✅ Redirect ke halaman daftar UOM
-      setTimeout(() => {
-        navigate(routes.dashboard.uoms); // pastikan path ini sesuai di routes.ts
-      }, 800);
+      navigate(routes.dashboard.uoms);
     } catch (error) {
       console.error('Error during create/update UOM:', error);
       toast.error(<Text as="b">Failed to save Satuan</Text>);

@@ -14,7 +14,7 @@ import AccountSettings from '@/app/shared/account-settings/page';
 
 import UomPage from '@/app/shared/satuan/products/page';
 import CreateUomPage from '@/app/shared/satuan/product/create-edit/index';
-import EditUomPage from '@/app/shared/satuan/products/[slug]/edit/page';
+import EditUomPage from '@/app/shared/satuan/product/create-edit/index';
 
 import ProductCategoriesPage from '@/app/shared/product-category-pages/products/page';
 import CreateProductCategoryPage from '@/app/shared/product-category-pages/product/create-edit';

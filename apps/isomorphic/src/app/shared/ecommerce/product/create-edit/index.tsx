@@ -97,54 +97,66 @@ export default function CreateEditProduct({ className }: IndexProps) {
 
   // ✅ Submit handler
   const onSubmit: SubmitHandler<CreateProductInput> = async (data) => {
-    setLoading(true);
-    try {
-      let result;
-      if (slug) {
-        result = await updateProduct(slug, data, product);
-      } else {
-        result = await createProduct(data);
-      }
+  setLoading(true);
+  try {
+    let result;
 
+    if (slug) {
+      // ✏️ UPDATE
+      result = await updateProduct(slug, data, product);
       if (result) {
-        toast.success(
-          <Text as="b">Product successfully {slug ? 'updated' : 'created'}</Text>
-        );
-
-        // ✅ setelah sukses, langsung keluar ke halaman produk
-        setTimeout(() => {
-          navigate(routes.dashboard.products);
-        }, 500);
+        toast.success(<Text as="b">Product successfully updated</Text>);
       } else {
-        toast.error(
-          <Text as="b">Failed to {slug ? 'update' : 'create'} product</Text>
-        );
+        toast.error(<Text as="b">Failed to update product</Text>);
+        setLoading(false);
+        return;
       }
-    } catch (error) {
-      console.error('Error during product creation/update:', error);
-      toast.error(<Text as="b">An error occurred</Text>);
-    } finally {
-      setLoading(false);
+    } else {
+      // ➕ CREATE
+      result = await createProduct(data);
+      if (result) {
+        toast.success(<Text as="b">Product successfully created</Text>);
+      } else {
+        toast.error(<Text as="b">Failed to create product</Text>);
+        setLoading(false);
+        return;
+      }
     }
-  };
 
-  // ✅ Delete handler
-  const handleDeleteProduct = async () => {
-    if (!slug) return;
-    setLoading(true);
-    try {
-      await deleteProduct(slug);
-      toast.success(<Text as="b">Product successfully deleted</Text>);
-      setTimeout(() => {
-        navigate(routes.dashboard.products);
-      }, 500);
-    } catch (error) {
-      console.error('Error during product deletion:', error);
-      toast.error(<Text as="b">Failed to delete product</Text>);
-    } finally {
-      setLoading(false);
-    }
-  };
+    // 🌀 Delay supaya spinner kelihatan mutar dulu (1.2 detik)
+    await new Promise((resolve) => setTimeout(resolve, 1200));
+
+    // ✅ Redirect setelah spinner sempat muncul
+    navigate(routes.dashboard.products);
+  } catch (error) {
+    console.error('Error during product creation/update:', error);
+    toast.error(<Text as="b">An error occurred</Text>);
+  } finally {
+    setLoading(false);
+  }
+};
+
+// ✅ Delete handler (juga dengan efek spinner delay)
+const handleDeleteProduct = async () => {
+  if (!slug) return;
+  setLoading(true);
+  try {
+    await deleteProduct(slug);
+    toast.success(<Text as="b">Product successfully deleted</Text>);
+
+    // 🌀 Biar spinner kelihatan dulu sebelum redirect
+    await new Promise((resolve) => setTimeout(resolve, 1200));
+
+    navigate(routes.dashboard.products);
+  } catch (error) {
+    console.error('Error during product deletion:', error);
+    toast.error(<Text as="b">Failed to delete product</Text>);
+  } finally {
+    setLoading(false);
+  }
+};
+
+
 
   if (fetching) {
     return <div className="p-6 text-gray-500">Loading product data...</div>;
@@ -178,7 +190,7 @@ export default function CreateEditProduct({ className }: IndexProps) {
             isLoading={isLoading}
             submitBtnText={slug ? 'Update Product' : 'Create Product'}
             deleteBtn={!!slug}
-            handleDelete={handleDeleteProduct}
+          
           />
         </form>
       </FormProvider>

@@ -116,10 +116,10 @@ const productCategoriesApiHandlers = {
     return await getAllProductCategories() as ProductCategory[];
   },
 
-  async getById(id: string): Promise<CreateProductCategoryInput | undefined> {
+  async getById(id: string): Promise<ApiProductCategory | undefined> {
     try {
       const category = await getProductCategoryById(id) as ApiProductCategory;
-      return mapApiCategoryToFormInput(category);
+      return category;
     } catch (error) {
       console.error(`❌ Failed to fetch category by ID (${id}):`, error);
       return undefined;

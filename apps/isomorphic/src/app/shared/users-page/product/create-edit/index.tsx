@@ -73,37 +73,40 @@ export default function CreateEditUser() {
   }, [id, methods]);
 
   const onSubmit: SubmitHandler<UserFormInput> = async (data) => {
-    setLoading(true);
-    try {
-      if (id) {
-        // ✏️ EDIT USER
-        const payload: UpdateUserRequest = {
-          email: data.email,
-          role: data.role,
-        };
-        await usersApiHandlers.update(id, payload);
-        toast.success('User updated successfully');
-      } else {
-        // ➕ CREATE USER
-        const payload: CreateUserRequest = {
-          email: data.email,
-          password: data.password ?? '',
-          role: data.role,
-        };
-        await usersApiHandlers.create(payload);
-        toast.success('User created successfully');
-      }
-
-      // ✅ Redirect ke halaman Users
-      setTimeout(() => {
-        navigate(routes.dashboard.users);
-      }, 800);
-    } catch (error) {
-      toast.error('Error saving user');
-    } finally {
-      setLoading(false);
+  setLoading(true);
+  try {
+    if (id) {
+      // ✏️ EDIT USER
+      const payload: UpdateUserRequest = {
+        email: data.email,
+        role: data.role,
+      };
+      await usersApiHandlers.update(id, payload);
+      toast.success('User updated successfully');
+    } else {
+      // ➕ CREATE USER
+      const payload: CreateUserRequest = {
+        email: data.email,
+        password: data.password ?? '',
+        role: data.role,
+      };
+      await usersApiHandlers.create(payload);
+      toast.success('User created successfully');
     }
-  };
+
+    // 🌟 Biar efek spinner-nya kelihatan smooth
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    // ✅ Redirect ke halaman Users
+    navigate(routes.dashboard.users);
+  } catch (error) {
+    toast.error('Error saving user');
+  } finally {
+    // 🔁 Delay kecil agar transisi terasa natural
+    setTimeout(() => setLoading(false), 300);
+  }
+};
+
 
   if (fetching) {
     return <div className="p-6 text-gray-500">Loading user data...</div>;
