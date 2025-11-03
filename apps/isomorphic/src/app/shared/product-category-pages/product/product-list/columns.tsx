@@ -44,7 +44,7 @@ export const productCategoryColumns = [
     enableSorting: false,
     cell: ({ row }) => (
       <AvatarCard
-        src={row.original.imageUrl}
+        src={row.original.imageUrl ?? ''}
         name={row.original.name}
         avatarProps={{
           name: row.original.name,
@@ -163,7 +163,7 @@ export const productCategoryColumns = [
 
       <DeletePopover
         title="Delete Category"
-        description={`Are you sure you want to delete "${row.original.id}"?`}
+        description={`Are you sure you want to delete "${row.original.name}"?`}
         onDelete={() =>
           meta?.handleDeleteRow && meta?.handleDeleteRow(row.original)
         }

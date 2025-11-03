@@ -84,19 +84,13 @@ export const productCategoryFormSchema = z.object({
   image: fileSchema.optional(),
 });
 
-export type ImageFormValue = {
-  name: string;
-  url: string;
-  size: number;
-  raw?: File;
-};
 
 export type CreateProductCategoryInput = z.infer<typeof productCategoryFormSchema>;
 
 // ================================
 // ✅ MAPPERS (for form binding)
 // ================================
-function mapApiCategoryToFormInput(item: ApiProductCategory): CreateProductCategoryInput {
+export function mapApiCategoryToFormInput(item: ApiProductCategory): CreateProductCategoryInput {
   return {
     name: item.name,
     image: item.imageUrl ? {

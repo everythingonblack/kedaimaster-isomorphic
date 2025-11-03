@@ -42,7 +42,7 @@ export default function DeletePopover({
             <div className="flex items-center justify-end">
               <Button
                 size="sm"
-                className="me-1.5 h-7"
+                className="me-1.5 h-7 bg-[#2E8074] hover:bg-[#25675E] text-white"
                 onClick={() => {
                   onDelete && onDelete();
                   setOpen(false);

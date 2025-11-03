@@ -34,12 +34,12 @@ export default function FormFooter({
     >
       {deleteBtn && (
         <Button
-          variant="outline"
-          className="w-full @xl:w-auto"
+          variant="solid"
+          className="w-full @xl:w-auto bg-[#2E8074] hover:bg-[#25675E] text-white"
           onClick={handleDelete}
           disabled={isLoading}
         >
-          Delete
+          Yes
         </Button>
       )}
 

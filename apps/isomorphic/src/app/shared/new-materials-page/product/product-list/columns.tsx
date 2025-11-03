@@ -166,7 +166,7 @@ export const materialsListColumns = [
         </Tooltip>
         <DeletePopover
           title={`Delete the material`}
-          description={`Are you sure you want to delete this #${row.original.id} material?`}
+          description={`Are you sure you want to delete "${row.original.name}"?`}
           onDelete={() =>
             meta?.handleDeleteRow && meta?.handleDeleteRow(row.original)
           }

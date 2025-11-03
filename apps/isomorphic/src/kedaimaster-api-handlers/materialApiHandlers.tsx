@@ -6,7 +6,7 @@ import { fileSchema } from '@/validators/common-rules';
 /**
  * Tipe data material mentah dari API (sebelum dimapping ke UI)
  */
-type ApiMaterial = {
+export type ApiMaterial = {
   id: string;
   name: string;
   remarks?: string;
@@ -159,12 +159,18 @@ export async function createMaterial(data: CreateMaterialInput) {
       name: data.name,
       uomId: data.categoryId,
       price: data.price,
-      stock: data.stock,
     };
     if (data.remarks !== undefined) payload.remarks = data.remarks;
-    // materialsApi.createMaterial does not currently support image upload directly in the payload.
-    // If image upload is needed for creation, the API or its handler needs to be adjusted.
-    return await materialsApi.createMaterial(payload);
+
+    // Create the material without initial stock
+    const newMaterial = await materialsApi.createMaterial(payload) as ApiMaterial;
+
+    // If stock is provided, call stockInMaterial
+    if (newMaterial?.id && data.stock && data.stock > 0) {
+      await materialsApi.stockInMaterial(newMaterial.id, data.stock, data.price);
+    }
+
+    return newMaterial;
   } catch (error) {
     console.error('❌ Failed to create material:', error);
     throw error;

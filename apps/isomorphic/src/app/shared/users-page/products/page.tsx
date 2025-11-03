@@ -89,7 +89,7 @@ const userListColumns = [
         </Tooltip>
         <DeletePopover
           title={`Delete User`}
-          description={`Are you sure you want to delete user ${row.original.email}?`}
+          description={`Are you sure you want to delete user "${row.original.email}"?`}
           onDelete={() =>
             meta?.handleDeleteRow && meta?.handleDeleteRow(row.original)
           }
