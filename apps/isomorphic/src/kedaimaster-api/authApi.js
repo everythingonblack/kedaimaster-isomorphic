@@ -1,6 +1,6 @@
 // src/utils/authApi.js
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://kedaimaster-api-stg.siwidia.id';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://dev-api-v2.kedaimaster.com';
 const ACCESS_TOKEN_KEY = 'accessToken';
 const REFRESH_TOKEN_KEY = 'refreshToken';
 
@@ -37,9 +37,15 @@ export async function apiRequest(endpoint, method = 'POST', data = {}, retry = t
   const { accessToken } = getTokens();
 
   try {
-    const headers = {
-      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
-    };
+    const headers = {};
+
+    // ❌ Jangan pakai Authorization di endpoint login/register/refresh
+    const noAuthEndpoints = ['/authenticate', '/register', '/refreshToken'];
+    const requiresAuth = !noAuthEndpoints.includes(endpoint);
+
+    if (accessToken && requiresAuth) {
+      headers['Authorization'] = `Bearer ${accessToken}`;
+    }
 
     // Hanya set Content-Type jika bukan FormData
     const isFormData = typeof FormData !== 'undefined' && data instanceof FormData;
@@ -52,7 +58,6 @@ export async function apiRequest(endpoint, method = 'POST', data = {}, retry = t
       headers,
     };
 
-    // Kirim body sesuai tipe
     if (method !== 'GET' && method !== 'HEAD') {
       options.body = isFormData ? data : JSON.stringify(data);
     }
@@ -62,11 +67,10 @@ export async function apiRequest(endpoint, method = 'POST', data = {}, retry = t
 
     if (response.ok) return result;
 
-    // Token expired → refresh otomatis
     if (retry && (response.status === 401 || response.status === 403)) {
       const refreshed = await tryRefreshToken();
       if (refreshed) {
-        return apiRequest(endpoint, method, data, false); // ulang sekali saja
+        return apiRequest(endpoint, method, data, false);
       }
     }
 
@@ -82,6 +86,7 @@ export async function apiRequest(endpoint, method = 'POST', data = {}, retry = t
     throw error;
   }
 }
+
 
 /**
  * Coba refresh token

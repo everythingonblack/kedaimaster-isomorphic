@@ -41,7 +41,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ show, onClose, initialMode }) => 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState(''); // New state for password confirmation
+  const [passwordConfirm, setPasswordConfirm] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
@@ -53,7 +53,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ show, onClose, initialMode }) => 
     setEmail('');
     setPassword('');
     setName('');
-    setPasswordConfirm(''); // Reset passwordConfirm
+    setPasswordConfirm('');
   }, [show, initialMode]);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -158,6 +158,22 @@ const AuthModal: React.FC<AuthModalProps> = ({ show, onClose, initialMode }) => 
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+          {!isLoginMode && (
+            <div className="mb-6">
+              <label className="block text-slate-700 text-sm font-bold mb-2" htmlFor="passwordConfirm">
+                Konfirmasi Password
+              </label>
+              <input
+                className="shadow-sm appearance-none border rounded-md w-full py-2 px-3 text-slate-700 mb-3 leading-tight focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                id="passwordConfirm"
+                type="password"
+                placeholder="******************"
+                value={passwordConfirm}
+                onChange={(e) => setPasswordConfirm(e.target.value)}
+                required
+              />
+            </div>
+          )}
           </div>
           <div className="flex items-center justify-between flex-col">
             <button

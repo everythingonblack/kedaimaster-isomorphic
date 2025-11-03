@@ -35,14 +35,6 @@ export default function FormFooter({
       )}
     >
       {children} {/* Render children here */}
-      <Button
-        variant="outline"
-        className="w-full @xl:w-auto"
-        onClick={handleAltBtn}
-        disabled={isLoading}
-      >
-        {altBtnText}
-      </Button>
 
       <Button
         type="submit"

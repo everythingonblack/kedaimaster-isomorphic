@@ -7,7 +7,7 @@ const AuthModal = ({ show, onClose, initialMode = 'login' }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
-  // const [passwordConfirm, setPasswordConfirm] = useState(''); // Uncomment jika API register butuh ini
+  const [passwordConfirm, setPasswordConfirm] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
@@ -20,7 +20,7 @@ const AuthModal = ({ show, onClose, initialMode = 'login' }) => {
       setEmail('');
       setPassword('');
       setName('');
-      // setPasswordConfirm('');
+      setPasswordConfirm('');
     }
   }, [show, initialMode]);
 
@@ -50,11 +50,11 @@ const AuthModal = ({ show, onClose, initialMode = 'login' }) => {
     setSuccessMessage('');
     setIsLoading(true);
     
-    // if (password !== passwordConfirm) {
-    //   setError('Password dan konfirmasi password tidak cocok.');
-    //   setIsLoading(false);
-    //   return;
-    // }
+    if (password !== passwordConfirm) {
+      setError('Password dan konfirmasi password tidak cocok.');
+      setIsLoading(false);
+      return;
+    }
 
     try {
       // Sesuaikan payload sesuai kebutuhan API Anda
@@ -197,7 +197,7 @@ const AuthModal = ({ show, onClose, initialMode = 'login' }) => {
               required
             />
           </div>
-           {/* <div className="mb-6">
+           <div className="mb-6">
              <label className="block text-slate-700 text-sm font-bold mb-2" htmlFor="passwordConfirm">
                Konfirmasi Password
              </label>
@@ -211,7 +211,6 @@ const AuthModal = ({ show, onClose, initialMode = 'login' }) => {
                required
              />
            </div>
-           */}
           <div className="flex items-center justify-between flex-col">
             <button
               className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline transition-colors disabled:bg-slate-400"
