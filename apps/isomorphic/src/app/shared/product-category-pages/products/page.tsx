@@ -40,6 +40,7 @@ export default function ProductCategoriesPage() {
             const updatedCategories =
               await productCategoriesApiHandlers.getAll();
             setData(updatedCategories);
+            table.resetRowSelection(); // ✅ Hapus selection setelah delete
           } catch (error) {
             console.error("Error deleting category:", error);
           }
@@ -55,6 +56,7 @@ export default function ProductCategoriesPage() {
             const updatedCategories =
               await productCategoriesApiHandlers.getAll();
             setData(updatedCategories);
+            table.resetRowSelection(); // ✅ Clear selection setelah delete
           } catch (error) {
             console.error("Error deleting multiple categories:", error);
           }
@@ -76,22 +78,34 @@ export default function ProductCategoriesPage() {
     fetchCategories();
   }, [setData]);
 
+  const selectedRows = table.getSelectedRowModel().rows.map((r) => r.original);
+  const hasSelected = selectedRows.length > 0;
+
   return (
     <>
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb}>
         <div className="mt-4 flex flex-wrap items-center gap-3 @lg:mt-0">
-          {table.getSelectedRowModel().rows.length > 0 ? (
-            <Button
-              onClick={() =>
-                table.options.meta?.handleMultipleDelete?.(
-                  table.getSelectedRowModel().rows.map((r) => r.original)
-                )
-              }
-              className="flex items-center gap-2 bg-[#C7362B] hover:bg-[#A42C22] text-white transition-all duration-200"
-            >
-              <PiTrashBold className="h-4 w-4" />
-              Delete Selected ({table.getSelectedRowModel().rows.length})
-            </Button>
+          {hasSelected ? (
+            <>
+              {/* ✅ Tombol Delete Selected */}
+              <Button
+                onClick={() =>
+                  table.options.meta?.handleMultipleDelete?.(selectedRows)
+                }
+                className="flex items-center gap-2 bg-[#C7362B] hover:bg-[#A42C22] text-white transition-all duration-200"
+              >
+                <PiTrashBold className="h-4 w-4" />
+                Delete Selected ({selectedRows.length})
+              </Button>
+
+              {/* ✅ Tombol Cancel Selection */}
+              <Button
+                onClick={() => table.resetRowSelection()}
+                className="flex items-center gap-2 bg-gray-300 hover:bg-gray-400 text-gray-800 transition-all duration-200"
+              >
+                Cancel Selection
+              </Button>
+            </>
           ) : (
             <>
               <ExportButton

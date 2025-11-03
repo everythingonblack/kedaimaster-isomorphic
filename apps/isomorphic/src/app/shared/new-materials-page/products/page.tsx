@@ -9,7 +9,7 @@ import {
   fetchMaterials,
   MaterialType,
 } from '@/kedaimaster-api-handlers/materialApiHandlers';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect } from 'react';
 import PageHeader from '@/app/shared/page-header';
 import ExportButton from '@/app/shared/export-button';
 import { useTanStackTable } from '@core/components/table/custom/use-TanStack-Table';
@@ -46,7 +46,7 @@ export default function MaterialsPage() {
             toast.success(`Deleted "${row.name}"`);
             const updatedMaterials = await fetchMaterials();
             setData(updatedMaterials);
-            table.toggleAllRowsSelected(false);
+            table.resetRowSelection(); // ✅ clear selection setelah delete
           } catch (error) {
             toast.error('Failed to delete material');
             console.error('Error deleting material:', error);
@@ -61,7 +61,7 @@ export default function MaterialsPage() {
             toast.success(`${rows.length} materials deleted`);
             const updatedMaterials = await fetchMaterials();
             setData(updatedMaterials);
-            table.toggleAllRowsSelected(false);
+            table.resetRowSelection(); // ✅ clear selection setelah delete
           } catch (error) {
             toast.error('Failed to delete multiple materials');
             console.error('Error deleting multiple materials:', error);
@@ -94,15 +94,26 @@ export default function MaterialsPage() {
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb}>
         <div className="mt-4 flex flex-wrap items-center gap-3 @lg:mt-0">
           {hasSelected ? (
-            <Button
-              onClick={() =>
-                table.options.meta?.handleMultipleDelete?.(selectedRows)
-              }
-              className="flex items-center gap-2 bg-[#C7362B] hover:bg-[#A42C22] text-white transition-all duration-200"
-            >
-              <PiTrashBold className="h-4 w-4" />
-              Delete Selected ({selectedRows.length})
-            </Button>
+            <>
+              {/* ✅ Tombol Delete Selected */}
+              <Button
+                onClick={() =>
+                  table.options.meta?.handleMultipleDelete?.(selectedRows)
+                }
+                className="flex items-center gap-2 bg-[#C7362B] hover:bg-[#A42C22] text-white transition-all duration-200"
+              >
+                <PiTrashBold className="h-4 w-4" />
+                Delete Selected ({selectedRows.length})
+              </Button>
+
+              {/* ✅ Tombol Cancel Selection */}
+              <Button
+                onClick={() => table.resetRowSelection()}
+                className="flex items-center gap-2 bg-gray-300 hover:bg-gray-400 text-gray-800 transition-all duration-200"
+              >
+                Cancel Selection
+              </Button>
+            </>
           ) : (
             <>
               <ExportButton
@@ -166,4 +177,3 @@ export default function MaterialsPage() {
     </>
   );
 }
-

@@ -1,3 +1,5 @@
+"use client";
+
 import { Link } from "react-router-dom";
 import { PiPlusBold, PiMagnifyingGlassBold, PiTrashBold } from "react-icons/pi";
 import { routes } from "@/config/routes";
@@ -27,9 +29,7 @@ export default function UomPage() {
     tableData: [],
     columnConfig: uomListColumns as any,
     options: {
-      initialState: {
-        pagination: { pageIndex: 0, pageSize: 10 },
-      },
+      initialState: { pagination: { pageIndex: 0, pageSize: 10 } },
       meta: {
         handleDeleteRow: async (row: Uom) => {
           try {
@@ -37,6 +37,7 @@ export default function UomPage() {
             setData((prev) => prev.filter((r) => r.id !== row.id));
             const updated = await uomApiHandlers.getAll();
             setData(updated);
+            table.resetRowSelection(); // ✅ Clear selection setelah delete
           } catch (error) {
             console.error("Error deleting satuan:", error);
           }
@@ -49,6 +50,7 @@ export default function UomPage() {
             );
             const updated = await uomApiHandlers.getAll();
             setData(updated);
+            table.resetRowSelection(); // ✅ Clear selection setelah delete
           } catch (error) {
             console.error("Error deleting multiple satuan:", error);
           }
@@ -62,7 +64,6 @@ export default function UomPage() {
     const getUoms = async () => {
       try {
         const data = await uomApiHandlers.getAll();
-        console.log("Fetched UOMs:", data);
         setData(data);
       } catch (err) {
         console.error("Error fetching satuan:", err);
@@ -71,23 +72,35 @@ export default function UomPage() {
     getUoms();
   }, [setData]);
 
+  const selectedRows = table.getSelectedRowModel().rows.map((r) => r.original);
+  const hasSelected = selectedRows.length > 0;
+
   return (
     <>
       {/* 🧭 HEADER */}
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb}>
         <div className="mt-4 flex flex-wrap items-center gap-3 @lg:mt-0">
-          {table.getSelectedRowModel().rows.length > 0 ? (
-            <Button
-              onClick={() =>
-                table.options.meta?.handleMultipleDelete?.(
-                  table.getSelectedRowModel().rows.map((r) => r.original)
-                )
-              }
-              className="flex items-center gap-2 bg-[#C7362B] hover:bg-[#A42C22] text-white transition-all duration-200"
-            >
-              <PiTrashBold className="h-4 w-4" />
-              Delete Selected ({table.getSelectedRowModel().rows.length})
-            </Button>
+          {hasSelected ? (
+            <>
+              {/* ✅ Tombol Delete Selected */}
+              <Button
+                onClick={() =>
+                  table.options.meta?.handleMultipleDelete?.(selectedRows)
+                }
+                className="flex items-center gap-2 bg-[#C7362B] hover:bg-[#A42C22] text-white transition-all duration-200"
+              >
+                <PiTrashBold className="h-4 w-4" />
+                Delete Selected ({selectedRows.length})
+              </Button>
+
+              {/* ✅ Tombol Cancel Selection */}
+              <Button
+                onClick={() => table.resetRowSelection()}
+                className="flex items-center gap-2 bg-gray-300 hover:bg-gray-400 text-gray-800 transition-all duration-200"
+              >
+                Cancel Selection
+              </Button>
+            </>
           ) : (
             <>
               <ExportButton

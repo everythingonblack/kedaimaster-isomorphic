@@ -42,6 +42,7 @@ export default function ProductsPage() {
             setData((prev) => prev.filter((r) => r.id !== row.id));
             const updatedProducts = await fetchProducts();
             setData(updatedProducts);
+            table.resetRowSelection(); // ✅ Hapus selection setelah delete
           } catch (error) {
             console.error("Error deleting product:", error);
           }
@@ -54,6 +55,7 @@ export default function ProductsPage() {
             );
             const updatedProducts = await fetchProducts();
             setData(updatedProducts);
+            table.resetRowSelection(); // ✅ Clear selection setelah delete
           } catch (error) {
             console.error("Error deleting multiple products:", error);
           }
@@ -68,7 +70,6 @@ export default function ProductsPage() {
     const getProducts = async () => {
       try {
         const productData = await fetchProducts();
-        console.log("Fetched products:", productData);
         setData(productData);
       } catch (err) {
         console.error("Error fetching products:", err);
@@ -77,22 +78,35 @@ export default function ProductsPage() {
     getProducts();
   }, [setData]);
 
+  const selectedCount = table.getSelectedRowModel().rows.length;
+
   return (
     <>
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb}>
         <div className="mt-4 flex flex-wrap items-center gap-3 @lg:mt-0">
-          {table.getSelectedRowModel().rows.length > 0 ? (
-            <Button
-              onClick={() =>
-                table.options.meta?.handleMultipleDelete?.(
-                  table.getSelectedRowModel().rows.map((r) => r.original)
-                )
-              }
-              className="flex items-center gap-2 bg-[#C7362B] hover:bg-[#A42C22] text-white transition-all duration-200"
-            >
-              <PiTrashBold className="h-4 w-4" />
-              Delete Selected ({table.getSelectedRowModel().rows.length})
-            </Button>
+          {selectedCount > 0 ? (
+            <>
+              {/* Tombol Delete Selected */}
+              <Button
+                onClick={() =>
+                  table.options.meta?.handleMultipleDelete?.(
+                    table.getSelectedRowModel().rows.map((r) => r.original)
+                  )
+                }
+                className="flex items-center gap-2 bg-[#C7362B] hover:bg-[#A42C22] text-white transition-all duration-200"
+              >
+                <PiTrashBold className="h-4 w-4" />
+                Delete Selected ({selectedCount})
+              </Button>
+
+              {/* ✅ Tombol Batal (clear selection) */}
+              <Button
+                onClick={() => table.resetRowSelection()}
+                className="flex items-center gap-2 bg-gray-300 hover:bg-gray-400 text-gray-800 transition-all duration-200"
+              >
+                Cancel Selection
+              </Button>
+            </>
           ) : (
             <>
               <ExportButton
@@ -135,7 +149,6 @@ export default function ProductsPage() {
           />
         }
       >
-        {/* ✅ Wrapper untuk tampilan tabel bergaya Excel */}
         <div className="w-full overflow-x-auto border border-gray-300 rounded-md shadow-sm">
           <Table
             table={table}
