@@ -35,7 +35,7 @@ export const userColumns = [
       <Flex align="center" justify="end" gap="3" className="pe-4">
         <Tooltip content="Delete User" placement="top" color="invert">
           <DeletePopover
-            title="Delete User"
+            title="Delete t User"
             description={`Are you sure you want to delete "${row.original.email}"?`}
             onDelete={() => meta?.handleDeleteRow?.(row.original)}
           />

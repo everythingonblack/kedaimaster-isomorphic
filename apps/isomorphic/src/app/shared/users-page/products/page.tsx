@@ -88,7 +88,7 @@ const userListColumns = [
           <Link to={routes.dashboard.editUser(row.original.id)}></Link>
         </Tooltip>
         <DeletePopover
-          title={`Delete User`}
+          title={`Delete the User`}
           description={`Are you sure you want to delete user "${row.original.email}"?`}
           onDelete={() =>
             meta?.handleDeleteRow && meta?.handleDeleteRow(row.original)

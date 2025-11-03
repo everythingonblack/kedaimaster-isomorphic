@@ -162,7 +162,7 @@ export const productCategoryColumns = [
       </Tooltip>
 
       <DeletePopover
-        title="Delete Category"
+        title="Delete the Category"
         description={`Are you sure you want to delete "${row.original.name}"?`}
         onDelete={() =>
           meta?.handleDeleteRow && meta?.handleDeleteRow(row.original)
