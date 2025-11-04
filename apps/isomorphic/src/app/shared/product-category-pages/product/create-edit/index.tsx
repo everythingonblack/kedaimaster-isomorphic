@@ -102,7 +102,7 @@ export default function CreateEditProductCategory({ className }: IndexProps) {
       }
 
       // 🌀 Delay supaya spinner kelihatan mutar dulu
-      await new Promise((resolve) => setTimeout(resolve, 1200));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // ✅ Redirect setelah spinner sempat muncul
       navigate(routes.dashboard.productCategories);

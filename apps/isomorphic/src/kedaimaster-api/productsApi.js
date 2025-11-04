@@ -34,6 +34,7 @@ import { apiRequest } from './authApi.js';
  *     },
  *     "stocking": true,
  *     "stock": 1073741824,
+ *     "material": "string",
  *     "createdBy": "string",
  *     "createdOn": "2025-10-23T09:14:08.714Z",
  *     "updatedBy": "string",
@@ -120,6 +121,7 @@ export async function createProduct(data) {
   const formData = new FormData();
   formData.append('name', data.name);
   if (data.categoryId) formData.append('categoryId', data.categoryId);
+  if (data.material) formData.append('material', data.material);
 
   // Konversi base64 ke File jika ada dan valid
   if (data.image?.url && data.image?.name) {
@@ -176,6 +178,7 @@ export async function updateProduct(id, data) {
   const formData = new FormData();
   if (data.name) formData.append('name', data.name);
   if (data.categoryId) formData.append('categoryId', data.categoryId);
+  if (data.material) formData.append('material', data.material);
 
   // Konversi base64 ke File jika ada dan valid
   if (data.image?.url && data.image?.name) {

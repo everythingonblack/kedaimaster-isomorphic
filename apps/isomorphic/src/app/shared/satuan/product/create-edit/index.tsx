@@ -88,7 +88,7 @@ export default function CreateEditUom({ className }: IndexProps) {
       }
 
       // 🌀 Tambahkan sedikit delay supaya spinner terlihat mutar dulu
-      await new Promise((resolve) => setTimeout(resolve, 1200));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // ✅ Redirect ke halaman daftar UOM
       navigate(routes.dashboard.uoms);

@@ -1,7 +1,8 @@
-import * as productsApi from '@/kedaimaster-api/productsApi';
+import * as productsApi from '@/kedaimaster-api/productsApi.js';
 import { z } from 'zod';
 import { messages } from '@/config/messages';
 import { fileSchema } from '@/validators/common-rules';
+import { fetchMaterials } from './materialApiHandlers';
 
 /**
  * Tipe data produk mentah dari API (sebelum dimapping ke UI)
@@ -19,12 +20,14 @@ type ApiProduct = {
     unitPrice: number;
   };
   description?: string;
+  material?: string;       // bisa ID atau nama tergantung backend
+  materialId?: string;     // antisipasi kalau backend pakai ini
   createdBy?: string;
   createdOn?: string;
 };
 
 /**
- * Type produk yang digunakan di tabel Stock Report (UI-friendly)
+ * Type produk yang digunakan di tabel (UI-friendly)
  */
 export type ProductType = {
   id: string;
@@ -34,33 +37,24 @@ export type ProductType = {
   stock: number;
   price: string;
   status: string;
+  material: string;
   createdBy: string;
   createdOn: string;
 };
 
 /**
  * Schema untuk form produk (Create/Edit)
- * Disesuaikan agar sejalan dengan ApiProduct dan kebutuhan UI.
  */
 export const productFormSchema = z.object({
   name: z.string().min(1, { message: messages.productNameIsRequired }),
-
   categoryId: z.string().min(1, { message: messages.productCategoryIsRequired }),
-
   description: z.string().optional(),
-
   price: z.coerce
     .number({ required_error: messages.priceIsRequired })
     .min(0, { message: messages.priceMustBePositive }),
-
-  stock: z
-    .coerce
-    .number()
-    .min(0, { message: messages.stockMustBePositive })
-    .optional()
-    .default(0),
-
-  image: fileSchema.optional(), // single file upload
+  stock: z.coerce.number().min(0, { message: messages.stockMustBePositive }).optional().default(0),
+  material: z.string().optional(),
+  image: fileSchema.optional(),
 });
 
 export type ImageFormValue = {
@@ -77,17 +71,25 @@ export type CreateProductInput = z.infer<typeof productFormSchema> & {
 /**
  * Helper untuk memetakan data dari ApiProduct ke ProductType
  */
-function mapApiProductToProductType(item: ApiProduct): ProductType {
+function mapApiProductToProductType(item: ApiProduct, materialMap: Map<string, string>): ProductType {
+  // ambil id material dari salah satu kemungkinan field
+  const materialId = item.materialId || item.material;
+  let materialName = 'N/A'; // Mengubah default dari '-' menjadi 'N/A'
+
+  if (materialId) {
+    materialName = materialMap.get(materialId) || materialId;
+  }
+  // TODO: Pastikan API backend mengembalikan 'material' atau 'materialId' untuk menampilkan data yang benar.
+
   return {
     id: item.id,
     name: item.name,
     category: item.category?.name || '-',
     image: item.imageUrl || '/placeholder.png',
     stock: item.stock ?? 0,
-    price: item.price?.unitPrice
-      ? item.price.unitPrice.toLocaleString('id-ID')
-      : '0',
+    price: item.price?.unitPrice ? item.price.unitPrice.toLocaleString('id-ID') : '0',
     status: (item.stock ?? 0) > 0 ? 'Available' : 'Out of Stock',
+    material: materialName,
     createdBy: item.createdBy || '-',
     createdOn: item.createdOn || '-',
   };
@@ -95,7 +97,6 @@ function mapApiProductToProductType(item: ApiProduct): ProductType {
 
 /**
  * Helper untuk memetakan data dari ApiProduct ke CreateProductInput
- * Digunakan saat Edit Form (prefill data dari backend)
  */
 function mapApiProductToCreateProductInput(item: ApiProduct): CreateProductInput {
   return {
@@ -104,6 +105,7 @@ function mapApiProductToCreateProductInput(item: ApiProduct): CreateProductInput
     price: item.price?.unitPrice ?? 0,
     stock: item.stock ?? 0,
     description: item.description ?? '',
+    material: item.materialId || item.material || '',
     image: item.imageUrl
       ? {
           name: item.imageUrl.split('/').pop() || 'image',
@@ -120,10 +122,21 @@ function mapApiProductToCreateProductInput(item: ApiProduct): CreateProductInput
  */
 export async function fetchProducts(): Promise<ProductType[]> {
   try {
-    const response = (await productsApi.getAllProducts()) as ApiProduct[] | null;
+    const [response, materials] = await Promise.all([
+      productsApi.getAllProducts() as Promise<ApiProduct[] | null>,
+      fetchMaterials(),
+    ]);
+
+    const materialMap = new Map<string, string>();
+    materials.forEach((material) => {
+      materialMap.set(material.id, material.name);
+    });
+
+
     if (Array.isArray(response)) {
-      return response.map(mapApiProductToProductType);
+      return response.map((item) => mapApiProductToProductType(item, materialMap));
     }
+
     return [];
   } catch (error) {
     console.error('❌ Failed to fetch products:', error);
@@ -225,10 +238,10 @@ export async function fetchPaymentTypes(): Promise<string[]> {
  * Handler untuk update produk secara smart
  */
 export async function updateProduct(id: string, data: CreateProductInput, oldData?: CreateProductInput) {
-  // Update name, categoryId, image jika ada perubahan
   const payload: any = {};
   payload.name = data.name;
   payload.categoryId = data.categoryId;
+  payload.material = data.material;
   if (data.image) payload.image = data.image;
 
   let result = null;
@@ -236,14 +249,12 @@ export async function updateProduct(id: string, data: CreateProductInput, oldDat
     result = await productsApi.updateProduct(id, payload);
   }
 
-  // Update stok jika ada field dan berubah
   if (typeof data.stock === 'number' && (!oldData || data.stock !== oldData.stock)) {
     const qty = Math.abs(data.stock - (oldData?.stock ?? 0));
     const type = data.stock > (oldData?.stock ?? 0) ? 'IN' : 'OUT';
     await productsApi.updateProductStock(id, { type, qty });
   }
 
-  // Update price jika ada field dan berubah
   if (typeof data.price === 'number' && (!oldData || data.price !== oldData.price)) {
     await productsApi.updateProductPrice(id, {
       price: data.price,
@@ -253,7 +264,3 @@ export async function updateProduct(id: string, data: CreateProductInput, oldDat
 
   return result;
 }
-
-
-
-

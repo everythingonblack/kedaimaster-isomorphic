@@ -20,6 +20,7 @@ import { useLayout } from '@/layouts/use-layout';
 import { LAYOUT_OPTIONS } from '@/config/enums';
 import { useParams, useNavigate } from 'react-router-dom'; // ✅ tambahkan useNavigate
 import productCategoriesApiHandlers from '@/kedaimaster-api-handlers/productCategoriesApiHandlers';
+import { fetchMaterials } from '@/kedaimaster-api-handlers/materialApiHandlers'; // Import fetchMaterials
 
 interface IndexProps {
   className?: string;
@@ -33,6 +34,9 @@ export default function CreateEditProduct({ className }: IndexProps) {
   const [product, setProduct] = useState<CreateProductInput | undefined>(undefined);
   const [fetching, setFetching] = useState(true);
   const [categoryOptions, setCategoryOptions] = useState<
+    { value: string; label: string }[]
+  >([]);
+  const [materialOptions, setMaterialOptions] = useState< // Added materialOptions state
     { value: string; label: string }[]
   >([]);
 
@@ -71,6 +75,20 @@ export default function CreateEditProduct({ className }: IndexProps) {
       }
     }
     fetchCategories();
+
+    async function fetchMaterialOptions() { // Fetch material options
+      try {
+        const materials = await fetchMaterials();
+        const options = materials.map((material: any) => ({
+          value: material.id,
+          label: material.name,
+        }));
+        setMaterialOptions(options);
+      } catch (error) {
+        console.error('Failed to fetch materials:', error);
+      }
+    }
+    fetchMaterialOptions();
   }, []);
 
   // ✅ Fetch produk jika mode edit
@@ -123,8 +141,8 @@ export default function CreateEditProduct({ className }: IndexProps) {
       }
     }
 
-    // 🌀 Delay supaya spinner kelihatan mutar dulu (1.2 detik)
-    await new Promise((resolve) => setTimeout(resolve, 1200));
+   // 🌀 Delay supaya spinner kelihatan mutar dulu (1 detik)
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     // ✅ Redirect setelah spinner sempat muncul
     navigate(routes.dashboard.products);
@@ -145,8 +163,6 @@ const handleDeleteProduct = async () => {
     toast.success(<Text as="b">Product successfully deleted</Text>);
 
     // 🌀 Biar spinner kelihatan dulu sebelum redirect
-    await new Promise((resolve) => setTimeout(resolve, 1200));
-
     navigate(routes.dashboard.products);
   } catch (error) {
     console.error('Error during product deletion:', error);
@@ -155,7 +171,6 @@ const handleDeleteProduct = async () => {
     setLoading(false);
   }
 };
-
 
 
   if (fetching) {
@@ -179,6 +194,7 @@ const handleDeleteProduct = async () => {
               <ProductSummary
                 className=""
                 categoryOptions={categoryOptions}
+                materialOptions={materialOptions} // Pass materialOptions
               />
             </div>
             <div>
