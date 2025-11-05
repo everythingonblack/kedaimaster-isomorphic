@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Text, Button } from 'rizzui';
+import { Text } from 'rizzui';
 import toast from 'react-hot-toast';
 import PageHeader from '@/app/shared/page-header';
 import { routes } from '@/config/routes';
@@ -17,21 +17,22 @@ import usersApiHandlers, {
 import { useParams, useNavigate } from 'react-router-dom';
 import UserSummary from '@/app/shared/users-page/product/create-edit/product-summary';
 
-const userFormSchema = z.object({
-  id: z.string().optional(), // Add id to schema
-  email: z.string().email('Invalid email address'),
-  password: z.string().optional(), // Keep optional for initial schema
-  role: z.string().min(1, 'Role is required'),
-}).superRefine((data, ctx) => {
-  // Conditionally make password required for creation
-  if (!data.id && !data.password) { // Check data.id for new user
-    ctx.addIssue({
-      path: ['password'],
-      code: z.ZodIssueCode.custom,
-      message: 'Password is required for new users',
-    });
-  }
-});
+const userFormSchema = z
+  .object({
+    id: z.string().optional(),
+    email: z.string().email('Invalid email address'),
+    password: z.string().optional(),
+    role: z.string().min(1, 'Role is required'),
+  })
+  .superRefine((data, ctx) => {
+    if (!data.id && !data.password) {
+      ctx.addIssue({
+        path: ['password'],
+        code: z.ZodIssueCode.custom,
+        message: 'Password is required for new users',
+      });
+    }
+  });
 
 export type UserFormInput = z.infer<typeof userFormSchema>;
 
@@ -44,7 +45,7 @@ export default function CreateEditUser() {
 
   const methods = useForm<UserFormInput>({
     resolver: zodResolver(userFormSchema),
-    defaultValues: { id: undefined, email: '', password: '', role: '' }, // Add id to defaultValues
+    defaultValues: { id: undefined, email: '', password: '', role: '' },
   });
 
   useEffect(() => {
@@ -56,7 +57,12 @@ export default function CreateEditUser() {
       try {
         const data = await usersApiHandlers.getById(id);
         setUser(data);
-        methods.reset({ id: data.id, email: data.email, role: data.role }); // Set id in form data
+        methods.reset({
+          id: data.id,
+          email: data.email,
+          role: data.role,
+          password: '',
+        });
       } catch (error) {
         toast.error('Failed to load user');
       } finally {
@@ -64,31 +70,43 @@ export default function CreateEditUser() {
       }
     };
     fetchUser();
-  }, [id]);
+  }, [id, methods]);
 
   const onSubmit: SubmitHandler<UserFormInput> = async (data) => {
-    setLoading(true);
-    try {
-      if (id) {
-        const payload: UpdateUserRequest = { email: data.email, role: data.role };
-        await usersApiHandlers.update(id, payload);
-        toast.success('User updated successfully');
-      } else {
-        const payload: CreateUserRequest = {
-          email: data.email,
-          password: data.password ?? '',
-          role: data.role,
-        };
-        await usersApiHandlers.create(payload);
-        toast.success('User created successfully');
-      }
-      navigate(routes.dashboard.users);
-    } catch (error) {
-      toast.error('Error saving user');
-    } finally {
-      setLoading(false);
+  setLoading(true);
+  try {
+    if (id) {
+      // ✏️ EDIT USER
+      const payload: UpdateUserRequest = {
+        email: data.email,
+        role: data.role,
+      };
+      await usersApiHandlers.update(id, payload);
+      toast.success('User updated successfully');
+    } else {
+      // ➕ CREATE USER
+      const payload: CreateUserRequest = {
+        email: data.email,
+        password: data.password ?? '',
+        role: data.role,
+      };
+      await usersApiHandlers.create(payload);
+      toast.success('User created successfully');
     }
-  };
+
+    // 🌟 Biar efek spinner-nya kelihatan smooth
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    // ✅ Redirect ke halaman Users
+    navigate(routes.dashboard.users);
+  } catch (error) {
+    toast.error('Error saving user');
+  } finally {
+    // 🔁 Delay kecil agar transisi terasa natural
+    setTimeout(() => setLoading(false), 300);
+  }
+};
+
 
   if (fetching) {
     return <div className="p-6 text-gray-500">Loading user data...</div>;
@@ -108,7 +126,11 @@ export default function CreateEditUser() {
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb} />
 
       <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-8">
+        <form
+          onSubmit={methods.handleSubmit(onSubmit)}
+          className="space-y-8"
+          noValidate
+        >
           <UserSummary />
           <FormFooter
             isLoading={loading}

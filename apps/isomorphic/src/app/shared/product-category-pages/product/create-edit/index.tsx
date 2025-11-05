@@ -15,9 +15,10 @@ import productCategoriesApiHandlers, {
   ProductCategory,
   CreateProductCategoryInput,
   productCategoryFormSchema,
+  mapApiCategoryToFormInput, // Import the mapper function
 } from '@/kedaimaster-api-handlers/productCategoriesApiHandlers';
 import { useLayout } from '@/layouts/use-layout';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom'; // ✅ tambahkan navigate
 
 interface IndexProps {
   className?: string;
@@ -25,6 +26,7 @@ interface IndexProps {
 
 export default function CreateEditProductCategory({ className }: IndexProps) {
   const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate(); // ✅ inisialisasi navigate
   const { layout } = useLayout();
   const [isLoading, setLoading] = useState(false);
   const [productCategory, setProductCategory] = useState<ProductCategory | undefined>(undefined);
@@ -46,7 +48,7 @@ export default function CreateEditProductCategory({ className }: IndexProps) {
     },
   });
 
-  // Fetch existing product category if slug exists
+  // ✅ Fetch existing product category if slug exists
   useEffect(() => {
     async function fetchProductCategory() {
       if (!slug) {
@@ -54,13 +56,11 @@ export default function CreateEditProductCategory({ className }: IndexProps) {
         return;
       }
       try {
-        const data = await productCategoriesApiHandlers.getById(slug);
-        setProductCategory(data);
-
-        // reset the form with API data
-        methods.reset({
-          name: data.name,
-        });
+        const apiProductCategory = await productCategoriesApiHandlers.getById(slug);
+        setProductCategory(apiProductCategory);
+        if (apiProductCategory) {
+          methods.reset(mapApiCategoryToFormInput(apiProductCategory));
+        }
       } catch (error) {
         console.error('Failed to fetch product category:', error);
         toast.error(<Text as="b">Failed to load product category</Text>);
@@ -73,37 +73,39 @@ export default function CreateEditProductCategory({ className }: IndexProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
 
+  // ✅ Submit handler dengan efek spinner delay
   const onSubmit: SubmitHandler<CreateProductCategoryInput> = async (data) => {
     setLoading(true);
-
     try {
       let result;
+
       if (slug) {
+        // ✏️ UPDATE
         result = await productCategoriesApiHandlers.update(slug, data);
+        if (result) {
+          toast.success(<Text as="b">Product category successfully updated</Text>);
+        } else {
+          toast.error(<Text as="b">Failed to update product category</Text>);
+          setLoading(false);
+          return;
+        }
       } else {
+        // ➕ CREATE
         result = await productCategoriesApiHandlers.create(data);
+        if (result) {
+          toast.success(<Text as="b">Product category successfully created</Text>);
+        } else {
+          toast.error(<Text as="b">Failed to create product category</Text>);
+          setLoading(false);
+          return;
+        }
       }
 
-      if (result) {
-        setProductCategory(result);
+      // 🌀 Delay supaya spinner kelihatan mutar dulu
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-        // Reset form supaya image preview tetap konsisten
-        methods.reset({
-          name: result.name,
-        });
-
-        toast.success(
-          <Text as="b">
-            Product category successfully {slug ? 'updated' : 'created'}
-          </Text>
-        );
-      } else {
-        toast.error(
-          <Text as="b">
-            Failed to {slug ? 'update' : 'create'} product category
-          </Text>
-        );
-      }
+      // ✅ Redirect setelah spinner sempat muncul
+      navigate(routes.dashboard.productCategories);
     } catch (error) {
       console.error('Error during product category creation/update:', error);
       toast.error(<Text as="b">An error occurred</Text>);
@@ -133,7 +135,7 @@ export default function CreateEditProductCategory({ className }: IndexProps) {
               <ProductSummary className="" />
             </div>
             <div>
-              <ProductMedia className="pt-7 @2xl:pt-9 @3xl:pt-11"/>
+              <ProductMedia className="pt-7 @2xl:pt-9 @3xl:pt-11" />
             </div>
           </div>
 

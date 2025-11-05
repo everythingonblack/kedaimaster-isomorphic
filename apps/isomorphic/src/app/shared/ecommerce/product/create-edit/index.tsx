@@ -1,11 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-
 import { routes } from '@/config/routes';
-
 import PageHeader from '@/app/shared/page-header';
-
 import toast from 'react-hot-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
@@ -14,15 +11,16 @@ import cn from '@core/utils/class-names';
 import ProductSummary from '@/app/shared/ecommerce/product/create-edit/product-summary';
 import ProductMedia from '@/app/shared/ecommerce/product/create-edit/product-media';
 import FormFooter from '@core/components/form-footer';
-import { createProduct, updateProduct, fetchProductById } from '@/kedaimaster-api-handlers/productApiHandlers';
+import { createProduct, updateProduct, fetchProductById, deleteProduct } from '@/kedaimaster-api-handlers/productApiHandlers';
 import {
   CreateProductInput,
   productFormSchema,
 } from '@/kedaimaster-api-handlers/productApiHandlers';
 import { useLayout } from '@/layouts/use-layout';
 import { LAYOUT_OPTIONS } from '@/config/enums';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom'; // ✅ tambahkan useNavigate
 import productCategoriesApiHandlers from '@/kedaimaster-api-handlers/productCategoriesApiHandlers';
+import { fetchMaterials } from '@/kedaimaster-api-handlers/materialApiHandlers'; // Import fetchMaterials
 
 interface IndexProps {
   className?: string;
@@ -30,6 +28,7 @@ interface IndexProps {
 
 export default function CreateEditProduct({ className }: IndexProps) {
   const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate(); // ✅ inisialisasi navigate
   const { layout } = useLayout();
   const [isLoading, setLoading] = useState(false);
   const [product, setProduct] = useState<CreateProductInput | undefined>(undefined);
@@ -37,13 +36,16 @@ export default function CreateEditProduct({ className }: IndexProps) {
   const [categoryOptions, setCategoryOptions] = useState<
     { value: string; label: string }[]
   >([]);
+  const [materialOptions, setMaterialOptions] = useState< // Added materialOptions state
+    { value: string; label: string }[]
+  >([]);
 
   const pageHeader = {
-    title: 'Edit Produk',
+    title: slug ? 'Edit Produk' : 'Tambah Produk',
     breadcrumb: [
       { href: routes.dashboard.main, name: 'Dashboard' },
       { href: routes.dashboard.products, name: 'Produk' },
-      { name: `${product?.name}` },
+      { name: slug ? `${product?.name ?? 'Edit Produk'}` : 'Tambah Produk' },
     ],
   };
 
@@ -58,7 +60,7 @@ export default function CreateEditProduct({ className }: IndexProps) {
     },
   });
 
-  // Fetch categories for dropdown
+  // ✅ Fetch kategori
   useEffect(() => {
     async function fetchCategories() {
       try {
@@ -73,9 +75,23 @@ export default function CreateEditProduct({ className }: IndexProps) {
       }
     }
     fetchCategories();
+
+    async function fetchMaterialOptions() { // Fetch material options
+      try {
+        const materials = await fetchMaterials();
+        const options = materials.map((material: any) => ({
+          value: material.id,
+          label: material.name,
+        }));
+        setMaterialOptions(options);
+      } catch (error) {
+        console.error('Failed to fetch materials:', error);
+      }
+    }
+    fetchMaterialOptions();
   }, []);
 
-  // Fetch existing product if slug exists
+  // ✅ Fetch produk jika mode edit
   useEffect(() => {
     async function fetchProduct() {
       if (!slug) {
@@ -85,7 +101,7 @@ export default function CreateEditProduct({ className }: IndexProps) {
       try {
         const data = await fetchProductById(slug);
         setProduct(data);
-        methods.reset(data); // langsung reset dengan data dari API
+        methods.reset(data);
       } catch (error) {
         console.error('Failed to fetch product:', error);
         toast.error(<Text as="b">Failed to load product</Text>);
@@ -97,33 +113,65 @@ export default function CreateEditProduct({ className }: IndexProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
 
+  // ✅ Submit handler
   const onSubmit: SubmitHandler<CreateProductInput> = async (data) => {
-    setLoading(true);
-    try {
-      let result;
-      if (slug) {
-        result = await updateProduct(slug, data, product);
-      } else {
-        result = await createProduct(data);
-      }
+  setLoading(true);
+  try {
+    let result;
 
+    if (slug) {
+      // ✏️ UPDATE
+      result = await updateProduct(slug, data, product);
       if (result) {
-        // Update state product agar breadcrumb ikut berubah
-        setProduct(result);
-
-        toast.success(
-          <Text as="b">Product successfully {slug ? 'updated' : 'created'}</Text>
-        );
+        toast.success(<Text as="b">Product successfully updated</Text>);
       } else {
-        toast.error(<Text as="b">Failed to {slug ? 'update' : 'create'} product</Text>);
+        toast.error(<Text as="b">Failed to update product</Text>);
+        setLoading(false);
+        return;
       }
-    } catch (error) {
-      console.error('Error during product creation/update:', error);
-      toast.error(<Text as="b">An error occurred</Text>);
-    } finally {
-      setLoading(false);
+    } else {
+      // ➕ CREATE
+      result = await createProduct(data);
+      if (result) {
+        toast.success(<Text as="b">Product successfully created</Text>);
+      } else {
+        toast.error(<Text as="b">Failed to create product</Text>);
+        setLoading(false);
+        return;
+      }
     }
-  };
+
+   // 🌀 Delay supaya spinner kelihatan mutar dulu (1 detik)
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    // ✅ Redirect setelah spinner sempat muncul
+    navigate(routes.dashboard.products);
+  } catch (error) {
+    console.error('Error during product creation/update:', error);
+    toast.error(<Text as="b">An error occurred</Text>);
+  } finally {
+    setLoading(false);
+  }
+};
+
+// ✅ Delete handler (juga dengan efek spinner delay)
+const handleDeleteProduct = async () => {
+  if (!slug) return;
+  setLoading(true);
+  try {
+    await deleteProduct(slug);
+    toast.success(<Text as="b">Product successfully deleted</Text>);
+
+    // 🌀 Biar spinner kelihatan dulu sebelum redirect
+    navigate(routes.dashboard.products);
+  } catch (error) {
+    console.error('Error during product deletion:', error);
+    toast.error(<Text as="b">Failed to delete product</Text>);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   if (fetching) {
     return <div className="p-6 text-gray-500">Loading product data...</div>;
@@ -146,6 +194,7 @@ export default function CreateEditProduct({ className }: IndexProps) {
               <ProductSummary
                 className=""
                 categoryOptions={categoryOptions}
+                materialOptions={materialOptions} // Pass materialOptions
               />
             </div>
             <div>
@@ -156,6 +205,8 @@ export default function CreateEditProduct({ className }: IndexProps) {
           <FormFooter
             isLoading={isLoading}
             submitBtnText={slug ? 'Update Product' : 'Create Product'}
+            deleteBtn={!!slug}
+          
           />
         </form>
       </FormProvider>

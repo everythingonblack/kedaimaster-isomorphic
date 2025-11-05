@@ -1,5 +1,19 @@
 import { apiRequest } from './authApi.js';
 
+/**
+ * Helper function to convert a File object to a Base64 string.
+ * @param {File} file - The File object to convert.
+ * @returns {Promise<string>} A promise that resolves with the Base64 string.
+ */
+async function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+}
+
 // ===========================================
 // MATERIAL API
 // ===========================================
@@ -128,14 +142,14 @@ export async function createMaterial(data) {
  */
 export async function updateMaterial(id, data, imageFile) {
   if (!id || !data) throw new Error('Material ID and data are required');
-  const formData = new FormData();
-  for (const key in data) {
-    formData.append(key, data[key]);
-  }
+
+  const payload = { ...data };
+
   if (imageFile) {
-    formData.append('image', imageFile);
+    payload.image = await fileToBase64(imageFile);
   }
-  return apiRequest(`/api/v1/materials/${id}`, 'PUT', formData, true); // true for multipart/form-data
+
+  return apiRequest(`/api/v1/materials/${id}`, 'PUT', payload);
 }
 
 /**

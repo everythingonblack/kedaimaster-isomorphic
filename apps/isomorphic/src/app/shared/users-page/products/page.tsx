@@ -4,20 +4,18 @@ import { Link } from "react-router-dom";
 import {
   PiPlusBold,
   PiMagnifyingGlassBold,
-  PiPencilBold,
+  PiTrashBold,
 } from "react-icons/pi";
 import { routes } from "@/config/routes";
 import { Button } from "rizzui/button";
-import usersApiHandlers, {
-  User,
-} from "@/kedaimaster-api-handlers/usersApiHandlers";
+import usersApiHandlers, { User } from "@/kedaimaster-api-handlers/usersApiHandlers";
 import { useEffect } from "react";
 import PageHeader from "@/app/shared/page-header";
 import ExportButton from "@/app/shared/export-button";
 import { useTanStackTable } from "@core/components/table/custom/use-TanStack-Table";
 import Table from "@core/components/table";
 import TablePagination from "@core/components/table/pagination";
-import { Input, ActionIcon, Checkbox, Flex, Text, Tooltip } from "rizzui";
+import { Input, Checkbox, Flex, Text, Tooltip } from "rizzui";
 import WidgetCard from "@core/components/cards/widget-card";
 import cn from "@core/utils/class-names";
 import { createColumnHelper } from "@tanstack/react-table";
@@ -25,9 +23,7 @@ import DeletePopover from "@core/components/delete-popover";
 
 const columnHelper = createColumnHelper<User>();
 
-// ✅ Kolom tabel — Email, Role, Action
 const userListColumns = [
-  // Checkbox Select
   columnHelper.display({
     id: "select",
     size: 50,
@@ -51,7 +47,6 @@ const userListColumns = [
     ),
   }),
 
-  // Email Column
   columnHelper.accessor("email", {
     id: "email",
     size: 300,
@@ -62,7 +57,6 @@ const userListColumns = [
     ),
   }),
 
-  // Role Column
   columnHelper.accessor("role", {
     id: "role",
     size: 200,
@@ -73,7 +67,6 @@ const userListColumns = [
     ),
   }),
 
-  // Action Column
   columnHelper.display({
     id: "action",
     size: 120,
@@ -85,14 +78,15 @@ const userListColumns = [
     }) => (
       <Flex align="center" justify="center" gap="3" className="w-full h-full">
         <Tooltip size="sm" content={"Edit User"} placement="top" color="invert">
-          <Link to={routes.dashboard.editUser(row.original.id)}></Link>
+          <Link to={routes.dashboard.editUser(row.original.id)} />
         </Tooltip>
         <DeletePopover
-          title={`Delete User`}
-          description={`Are you sure you want to delete user ${row.original.email}?`}
-          onDelete={() =>
-            meta?.handleDeleteRow && meta?.handleDeleteRow(row.original)
-          }
+          title={`Delete the User`}
+          description={`Are you sure you want to delete user "${row.original.email}"?`}
+          onDelete={async () => {
+            await meta?.handleDeleteRow?.(row.original);
+            row.toggleSelected(false);
+          }}
         />
       </Flex>
     ),
@@ -102,7 +96,7 @@ const userListColumns = [
 const pageHeader = {
   title: "Users",
   breadcrumb: [
-    { href: routes.dashboard.main, name: "Dashboard" },
+    { href: routes.dashboard.main, name: "E-Commerce" },
     { href: routes.dashboard.users, name: "Users" },
     { name: "List" },
   ],
@@ -123,20 +117,18 @@ export default function UsersPage() {
             setData((prev) => prev.filter((r) => r.id !== row.id));
             const updatedUsers = await usersApiHandlers.getAll();
             setData(updatedUsers);
+            table.resetRowSelection(); // ✅ Reset selection setelah delete
           } catch (error) {
             console.error("Error deleting user:", error);
           }
         },
         handleMultipleDelete: async (rows: User[]) => {
           try {
-            await Promise.all(
-              rows.map((row) => usersApiHandlers.delete(row.id))
-            );
-            setData((prev) =>
-              prev.filter((r) => !rows.some((s) => s.id === r.id))
-            );
+            await Promise.all(rows.map((row) => usersApiHandlers.delete(row.id)));
+            setData((prev) => prev.filter((r) => !rows.some((s) => s.id === r.id)));
             const updatedUsers = await usersApiHandlers.getAll();
             setData(updatedUsers);
+            table.resetRowSelection(); // ✅ Clear selection setelah multiple delete
           } catch (error) {
             console.error("Error deleting multiple users:", error);
           }
@@ -158,29 +150,61 @@ export default function UsersPage() {
     getUsers();
   }, [setData]);
 
+  const selectedCount = table.getSelectedRowModel().rows.length;
+
   return (
     <>
       {/* ✅ Header */}
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb}>
-        <div className="mt-4 flex items-center gap-3 @lg:mt-0">
-          <ExportButton
-            data={table.getRowModel().rows.map((r) => r.original)}
-            fileName="user_data"
-            header="ID,Email,Role"
-          />
-          <Link to={routes.dashboard.createUser} className="w-full @lg:w-auto">
-            <Button
-              as="span"
-              className="w-full @lg:w-auto bg-[#2F7F7A] text-white hover:bg-[#276B67]"
-            >
-              <PiPlusBold className="me-1.5 h-[17px] w-[17px]" />
-              Add User
-            </Button>
-          </Link>
+        <div className="mt-4 flex flex-wrap items-center gap-3 @lg:mt-0">
+          {selectedCount > 0 ? (
+            <>
+              <Button
+                onClick={() =>
+                  table.options.meta?.handleMultipleDelete?.(
+                    table.getSelectedRowModel().rows.map((r) => r.original)
+                  )
+                }
+                className="flex items-center gap-2 bg-[#C7362B] hover:bg-[#A42C22] text-white transition-all duration-200"
+              >
+                <PiTrashBold className="h-4 w-4" />
+                Delete Selected ({selectedCount})
+              </Button>
+
+              {/* ✅ Tombol batal */}
+              <Button
+                variant="outline"
+                onClick={() => table.resetRowSelection()}
+                 className="flex items-center gap-2 bg-gray-300 hover:bg-gray-400 text-gray-800 transition-all duration-200"
+              >
+                Cancel Selection 
+              </Button>
+            </>
+          ) : (
+            <>
+              <ExportButton
+                data={table.getRowModel().rows.map((r) => r.original)}
+                fileName="user_data"
+                header="ID,Email,Role"
+              />
+              <Link
+                to={routes.dashboard.createUser}
+                className="w-full @lg:w-auto"
+              >
+                <Button
+                  as="span"
+                  className="w-full @lg:w-auto bg-[#2F7F7A] text-white hover:bg-[#276B67]"
+                >
+                  <PiPlusBold className="me-1.5 h-[17px] w-[17px]" />
+                  Add User
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
       </PageHeader>
 
-      {/* ✅ Tabel dengan style kayak Excel */}
+      {/* ✅ Tabel */}
       <WidgetCard
         title="User List"
         className={cn("p-0 lg:p-0")}
@@ -199,7 +223,6 @@ export default function UsersPage() {
           />
         }
       >
-        {/* ✅ Wrapper Excel Style */}
         <div className="overflow-x-auto border border-gray-300 rounded-md shadow-sm">
           <Table
             table={table}
@@ -215,7 +238,6 @@ export default function UsersPage() {
           />
         </div>
 
-        {/* ✅ Pagination */}
         <TablePagination table={table} className="p-4" />
       </WidgetCard>
     </>

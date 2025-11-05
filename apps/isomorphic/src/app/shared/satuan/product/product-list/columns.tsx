@@ -136,7 +136,7 @@ export const uomListColumns = [
           </Link>
         </Tooltip>
         <DeletePopover
-          title={`Delete Satuan`}
+          title={`Delete the Satuan`}
           description={`Are you sure you want to delete "${row.original.name}"?`}
           onDelete={() =>
             meta?.handleDeleteRow && meta?.handleDeleteRow(row.original)

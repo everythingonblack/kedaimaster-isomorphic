@@ -41,7 +41,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ show, onClose, initialMode }) => 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState(''); // New state for password confirmation
+  const [passwordConfirm, setPasswordConfirm] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
@@ -53,7 +53,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ show, onClose, initialMode }) => 
     setEmail('');
     setPassword('');
     setName('');
-    setPasswordConfirm(''); // Reset passwordConfirm
+    setPasswordConfirm('');
   }, [show, initialMode]);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -158,6 +158,22 @@ const AuthModal: React.FC<AuthModalProps> = ({ show, onClose, initialMode }) => 
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+          {!isLoginMode && (
+            <div className="mb-6">
+              <label className="block text-slate-700 text-sm font-bold mb-2" htmlFor="passwordConfirm">
+                Konfirmasi Password
+              </label>
+              <input
+                className="shadow-sm appearance-none border rounded-md w-full py-2 px-3 text-slate-700 mb-3 leading-tight focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                id="passwordConfirm"
+                type="password"
+                placeholder="******************"
+                value={passwordConfirm}
+                onChange={(e) => setPasswordConfirm(e.target.value)}
+                required
+              />
+            </div>
+          )}
           </div>
           <div className="flex items-center justify-between flex-col">
             <button
@@ -798,60 +814,126 @@ const KedaiMasterPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {/* Fitur 1 */}
               <div className="bg-slate-50 p-6 rounded-lg">
-                <h3 className="font-semibold text-lg">
-                  Manajemen Tenan & Kasir
-                </h3>
+                <h3 className="font-semibold text-lg">AI Asisten Pelanggan</h3>
                 <p className="mt-2 text-sm text-slate-600">
-                  Kelola banyak tenan secara mandiri dengan mudah dan fleksibel.
+                  Dengan AI Asisten Pelanggan dari Kedai Master, layanan Anda
+                  jadi lebih cepat, responsif, dan personal otomatis melayani
+                  pelanggan 24 jam melalui chat maupun suara. Hasilnya, kepuasan
+                  meningkat, loyalitas tumbuh, dan bisnis Anda makin unggul!
                 </p>
               </div>
               {/* Fitur 2 */}
               <div className="bg-slate-50 p-6 rounded-lg">
                 <h3 className="font-semibold text-lg">
-                  Pesan Langsung dari Meja
+                  AI Prediksi Inventaris
                 </h3>
                 <p className="mt-2 text-sm text-slate-600">
-                  Pelanggan bisa memesan dari mana saja dengan memindai kode QR
-                  unik di setiap meja.
+                  Dengan AI Inventory Prediction dari Kedai Master, Anda bisa
+                  mengelola stok dengan cerdas tanpa takut kehabisan atau
+                  kelebihan barang. Berkat analisis data dan machine learning,
+                  sistem ini memperkirakan produk yang paling laku, waktu
+                  terbaik restock, dan jumlah idealnya secara otomatis!
                 </p>
               </div>
               {/* Fitur 3 */}
               <div className="bg-slate-50 p-6 rounded-lg">
-                <h3 className="font-semibold text-lg">
-                  Pembayaran QRIS Terintegrasi
-                </h3>
+                <h3 className="font-semibold text-lg">AI Agen Pemasaran</h3>
                 <p className="mt-2 text-sm text-slate-600">
-                  Semua transaksi langsung masuk ke rekening Anda.
+                  Dengan AI Marketing Agent dari Kedai Master, promosi bisnis
+                  jadi lebih mudah dan efisien! Sistem AI ini secara otomatis
+                  membuat konten visual, caption, hingga video pendek, lalu
+                  mempostingnya langsung ke media sosial Anda. Strategi
+                  pemasaran jadi cepat, konsisten, dan selalu menarik perhatian
+                  pelanggan!
                 </p>
               </div>
               {/* Fitur 4 */}
               <div className="bg-slate-50 p-6 rounded-lg">
-                <h3 className="font-semibold text-lg">
-                  Laporan & Analisa Otomatis
-                </h3>
+                <h3 className="font-semibold text-lg">AI Penasihat Bisnis</h3>
                 <p className="mt-2 text-sm text-slate-600">
-                  Laporan penjualan dapat diakses dengan lacakan akurat yang
-                  didukung visual menarik.
+                  Dengan AI Penasihat Bisnis dari Kedai Master, Anda memiliki
+                  konsultan digital pribadi yang siap memberi analisis, saran,
+                  dan strategi otomatis berbasis data. Ambil keputusan lebih
+                  cepat, akurat, dan cerdas dengan insight real-time dari
+                  kecerdasan buatan yang selalu siap membantu kapan pun Anda
+                  butuh!
                 </p>
               </div>
               {/* Fitur 5 */}
               <div className="bg-slate-50 p-6 rounded-lg">
                 <h3 className="font-semibold text-lg">
-                  Otomatisasi Pesanan Tak Terpikirkan
+                  Laporan & Analisis Otomatis
                 </h3>
                 <p className="mt-2 text-sm text-slate-600">
-                  Dapur menerima pesanan saat pelanggan selesai memesan,
-                  mempercepat laju di kafe Anda secara otomatis.
+                  Dengan Laporan & Analisis Otomatis dari Kedai Master, semua
+                  data bisnis diolah otomatis oleh AI, memberi Anda hasil cepat,
+                  akurat, dan efisien tanpa repot, tanpa salah, langsung bantu
+                  tingkatkan profit!
                 </p>
               </div>
               {/* Fitur 6 */}
               <div className="bg-slate-50 p-6 rounded-lg">
                 <h3 className="font-semibold text-lg">
-                  Manajemen Inventaris & Bahan
+                  Manajemen Stok & Bahan
                 </h3>
                 <p className="mt-2 text-sm text-slate-600">
-                  Kontrol inventaris dan bahan baku secara real-time untuk
-                  menghindari kehabisan stok.
+                  Manajemen Stok & Bahan dari Kedai Master memastikan
+                  ketersediaan barang selalu tepat waktu dan sesuai kebutuhan
+                  tanpa kelebihan, tanpa kekurangan, semuanya otomatis
+                  terkontrol!
+                </p>
+              </div>
+              {/* Fitur 6 */}
+              <div className="bg-slate-50 p-6 rounded-lg">
+                <h3 className="font-semibold text-lg">
+                  Manajemen Tenant & Kasir
+                </h3>
+                <p className="mt-2 text-sm text-slate-600">
+                  Dengan Tenant & Kasir Manajemen dari Kedai Master, semua data,
+                  kontrak, tagihan, hingga penjualan setiap tenant terhubung
+                  otomatis dalam satu sistem. Satu dashboard utama untuk kontrol
+                  penuh bisnis Anda real-time, transparan, dan efisien!
+                </p>
+              </div>
+              {/* Fitur 6 */}
+              <div className="bg-slate-50 p-6 rounded-lg">
+                <h3 className="font-semibold text-lg">
+                  Pembayaran QRIS Terintegras
+                </h3>
+                <p className="mt-2 text-sm text-slate-600">
+                  Dengan Integrated QRIS Payment dari Kedai Master, setiap
+                  transaksi langsung tercatat otomatis di sistem kasir, laporan
+                  keuangan, dan dashboard bisnis tanpa input manual. Pembayaran
+                  jadi lebih cepat, akurat, dan efisien bebas pajak, langsung
+                  masuk ke rekening Anda secara real-time!
+                </p>
+              </div>
+              {/* Fitur 6 */}
+              <div className="bg-slate-50 p-6 rounded-lg">
+                <h3 className="font-semibold text-lg">
+                  Ciptakan Momen Tak Terlupakan
+                </h3>
+                <p className="mt-2 text-sm text-slate-600">
+                  Dengan Ciptakan Momen Tak Terlupakan dari Kedai Master, setiap
+                  interaksi pelanggan diubah menjadi pengalaman emosional yang
+                  berkesan. Bukan sekadar layanan, tapi kenangan positif yang
+                  membuat mereka ingin kembali lagi dan merekomendasikan bisnis
+                  Anda ke orang lain!
+                </p>
+              </div>
+              
+              <div className="bg-slate-50 p-6 rounded-lg">
+                <h3 className="font-semibold text-lg">
+                  Pesan Langsung di Meja
+                </h3>
+                <p className="mt-2 text-sm text-slate-600">
+                  Kedai Master ini memudahkan pengunjung kafe untuk memesan
+                  langsung dari meja hanya dengan scan QR. Tanpa perlu menunggu
+                  pelayan, pelanggan bisa melihat menu, memilih makanan atau
+                  minuman, memanfaatkan promo, dan langsung melakukan pemesanan
+                  secara instan. Semua transaksi tercatat otomatis di sistem
+                  kasir, menjadikan pengalaman makan lebih cepat, nyaman, dan
+                  efisien bagi pelanggan maupun pihak kafe!
                 </p>
               </div>
             </div>

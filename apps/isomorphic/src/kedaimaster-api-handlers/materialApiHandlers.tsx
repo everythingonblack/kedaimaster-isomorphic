@@ -6,7 +6,7 @@ import { fileSchema } from '@/validators/common-rules';
 /**
  * Tipe data material mentah dari API (sebelum dimapping ke UI)
  */
-type ApiMaterial = {
+export type ApiMaterial = {
   id: string;
   name: string;
   remarks?: string;
@@ -155,12 +155,22 @@ export async function fetchMaterialById(id: string): Promise<CreateMaterialInput
  */
 export async function createMaterial(data: CreateMaterialInput) {
   try {
-    const payload: any = { name: data.name, uomId: data.categoryId };
+    const payload: any = {
+      name: data.name,
+      uomId: data.categoryId,
+      price: data.price,
+    };
     if (data.remarks !== undefined) payload.remarks = data.remarks;
-    if (data.image?.raw) {
-      payload.image = data.image.raw; // Assuming API can handle raw file upload
+
+    // Create the material without initial stock
+    const newMaterial = await materialsApi.createMaterial(payload) as ApiMaterial;
+
+    // If stock is provided, call stockInMaterial
+    if (newMaterial?.id && data.stock && data.stock > 0) {
+      await materialsApi.stockInMaterial(newMaterial.id, data.stock, data.price);
     }
-    return await materialsApi.createMaterial(payload);
+
+    return newMaterial;
   } catch (error) {
     console.error('❌ Failed to create material:', error);
     throw error;
@@ -220,6 +230,8 @@ export async function updateMaterial(id: string, data: CreateMaterialInput, oldD
   console.log(oldData)
   payload.name = data.name;
   payload.uomId = data.categoryId;
+  payload.price = data.price; // Add price to payload
+  payload.stock = data.stock; // Add stock to payload
 
   let result = null;
   if (Object.keys(payload).length > 0 || data.image?.raw) {

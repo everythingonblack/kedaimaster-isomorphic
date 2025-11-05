@@ -1,9 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-
 import { routes } from '@/config/routes';
-
 import toast from 'react-hot-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
@@ -11,13 +9,16 @@ import { Text } from 'rizzui';
 import cn from '@core/utils/class-names';
 import UomSummary from '@/app/shared/satuan/product/create-edit/product-summary';
 import FormFooter from '@core/components/form-footer';
-import uomApiHandlers, { CreateUomRequest, Uom } from '@/kedaimaster-api-handlers/uomApiHandlers';
+import uomApiHandlers, {
+  CreateUomRequest,
+  UpdateUomRequest,
+  Uom,
+} from '@/kedaimaster-api-handlers/uomApiHandlers';
 import { z } from 'zod';
 import { useLayout } from '@/layouts/use-layout';
-import { LAYOUT_OPTIONS } from '@/config/enums';
 import { useParams, useNavigate } from 'react-router-dom';
 
-// Define UOM Form Schema
+// ✅ Schema
 const uomFormSchema = z.object({
   name: z.string().min(1, { message: 'Name is required' }),
   remarks: z.string().optional(),
@@ -32,8 +33,8 @@ export default function CreateEditUom({ className }: IndexProps) {
   const navigate = useNavigate();
   const { layout } = useLayout();
   const [isLoading, setLoading] = useState(false);
-  const [uom, setUom] = useState<Uom | undefined>(undefined);
   const [fetching, setFetching] = useState(true);
+  const [uom, setUom] = useState<Uom | null>(null);
 
   const methods = useForm<CreateUomRequest>({
     resolver: zodResolver(uomFormSchema),
@@ -43,56 +44,57 @@ export default function CreateEditUom({ className }: IndexProps) {
     },
   });
 
-  // Fetch existing UOM if slug exists
+  // ✅ Fetch existing data (Edit mode)
   useEffect(() => {
     async function fetchUom() {
       if (!slug) {
         setFetching(false);
         return;
       }
+
       try {
         const data = await uomApiHandlers.getById(slug);
         setUom(data);
-        methods.reset(data);
+        methods.reset({
+          name: data.name,
+          remarks: data.remarks || '',
+        });
       } catch (error) {
         console.error('Failed to fetch UOM:', error);
-        toast.error(<Text as="b">Failed to load UOM</Text>);
+        toast.error(<Text as="b">Failed to load Satuan</Text>);
       } finally {
         setFetching(false);
       }
     }
-    fetchUom();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slug]);
 
+    fetchUom();
+  }, [slug, methods]);
+
+  // ✅ Handle submit
   const onSubmit: SubmitHandler<CreateUomRequest> = async (data) => {
     setLoading(true);
     try {
-      let result;
       if (slug) {
-        result = await uomApiHandlers.update(slug, data);
+        // ✏️ UPDATE
+        const payload: UpdateUomRequest = { ...data };
+        await uomApiHandlers.update(slug, payload);
+        toast.success(<Text as="b">Satuan updated successfully</Text>);
       } else {
-        result = await uomApiHandlers.create(data);
+        // ➕ CREATE
+        const result = await uomApiHandlers.create(data);
+        if (result) {
+          toast.success(<Text as="b">Satuan created successfully</Text>);
+        }
       }
 
-      if (result) {
-        setUom(result);
-        toast.success(
-          <Text as="b">Satuan successfully {slug ? 'updated' : 'created'}</Text>
-        );
-        
-        // Redirect to detail page after create to show proper breadcrumb
-        if (!slug && result.id) {
-          setTimeout(() => {
-            navigate(routes.dashboard.editUom(result.id));
-          }, 1000);
-        }
-      } else {
-        toast.error(<Text as="b">Failed to {slug ? 'update' : 'create'} satuan</Text>);
-      }
+      // 🌀 Tambahkan sedikit delay supaya spinner terlihat mutar dulu
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // ✅ Redirect ke halaman daftar UOM
+      navigate(routes.dashboard.uoms);
     } catch (error) {
-      console.error('Error during UOM creation/update:', error);
-      toast.error(<Text as="b">An error occurred</Text>);
+      console.error('Error during create/update UOM:', error);
+      toast.error(<Text as="b">Failed to save Satuan</Text>);
     } finally {
       setLoading(false);
     }
@@ -111,12 +113,11 @@ export default function CreateEditUom({ className }: IndexProps) {
             'relative z-[19] [&_label.block>span]:font-medium',
             className
           )}
+          noValidate
         >
           <div className="mb-10 grid gap-7 divide-y divide-dashed divide-gray-200 @2xl:gap-9 @3xl:gap-11">
             <div>
-              <UomSummary
-                className=""
-              />
+              <UomSummary className="" />
             </div>
           </div>
 

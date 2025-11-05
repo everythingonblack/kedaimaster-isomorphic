@@ -61,6 +61,17 @@ export const productsListColumns = [
     ),
   }),
 
+   // ✅ Material
+  columnHelper.accessor('material', {
+    id: 'material',
+    size: 150,
+    header: 'Material',
+    enableSorting: false,
+    cell: ({ row }) => (
+      <Text className="font-medium text-gray-700">{row.original.material}</Text>
+    ),
+  }),
+
   // ✅ Stock column — pakai ikon ↑↓
   columnHelper.accessor('stock', {
     id: 'stock',
@@ -174,7 +185,7 @@ columnHelper.accessor('createdOn', {
   </Tooltip>
   <DeletePopover
     title={`Delete the product`}
-    description={`Are you sure you want to delete this #${row.original.id} product?`}
+    description={`Are you sure you want to delete "${row.original.name}"?`}
     onDelete={() =>
       meta?.handleDeleteRow && meta?.handleDeleteRow(row.original)
     }
