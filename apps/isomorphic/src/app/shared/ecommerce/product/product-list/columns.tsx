@@ -72,21 +72,6 @@ export const productsListColumns = [
     ),
   }),
 
-  // ✅ Stock column — pakai ikon ↑↓
-  columnHelper.accessor('stock', {
-    id: 'stock',
-    size: 200,
-    header: ({ column }) => (
-      <div
-        className="flex items-center justify-center gap-1 cursor-pointer select-none"
-        onClick={column.getToggleSortingHandler()}
-      >
-        <span className="font-medium">Stock</span>
-      </div>
-    ),
-    cell: ({ row }) => getStockStatus(row.original.stock),
-  }),
-
   // ✅ Price column — pakai ikon ↑↓
   columnHelper.accessor('price', {
     id: 'price',
