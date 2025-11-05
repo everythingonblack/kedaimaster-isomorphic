@@ -10,11 +10,15 @@ import CartFAB from './CartFAB';
 import DeleteModal from './DeleteModal';
 import MusicPlayer from './MusicPlayer';
 
+import { getAllProductCategories } from '../kedaimaster-api/productCategoriesApi.js';
+
 const App = () => {
   const [cart, setCart] = useState({});
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
   const [menuItemsData, setMenuItemsData] = useState([]);
+  const [categoryItemsData, setCategoryItemsData] = useState([]);
+  const [activeCategory, setActiveCategory] = useState('semua');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -22,6 +26,7 @@ const App = () => {
     const fetchProducts = async () => {
       try {
         const products = await getAllProducts();
+        const categories = await getAllProductCategories();
 
         // --- Kelompokkan produk berdasarkan category.id ---
         const groupedProducts = products.reduce((acc, product) => {
@@ -50,6 +55,7 @@ const App = () => {
 
         // Ubah ke array agar mudah di-render
         setMenuItemsData(Object.values(groupedProducts));
+        setCategoryItemsData(categories);
       } catch (err) {
         setError(err);
       } finally {
@@ -130,13 +136,18 @@ const App = () => {
         <Header />
         <main className={styles.mainContent}>
           <MusicPlayer />
-          <Categories />
+          <Categories
+            categories={categoryItemsData}
+            activeCategory={activeCategory}
+            setActiveCategory={setActiveCategory}
+          />
           <MenuList
             menuItems={menuItemsData}
             cart={cart}
             onAddToCart={handleAddToCart}
             onIncreaseQuantity={handleIncreaseQuantity}
             onDecreaseQuantity={handleDecreaseQuantity}
+            activeCategory={activeCategory}
           />
 
           <div className="

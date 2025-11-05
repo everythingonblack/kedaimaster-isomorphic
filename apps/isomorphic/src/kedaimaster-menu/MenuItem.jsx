@@ -6,7 +6,7 @@ const MenuItem = ({ item, cartItem, onAddToCart, onIncreaseQuantity, onDecreaseQ
   return (
     <div className={styles.menuItem} key={item.id}>
       <div className={styles.menuItemContent}>
-        <img src={item.image || 'https://i.ibb.co.com/fVtH4YhH/Gemini-Generated-Image-g164fkg164fkg164-1.png'} alt={item.name} />
+        <img src={item.image || '/kedaimaster-assets/noImage.png'} alt={item.name} />
         <div className={styles.menuItemDetails}>
           <h3>{item.name}</h3>
           <p className={styles.menuItemPrice}>Rp {item.price.toLocaleString('id-ID')}</p>

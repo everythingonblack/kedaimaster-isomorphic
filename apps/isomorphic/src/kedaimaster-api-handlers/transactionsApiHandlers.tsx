@@ -4,7 +4,7 @@ import { createTransaction, getTransactionById, getTransactionsByDateRange } fro
 
 // Define the types based on the transactionsApi.js
 export type TransactionItem = { productId: string; qty: number; unitPrice: number; };
-export type CreateTransactionRequest = { deviceTime: string; paymentType: string; servingType: string; orderType: string; notes?: string; customerName?: string; customerPhone?: string; items: TransactionItem[]; };
+export type CreateTransactionRequest = { deviceTime: string; paymentType: string; servingType: string; notes?: string; customerName?: string; customerPhone?: string; items: TransactionItem[]; };
 export type Transaction = { id: string; deviceTime: string; paymentType: string; servingType: string; notes?: string; customerName?: string; customerPhone?: string; items: TransactionItem[]; };
 
 const transactionsApiHandlers = {

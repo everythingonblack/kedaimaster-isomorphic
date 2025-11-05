@@ -54,7 +54,7 @@ function App() {
       <Routes>
         {/* Halaman tanpa layout */}
         <Route path="/" element={<LandingPage />} />
-        <Route path="/menu" element={<MenuPage />} /> {/* ✅ Standalone */}
+        <Route path="/ff1f9a4d-2876-44b1-8e57-7c6a5d425755/menu" element={<MenuPage />} /> {/* ✅ Standalone */}
 
         {/* Halaman dengan layout */}
         <Route element={<HydrogenLayout setDate={handleSetDate} />}>

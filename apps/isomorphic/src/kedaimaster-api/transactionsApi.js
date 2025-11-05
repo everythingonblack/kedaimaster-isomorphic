@@ -10,7 +10,6 @@ import { apiRequest } from './authApi.js';
  * @param {string} transactionData.deviceTime - Waktu device, ISO string
  * @param {string} transactionData.paymentType - Tipe pembayaran (e.g. "CASH")
  * @param {string} transactionData.servingType - Tipe layanan (e.g. "PICKUP")
- * @param {string} transactionData.orderType - Tipe layanan (e.g. "DINE_IN")
  * @param {string} [transactionData.notes] - Catatan
  * @param {string} [transactionData.customerName] - Nama customer
  * @param {string} [transactionData.customerPhone] - Telepon customer
@@ -86,6 +85,10 @@ export async function getTransactionById(id) {
   return apiRequest(`/api/v1/transactions/${id}`, 'GET');
 }
 
+export async function cancelTransactionById(id) {
+  if (!id) throw new Error('Transaction ID is required');
+  return apiRequest(`/api/v1/transactions/${id}/cancel`, 'PUT');
+}
 /**
  * GET: Ambil transaksi berdasarkan rentang tanggal
  * @param {string} startDate - Tanggal mulai, format string
