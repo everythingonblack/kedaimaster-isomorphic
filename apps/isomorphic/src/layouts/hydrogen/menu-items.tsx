@@ -8,6 +8,7 @@ import {
   PiSquaresFourDuotone,
   PiUserDuotone,
   PiAndroidLogoDuotone,
+  PiDoorOpenDuotone,
 } from 'react-icons/pi';
 
 // Note: do not add href in the label object, it is rendering as label
@@ -71,6 +72,11 @@ export const menuItems = [
 ];
 
 export const bottomMenuItems = [
+  {
+    name: 'Kunjungi Menu Utama',
+    href: '#', // You might want to change this to an actual link for the cafe
+    icon: <PiDoorOpenDuotone />,
+  },
   {
     name: 'Download Aplikasi',
     href: 'https://download.kedaimaster.apps.kediritechnopark.com/', // You might want to change this to an actual download link

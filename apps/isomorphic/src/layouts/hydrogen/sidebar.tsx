@@ -40,13 +40,13 @@ export default function Sidebar({ className }: { className?: string }) {
                 <Link
                   to={item.href}
                   className={cn(
-                    'group relative mx-3 my-0.5 flex items-center justify-between rounded-md px-3 py-2 font-medium capitalize lg:my-1 2xl:mx-5 2xl:my-2',
+                    'group relative mx-0 my-0.5 flex items-center rounded-md px-0 py-2 font-medium capitalize lg:my-1 2xl:mx-0 2xl:my-2',
                     isActive
                       ? 'before:top-2/5 text-primary before:absolute before:-start-3 before:block before:h-4/5 before:w-1 before:rounded-ee-md before:rounded-se-md before:bg-primary 2xl:before:-start-5'
                       : 'text-gray-700 transition-colors duration-200 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-700/90'
                   )}
                 >
-                  <div className="flex items-center truncate">
+                  <div className="flex items-center">
                     {item?.icon && (
                       <span
                         className={cn(
@@ -59,14 +59,14 @@ export default function Sidebar({ className }: { className?: string }) {
                         {item.icon}
                       </span>
                     )}
-                    <span className="truncate">{item.name}</span>
+                    <span>{item.name}</span>
                   </div>
                 </Link>
               ) : (
                 <Title
                   as="h6"
                   className={cn(
-                    'mb-2 truncate px-6 text-xs font-normal uppercase tracking-widest text-gray-500 2xl:px-8',
+                    'mb-2 px-6 text-xs font-normal uppercase tracking-widest text-gray-500 2xl:px-8',
                     index !== 0 && 'mt-6 3xl:mt-7'
                   )}
                 >
