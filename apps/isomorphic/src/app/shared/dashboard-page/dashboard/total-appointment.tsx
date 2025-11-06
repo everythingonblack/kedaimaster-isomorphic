@@ -12,7 +12,6 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-
 import DropdownAction from '@core/components/charts/dropdown-action';
 import TrendingUpIcon from '@core/components/icons/trending-up';
 import cn from '@core/utils/class-names';
@@ -20,44 +19,41 @@ import { formatNumber } from '@core/utils/format-number';
 import { useTheme } from '@core/utils/next-themes';
 import { Title } from 'rizzui';
 
-const data = [
-  {
-    label: 'Senin',
-    MingguLalu: 806,
-    MingguIni: 584,
-  },
-  {
-    label: 'Selasa',
-    MingguLalu: 740,
-    MingguIni: 923,
-  },
-  {
-    label: 'Rabu',
-    MingguLalu: 627,
-    MingguIni: 784,
-  },
-  {
-    label: 'Kamis',
-    MingguLalu: 915,
-    MingguIni: 759,
-  },
-  {
-    label: 'Jumat',
-    MingguLalu: 850,
-    MingguIni: 923,
-  },
+interface IncomeData {
+  date: string;
+  income: number;
+}
 
-  {
-    label: 'Sabtu',
-    MingguLalu: 703,
-    MingguIni: 587,
-  },
-  {
-    label: 'Minggu',
-    MingguLalu: 923,
-    MingguIni: 805,
-  },
-];
+interface TotalAppointmentProps {
+  className?: string;
+  currentWeekIncome: IncomeData[];
+  previousWeekIncome: IncomeData[];
+}
+
+// 📅 Helper: generate 7 hari (Senin–Minggu) minggu ini dari date now
+const getCurrentWeekDates = (): string[] => {
+  const today = new Date();
+  const currentDay = today.getDay(); // Minggu = 0, Senin = 1
+  const weekStart = new Date(today);
+  weekStart.setDate(today.getDate() - ((currentDay + 6) % 7)); // Set ke Senin
+
+  const weekDates = [];
+  for (let i = 0; i < 7; i++) {
+    const date = new Date(weekStart);
+    date.setDate(weekStart.getDate() + i);
+    weekDates.push(date.toISOString().split('T')[0]);
+  }
+  return weekDates;
+};
+
+// 🧩 Isi array sampai 7 hari
+const fillToSevenDays = (arr: number[], defaultValue: number = 0): number[] => {
+  const filled: number[] = [];
+  for (let i = 0; i < 7; i++) {
+    filled.push(arr[i] ?? defaultValue);
+  }
+  return filled;
+};
 
 const appointmentLegend = [{ name: 'Minggu Lalu' }, { name: 'Minggu Ini' }];
 
@@ -66,32 +62,59 @@ interface ColorMap {
   light: string;
   [key: string]: string;
 }
+
 const COLORS: ColorMap[] = [
   { dark: '#2B7F75', light: '#2B7F75' },
   { dark: '#FFD66B', light: '#FFD66B' },
 ];
 
-const viewOptions = [
-  {
-    value: 'Daily',
-    label: 'Daily',
-  },
-  {
-    value: 'Monthly',
-    label: 'Monthly',
-  },
-];
-
 export default function TotalAppointment({
   className,
-}: {
-  className?: string;
-}) {
+  currentWeekIncome: initialCurrentWeekIncome,
+  previousWeekIncome: initialPreviousWeekIncome,
+}: TotalAppointmentProps) {
   const { theme } = useTheme();
 
-  function handleChange(viewType: string) {
-    console.log('viewType', viewType);
-  }
+  // Ambil minggu berjalan (7 hari, dari Senin ke Minggu)
+  const currentWeekDates = getCurrentWeekDates();
+
+  // Map income ke tanggal (biar cocok urutan harinya)
+  const mapIncomeToWeek = (data: IncomeData[]): number[] => {
+    const dateMap: Record<string, number> = {};
+    data.forEach((item) => {
+      const key = item.date.split('T')[0];
+      dateMap[key] = item.income;
+    });
+
+    return currentWeekDates.map((d) => dateMap[d] ?? 0);
+  };
+
+  const currentWeekIncome = fillToSevenDays(mapIncomeToWeek(initialCurrentWeekIncome));
+  const previousWeekIncome = fillToSevenDays(mapIncomeToWeek(initialPreviousWeekIncome));
+
+  // Gabungkan data untuk chart
+  const processedData = currentWeekIncome.map((current, index) => {
+    const previous = previousWeekIncome[index];
+    const dayName = new Date(currentWeekDates[index]).toLocaleDateString('id-ID', {
+      weekday: 'long',
+    });
+    const minHeight = 0; // biar kelihatan kalau 0
+    return {
+      label: dayName,
+      MingguLalu: previous || minHeight,
+      MingguIni: current || minHeight,
+    };
+  });
+
+  const totalCurrentWeekIncome = currentWeekIncome.reduce((sum, item) => sum + item, 0);
+  const totalPreviousWeekIncome = previousWeekIncome.reduce((sum, item) => sum + item, 0);
+
+  const incomeGrowth =
+    totalPreviousWeekIncome === 0
+      ? totalCurrentWeekIncome > 0
+        ? 100
+        : 0
+      : ((totalCurrentWeekIncome - totalPreviousWeekIncome) / totalPreviousWeekIncome) * 100;
 
   return (
     <WidgetCard
@@ -101,49 +124,48 @@ export default function TotalAppointment({
       action={
         <div className="flex items-center gap-5">
           <CustomLegend className="hidden @[28rem]:mt-0 @[28rem]:inline-flex" />
-          {/* <DropdownAction
-            className="rounded-md border"
-            options={viewOptions}
-            onChange={handleChange}
-          /> */}
         </div>
       }
       className={cn('min-h-[20rem] @container', className)}
     >
       <div className="mb-4 mt-1 flex items-center gap-2">
         <Title as="h2" className="font-inter font-bold">
-          2834
+          {formatNumber(totalCurrentWeekIncome)}
         </Title>
-        <span className="flex items-center gap-1 text-green-dark">
-          <TrendingUpIcon className="h-auto w-5" />
-          <span className="font-semibold leading-none"> +28.00%</span>
+        <span
+          className={`flex items-center gap-1 ${
+            incomeGrowth >= 0 ? 'text-green-dark' : 'text-red-dark'
+          }`}
+        >
+          {incomeGrowth >= 0 ? (
+            <TrendingUpIcon className="h-auto w-5" />
+          ) : (
+            <TrendingUpIcon className="h-auto w-5 rotate-180" />
+          )}
+          <span className="font-semibold leading-none"> {incomeGrowth.toFixed(2)}%</span>
         </span>
       </div>
+
       <CustomLegend className="mb-4 mt-0 inline-flex @[28rem]:hidden" />
+
       <div className="custom-scrollbar -mb-3 overflow-x-auto pb-3">
         <div className="h-[18rem] w-full pt-1">
           <ResponsiveContainer width="100%" height="100%" minWidth={800}>
             <ComposedChart
               barGap={8}
-              data={data}
-              margin={{
-                left: -15,
-                top: 20,
-              }}
+              data={processedData}
+              margin={{ left: -15, top: 20 }}
               className="[&_.recharts-tooltip-cursor]:fill-opacity-20 dark:[&_.recharts-tooltip-cursor]:fill-opacity-10 [&_.recharts-cartesian-axis-tick-value]:fill-gray-500 rtl:[&_.recharts-cartesian-axis.yAxis]:-translate-x-12 [&_.recharts-xAxis.xAxis]:translate-y-2.5 [&_path.recharts-rectangle]:!stroke-none"
             >
-              <CartesianGrid
-                vertical={false}
-                strokeOpacity={0.435}
-                strokeDasharray="8 10"
-              />
+              <CartesianGrid vertical={false} strokeOpacity={0.435} strokeDasharray="8 10" />
               <XAxis dataKey="label" axisLine={false} tickLine={false} />
               <YAxis
                 axisLine={false}
                 tickLine={false}
-                tickFormatter={(label) => label}
+                tickFormatter={(label) => formatNumber(label)}
               />
               <Tooltip content={<CustomTooltip />} cursor={false} />
+
               <Bar
                 dataKey="MingguLalu"
                 {...(theme && {
@@ -152,11 +174,12 @@ export default function TotalAppointment({
                 })}
                 barSize={40}
                 radius={10}
+                minPointSize={30}
               >
                 <LabelList dataKey="MingguLalu" content={<CustomizedLabel />} />
               </Bar>
+
               <Bar
-                type="natural"
                 dataKey="MingguIni"
                 {...(theme && {
                   fill: COLORS[1][theme],
@@ -164,6 +187,7 @@ export default function TotalAppointment({
                 })}
                 barSize={40}
                 radius={10}
+                minPointSize={30}
               >
                 <LabelList dataKey="MingguIni" content={<CustomizedLabel />} />
               </Bar>
@@ -178,12 +202,7 @@ export default function TotalAppointment({
 function CustomLegend({ className }: { className?: string }) {
   const { theme } = useTheme();
   return (
-    <div
-      className={cn(
-        'mt-2 flex flex-wrap items-start gap-3 lg:gap-5',
-        className
-      )}
-    >
+    <div className={cn('mt-2 flex flex-wrap items-start gap-3 lg:gap-5', className)}>
       {appointmentLegend.map((item, index) => (
         <div key={item.name} className="flex items-center gap-1.5">
           <span
@@ -202,7 +221,7 @@ function CustomLegend({ className }: { className?: string }) {
 }
 
 function CustomizedLabel(props: any) {
-  const { x, y, width, height, value } = props;
+  const { x, y, width, value } = props;
   const radius = 8;
 
   return (
