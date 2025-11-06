@@ -48,6 +48,7 @@ const App = () => {
             image: product.imageUrl,
             description: product.description || '',
             stock: product.stock || 0,
+            visible: product.visible,
           });
 
           return acc;
