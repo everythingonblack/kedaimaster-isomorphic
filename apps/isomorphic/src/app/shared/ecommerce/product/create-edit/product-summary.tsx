@@ -80,15 +80,6 @@ export default function ProductSummary({ className, categoryOptions, materialOpt
         error={errors.price?.message as string}
       />
 
-      {/* Stock */}
-      <Input
-        label="Stock"
-        type="number"
-        placeholder="Product stock"
-        {...register('stock')}
-        error={errors.stock?.message as string}
-      />
-
       {/* Material (Custom Select) */}
       <Controller
         name="material"
