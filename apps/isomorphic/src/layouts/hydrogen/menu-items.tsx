@@ -7,6 +7,7 @@ import {
   PiPushPinDuotone,
   PiSquaresFourDuotone,
   PiUserDuotone,
+  PiAndroidLogoDuotone,
 } from 'react-icons/pi';
 
 // Note: do not add href in the label object, it is rendering as label
@@ -66,5 +67,13 @@ export const menuItems = [
     name: 'Users',
     href: routes.dashboard.users,
     icon: <PiUserDuotone />,
+  },
+];
+
+export const bottomMenuItems = [
+  {
+    name: 'Download Aplikasi',
+    href: 'https://download.kedaimaster.apps.kediritechnopark.com/', // You might want to change this to an actual download link
+    icon: <PiAndroidLogoDuotone />,
   },
 ];
