@@ -95,7 +95,7 @@ export default function HeaderMenuRight({ setDate }: HeaderMenuRightProps) {
 
   useEffect(() => {
     const range = rangeOptions.find(option => option.value === viewType);
-    if (range) {
+    if (range && range.getRange) { // Ensure getRange exists
       const { start, end } = range.getRange();
       // Check if the range is different from the previous one
       const isSame =
@@ -104,8 +104,11 @@ export default function HeaderMenuRight({ setDate }: HeaderMenuRightProps) {
 
       if (!isSame) {
         setDate(start, end, range.compareLabel);
-        prevRange.current = { start, end };
+        (prevRange.current as { start: Date | null; end: Date | null }) = { start, end }; // Type assertion for mutability
       }
+    } else if (viewType === 'kustom') {
+      // For 'kustom' type, the date is set via onChange of SmartDateSelector,
+      // so no action needed here.
     }
   }, [viewType, setDate]);
 
@@ -115,8 +118,9 @@ export default function HeaderMenuRight({ setDate }: HeaderMenuRightProps) {
         <SmartDateSelector
           options={rangeOptions}
           defaultValue={viewType}
-          onChange={({ start, end, compareLabel }) => {
-            setDate(start, end, compareLabel);
+          onChange={({ start, end, type }) => {
+            const selectedOption = rangeOptions.find(option => option.value === type);
+            setDate(start, end, selectedOption?.compareLabel || type); // Use compareLabel from option or fallback to type
             setViewType(type); // Set viewType on manual date range selection
           }}
         />

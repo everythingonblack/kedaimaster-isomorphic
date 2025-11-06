@@ -80,10 +80,10 @@ const CartFormPage = ({
         {children}
 
         <button type="submit" className={styles.cartActionButton}>
-          {!isLoading ?      <div className={styles.loadingContainer}>
-        <div className={styles.spinner}></div>
-      </div>
- : buttonText}
+          {isLoading ? <div className={styles.loadingContainer}>
+            <div className={styles.spinner}></div>
+          </div>
+            : buttonText}
         </button>
       </form>
     </div>

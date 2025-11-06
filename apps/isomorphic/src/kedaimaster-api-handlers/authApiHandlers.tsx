@@ -8,7 +8,7 @@ export type RegisterUserResponse = { id: string; email: string; role: string; cr
 export type AuthenticateRequest = { email: string; password: string; };
 export type AuthenticateResponse = { accessToken: string; refreshToken: string; user: { id: string; email: string; role: string; }; };
 export type RefreshTokenResponse = { accessToken: string; refreshToken: string; };
-export type Profile = { id: string; email: string; name: string; role: string; };
+export type Profile = { id: string; email: string; name?: string; role: string; };
 
 const authApiHandlers = {
   async register(data: RegisterUserRequest): Promise<RegisterUserResponse> {

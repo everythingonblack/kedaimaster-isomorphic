@@ -19,6 +19,7 @@ import { useEffect } from 'react';
 type AppointmentStatsType = {
   className?: string;
   dashboardData?: any; // gunakan tipe yang sesuai jika ada
+  compareType?: string;
 };
 
 export type StatType = {

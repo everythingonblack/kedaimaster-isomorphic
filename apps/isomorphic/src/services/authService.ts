@@ -1,4 +1,5 @@
 import { getTokens as fetchTokens, clearTokens as removeTokens } from "@/kedaimaster-api/authApi";
+import authApiHandlers from "@/kedaimaster-api-handlers/authApiHandlers";
 
 export const getTokens = () => {
   return fetchTokens();
@@ -13,7 +14,7 @@ export const isAuthenticated = async () => {
   if (!accessToken) return false;
 
   try {
-    const profile = await getProfile();
+    const profile = await authApiHandlers.getProfileData();
     return profile ? true : false;
   } catch {
     clearTokens();

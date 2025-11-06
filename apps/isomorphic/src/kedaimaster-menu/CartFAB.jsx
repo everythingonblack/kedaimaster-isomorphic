@@ -92,141 +92,116 @@ const CartFAB = ({ cart, onIncreaseQuantity, onDecreaseQuantity, onResetCart, is
             }
         }
     }, [totalItems]);
-
-    // ==============================
-    // Polling Cek Status Pembayaran
-    // ==============================
     useEffect(() => {
-        // Hentikan polling sebelumnya jika ada
-        if (pollIntervalRef.current) {
-            clearInterval(pollIntervalRef.current);
-            pollIntervalRef.current = null;
-        }
+        let pollTimeout = null;
+        let isCancelled = false;
 
-        // Mulai polling HANYA jika di halaman 3, ada ID, dan belum lunas
-        if (cartPage === 3 && newestTransactionId && !isPaid) {
-            setIsLoadingPayment(true); // Tampilkan loading
+        const pollTransactions = async () => {
+            try {
+                const saved = JSON.parse(localStorage.getItem('transactionList') || '[]');
+                const activeTransactions = saved.filter(t => !t.paid && !t.canceled);
 
-            const pollPaymentStatus = async () => {
-                console.log(`Polling status for transaction: ${newestTransactionId}`);
-                try {
-                    // Panggil API getTransactionById
-                    const transaction = await getTransactionById(newestTransactionId);
-                    if (transaction && transaction.paid === true) {
-                        console.log('Payment successful!');
-                        setIsPaid(true);
-                        setIsLoadingPayment(false);
-                        if (pollIntervalRef.current) {
-                            clearInterval(pollIntervalRef.current); // Hentikan polling
-                            pollIntervalRef.current = null;
-                        }
-                    } else {
-                        // Belum lunas, biarkan polling berlanjut
-                        console.log('Payment still pending...');
-                    }
-                } catch (error) {
-                    console.error('Error polling payment status:', error);
-                    // Biarkan polling berlanjut jika error? Atau hentikan?
-                    // Untuk saat ini, biarkan berlanjut.
+                if (activeTransactions.length === 0) {
+                    console.log('✅ Tidak ada transaksi aktif untuk dipolling.');
+                    return; // hentikan polling
                 }
-            };
 
-            // Panggil sekali di awal
-            pollPaymentStatus();
-            // Lalu set interval untuk polling
-            pollIntervalRef.current = setInterval(pollPaymentStatus, 15000); // Poll setiap 15 detik
-        }
+                console.log(`🔄 Polling ${activeTransactions.length} transaksi aktif...`);
+                const updatedList = await Promise.all(
+                    activeTransactions.map(async (transaction) => {
+                        try {
+                            const updated = await getTransactionById(transaction.id);
+                            // kembalikan versi terbaru jika berhasil
+                            return updated || transaction;
+                        } catch (err) {
+                            console.warn(`Gagal polling transaksi ${transaction.id}`, err);
+                            return transaction; // biarkan data lama
+                        }
+                    })
+                );
 
-        // Cleanup function (dijalankan saat unmount atau dependencies berubah)
+                // gabungkan hasil update dengan list lama
+                const mergedList = saved.map(oldItem => {
+                    const newItem = updatedList.find(u => u.id === oldItem.id);
+                    if (!newItem) return oldItem;
+
+                    return {
+                        ...oldItem,           // simpan local flags
+                        ...newItem,           // update dari server
+                        userInitiatedCancel: oldItem.userInitiatedCancel || false, // tetap pertahankan
+                    };
+                });
+
+
+                // hanya lanjut update state/localStorage jika komponen masih aktif
+                if (!isCancelled) {
+                    setTransactionList(mergedList);
+                    localStorage.setItem('transactionList', JSON.stringify(mergedList));
+                }
+
+            } catch (error) {
+                console.error('❌ Error saat polling transaksi:', error);
+            } finally {
+                // lakukan polling ulang setiap 20 detik (bisa ubah sesuai kebutuhan)
+                if (!isCancelled) {
+                    pollTimeout = setTimeout(pollTransactions, 20000);
+                }
+            }
+        };
+
+        pollTransactions(); // langsung jalan pertama kali
+
+        // cleanup
         return () => {
-            if (pollIntervalRef.current) {
-                clearInterval(pollIntervalRef.current);
-                pollIntervalRef.current = null;
-            }
+            isCancelled = true;
+            if (pollTimeout) clearTimeout(pollTimeout);
         };
-    }, [cartPage, newestTransactionId, isPaid]);
-
-    // ==============================
-    // Polling Cek Status Pembayaran (untuk transaksi unpaid)
-    // ==============================
-    useEffect(() => {
-        const pollUnpaidTransactions = async () => {
-            const saved = JSON.parse(localStorage.getItem('transactionList') || '[]');
-            const unpaidTransactions = saved.filter(transaction => !transaction.paid);
-
-            if (unpaidTransactions.length > 0) {
-                console.log('Polling unpaid transactions...');
-                for (const transaction of unpaidTransactions) {
-                    try {
-                        const updatedTransaction = await getTransactionById(transaction.id);
-                        if (updatedTransaction && updatedTransaction.paid) {
-                            console.log(`Transaction ${transaction.id} is now paid!`);
-                            // Update transactionList di local storage
-                            const updatedTransactionList = saved.map(t =>
-                                t.id === transaction.id ? updatedTransaction : t
-                            );
-                            localStorage.setItem('transactionList', JSON.stringify(updatedTransactionList));
-                            setTransactionList(updatedTransactionList);
-                        }
-                    } catch (error) {
-                        console.error(`Error polling transaction ${transaction.id}:`, error);
-                    }
-                }
-            } else {
-                console.log('No unpaid transactions to poll.');
-            }
-        };
-
-        // Jalankan polling setiap 15 detik
-        const intervalId = setInterval(pollUnpaidTransactions, 15000);
-
-        // Cleanup interval saat komponen unmount
-        return () => clearInterval(intervalId);
     }, []);
+
 
     // ==============================
     // Buat transaksi
     // ==============================
-const handleCreateTransaction = async () => {
-  setIsCreatingTransaction(true); // 🔥 Mulai loading
+    const handleCreateTransaction = async () => {
+        setIsCreatingTransaction(true); // 🔥 Mulai loading
 
-  const transactionData = {
-    deviceTime: formatDateTime(new Date()),
-    paymentType: selectedPaymentMethod === 'QRIS' ? 'QRIS' : 'CASH',
-    servingType: 'PICKUP',
-    notes: orderNotes,
-    customerName,
-    customerPhone,
-    items: Object.values(cart).map((item) => ({
-      productId: item.id,
-      qty: item.quantity,
-      unitPrice: item.price,
-    })),
-  };
+        const transactionData = {
+            deviceTime: formatDateTime(new Date()),
+            paymentType: selectedPaymentMethod === 'QRIS' ? 'CASHLESS' : 'CASH',
+            servingType: 'PICKUP',
+            notes: orderNotes,
+            customerName,
+            customerPhone,
+            items: Object.values(cart).map((item) => ({
+                productId: item.id,
+                qty: item.quantity,
+                unitPrice: item.price,
+            })),
+        };
 
-  try {
-    const response = await createTransaction(transactionData);
+        try {
+            const response = await createTransaction(transactionData);
 
-    const savedList = JSON.parse(localStorage.getItem('transactionList') || '[]');
-    const updatedList = [response, ...savedList];
-    localStorage.setItem('transactionList', JSON.stringify(updatedList));
+            const savedList = JSON.parse(localStorage.getItem('transactionList') || '[]');
+            const updatedList = [response, ...savedList];
+            localStorage.setItem('transactionList', JSON.stringify(updatedList));
 
-    setNewestTransactionId(response.id);
-    setTransactionStatus('success');
-    setIsPaid(false);
-    setIsLoadingPayment(true);
-    onResetCart();
-    setTransactionList(updatedList);
-    setExpandedTransactionId(response.id);
-    setCartPage(3); // 🔥 Langsung ke halaman pembayaran
-  } catch (error) {
-    console.error('Gagal membuat transaksi:', error);
-    setTransactionStatus('failure');
-    setCartPage(4);
-  } finally {
-    setIsCreatingTransaction(false); // 🔥 Selesai loading
-  }
-};
+            setNewestTransactionId(response.id);
+            setTransactionStatus('success');
+            setIsPaid(false);
+            setIsLoadingPayment(true);
+            onResetCart();
+            setTransactionList(updatedList);
+            setExpandedTransactionId(response.id);
+            setCartPage(1); // 🔥 Langsung ke halaman pembayaran
+        } catch (error) {
+            console.error('Gagal membuat transaksi:', error);
+            setTransactionStatus('failure');
+            setCartPage(4);
+        } finally {
+            setIsCreatingTransaction(false); // 🔥 Selesai loading
+        }
+    };
 
 
 
@@ -269,13 +244,34 @@ const handleCreateTransaction = async () => {
     };
 
     // Fungsi untuk handle klik pembatalan
-    const handleCancelOrder = (transactionId) => {
-        // Ganti ini dengan logika API call Anda
-        console.log("Batalkan pesanan:", transactionId);
-        alert(`Fungsi batalkan pesanan ${transactionId} dipanggil.`);
-        setExpandedTransactionId(null); // Tutup card setelah dibatalkan
-        cancelTransactionById(transactionId);
+    const handleCancelOrder = async (transactionId) => {
+        try {
+            console.log("Batalkan pesanan:", transactionId);
+
+            await cancelTransactionById(transactionId); // API cancel
+
+            setTransactionList((prevList) => {
+                const updated = prevList.map((t) =>
+                    t.id === transactionId
+                        ? { ...t, canceled: true, userInitiatedCancel: true }
+                        : t
+                );
+
+                // Simpan juga di localStorage
+                localStorage.setItem('transactionList', JSON.stringify(updated));
+
+                return updated;
+            });
+
+            setExpandedTransactionId(null);
+            alert('Transaksi berhasil dibatalkan.');
+        } catch (error) {
+            console.error('Gagal membatalkan pesanan:', error);
+            alert('Gagal membatalkan pesanan, coba lagi.');
+        }
     };
+
+
     // ==============================
     // PAGE 1: KERANJANG
     // ==============================
@@ -425,14 +421,21 @@ const handleCreateTransaction = async () => {
                                                                 Transaksi Berhasil
                                                             </span>
                                                         ) : transaction.canceled ? (
-                                                            <span className="flex-shrink-0 bg-red-500/30 text-red-300 text-xs font-semibold px-3 py-1 rounded-full">
-                                                                Transaksi Dibatalkan
-                                                            </span>
+                                                            transaction.userInitiatedCancel ? (
+                                                                <span className="flex-shrink-0 bg-red-500/30 text-red-300 text-xs font-semibold px-3 py-1 rounded-full">
+                                                                    Dibatalkan oleh Anda
+                                                                </span>
+                                                            ) : (
+                                                                <span className="flex-shrink-0 bg-gray-500/30 text-gray-300 text-xs font-semibold px-3 py-1 rounded-full">
+                                                                    Dibatalkan oleh Kasir
+                                                                </span>
+                                                            )
                                                         ) : (
                                                             <span className="flex-shrink-0 bg-yellow-500/30 text-yellow-300 text-xs font-semibold px-3 py-1 rounded-full animate-pulse">
                                                                 Menunggu Pembayaran
                                                             </span>
                                                         )}
+
 
                                                         <p className="text-xs md:text-sm text-white/70 mt-1">
                                                             {formatTime(transaction.createdOn)}
@@ -478,7 +481,7 @@ const handleCreateTransaction = async () => {
                                                     ))}
                                                 </div>
 
-                                                {!transaction.paid && !transaction.notes &&
+                                                {((!transaction.paid && !transaction.canceled) || transaction.notes) &&
                                                     <>
                                                         <hr className="border-white/10 my-3" />
 
@@ -486,7 +489,7 @@ const handleCreateTransaction = async () => {
 
                                                         <div className="text-base text-white/60 space-y-1 mb-4">
 
-                                                            {!transaction.paid &&
+                                                            {!transaction.paid && !transaction.canceled &&
                                                                 <p><span className="font-medium">Silakan lakukan pembayaran di kasir atas nama </span>{transaction.customerName}</p>
                                                             }
                                                             {transaction.notes && <p><span className="font-medium">Catatan:</span> {transaction.notes}</p>}
@@ -494,7 +497,7 @@ const handleCreateTransaction = async () => {
                                                     </>
                                                 }
                                                 {/* Tombol Batalkan Pesanan (hanya muncul jika belum bayar) */}
-                                                {!transaction.paid &&
+                                                {!transaction.paid && !transaction.canceled &&
                                                     <button
                                                         className={`w-full bg-red-500/80 hover:bg-red-500 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all`}
                                                         onClick={(e) => {
@@ -637,7 +640,7 @@ const handleCreateTransaction = async () => {
                 buttonText="Pesan"
                 onSubmit={handleCreateTransaction}
                 onBack={() => setCartPage(1)}
-                                isLoading={isCreatingTransaction}
+                isLoading={isCreatingTransaction}
 
             />
         </div>

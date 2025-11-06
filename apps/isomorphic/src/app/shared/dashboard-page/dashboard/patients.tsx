@@ -51,7 +51,7 @@ export default function Patients({
   const chartData = topProducts.map((item: any) => ({
     name: item.name,
     value: item.total,
-    percentage: totalAll > 0 ? parseInt((item.total / totalAll) * 100) : 0,
+    percentage: totalAll > 0 ? parseInt(((item.total / totalAll) * 100).toString(), 10) : 0,
   }));
 
   const [showAll, setShowAll] = useState(false);

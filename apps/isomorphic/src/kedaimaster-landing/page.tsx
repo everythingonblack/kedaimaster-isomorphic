@@ -15,7 +15,8 @@ import "./page.css";
 import { useNavigate  } from "react-router-dom";
 // Impor AuthModal yang sudah dipisah
 // Impor fungsi API
-import { getTokens, clearTokens, getProfile } from "@/kedaimaster-api/authApi";
+import { getTokens, clearTokens } from "@/kedaimaster-api/authApi";
+import authApiHandlers, { Profile } from "@/kedaimaster-api-handlers/authApiHandlers";
 import PricingModal from "./PricingModal"; // Import the PricingModal component
 
 
@@ -27,12 +28,7 @@ document.head.appendChild(link);
 // Mengimpor fungsi otentikasi dari file API (mock)
 import { authenticate, registerUser } from '@/kedaimaster-api/authApi';
 
-interface UserData {
-  id: string;
-  email: string;
-  name?: string; // Assuming name might be part of user data
-  role: string;
-}
+interface UserData extends Profile {}
 
 // --- Komponen Modal Otentikasi ---
 const AuthModal: React.FC<AuthModalProps> = ({ show, onClose, initialMode }) => {
@@ -228,7 +224,7 @@ const KedaiMasterPage = () => {
       try {
         // Coba ambil profil pengguna untuk memvalidasi token
         console.log("Token ditemukan, memvalidasi...");
-        const profile = await getProfile(); // Menggunakan fungsi getProfile dari authApi.js
+        const profile = await authApiHandlers.getProfileData(); // Menggunakan fungsi getProfileData dari authApiHandlers
         if(!profile) throw { status: 401, message: "Token tidak valid" };
         console.log("Token valid, pengguna login:", profile);
         setIsAuthenticated(true);
@@ -278,8 +274,8 @@ const KedaiMasterPage = () => {
     // Jika login sukses, kita refresh status auth
     if (loginSuccess) {
       setIsAuthLoading(true);
-      getProfile()
-        .then((profile: UserData | null) => {
+      authApiHandlers.getProfileData()
+        .then((profile: Profile | null) => {
           if (profile) {
             setIsAuthenticated(true);
             setUserData(profile);
