@@ -89,15 +89,6 @@ export const productsListColumns = [
     ),
   }),
 
-  // ✅ Status
-  columnHelper.accessor('status', {
-    id: 'status',
-    size: 120,
-    header: 'Status',
-    enableSorting: false,
-    cell: ({ row }) => getStatusBadge(row.original.status),
-  }),
-
   // ✅ Created By
   columnHelper.accessor('createdBy', {
     id: 'createdBy',
