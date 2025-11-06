@@ -46,12 +46,12 @@ export default function AppointmentDiseases({
     >
       <div className="mb-4 mt-1 flex items-center gap-2">
         <Title as="h2" className="font-inter font-bold">
-          75,095
+          {data[0].patients + data[1].patients}
         </Title>
-        <span className="flex items-center gap-1 text-green-dark">
+        {/* <span className="flex items-center gap-1 text-green-dark">
           <TrendingUpIcon className="h-auto w-5" />
           <span className="font-semibold leading-none"> +32.40%</span>
-        </span>
+        </span> */}
       </div>
 
       <div className="w-full items-center justify-between gap-4 pb-4 @sm:flex @lg:pt-4 @xl:pb-0">
