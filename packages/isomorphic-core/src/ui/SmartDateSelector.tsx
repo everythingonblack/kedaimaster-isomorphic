@@ -13,6 +13,7 @@ export type RangeCalculator = () => { start: Date; end: Date };
 export interface DateOption {
   label: string;
   value: string;
+  compareLabel: string;
   getRange?: RangeCalculator; // jika undefined → dianggap "Kustom"
 }
 
@@ -77,7 +78,7 @@ export default function SmartDateSelector({
       prevRange.current.end?.getTime() === end.getTime();
 
     if (!isSame) {
-      onChange({ start, end, type: selected.value });
+      onChange({ start, end, type: selected.compareLabel });
       prevRange.current = { start, end };
       prevSelected.current = selected.value; // update prevSelected
     }

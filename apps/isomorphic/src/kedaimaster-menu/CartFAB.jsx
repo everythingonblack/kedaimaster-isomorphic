@@ -35,6 +35,9 @@ const CartFAB = ({ cart, onIncreaseQuantity, onDecreaseQuantity, onResetCart, is
     const totalItems = Object.values(cart).reduce((sum, item) => sum + item.quantity, 0);
     const totalPrice = Object.values(cart).reduce((sum, item) => sum + item.price * item.quantity, 0);
 
+    const [isCreatingTransaction, setIsCreatingTransaction] = useState(false);
+
+
     // ==============================
     // Format waktu ke "YYYY-MM-DD HH:mm:ss"
     // ==============================
@@ -184,47 +187,47 @@ const CartFAB = ({ cart, onIncreaseQuantity, onDecreaseQuantity, onResetCart, is
     // ==============================
     // Buat transaksi
     // ==============================
-    const handleCreateTransaction = async () => {
-        const transactionData = {
-            deviceTime: formatDateTime(new Date()),
-            paymentType: selectedPaymentMethod === 'QRIS' ? 'QRIS' : 'CASH',
-            servingType: 'PICKUP',
-            notes: orderNotes,
-            customerName,
-            customerPhone,
-            items: Object.values(cart).map((item) => ({
-                productId: item.id,
-                qty: item.quantity,
-                unitPrice: item.price,
-            })),
-        };
+const handleCreateTransaction = async () => {
+  setIsCreatingTransaction(true); // 🔥 Mulai loading
 
-        try {
-            const response = await createTransaction(transactionData);
+  const transactionData = {
+    deviceTime: formatDateTime(new Date()),
+    paymentType: selectedPaymentMethod === 'QRIS' ? 'QRIS' : 'CASH',
+    servingType: 'PICKUP',
+    notes: orderNotes,
+    customerName,
+    customerPhone,
+    items: Object.values(cart).map((item) => ({
+      productId: item.id,
+      qty: item.quantity,
+      unitPrice: item.price,
+    })),
+  };
 
-            // simpan ke localStorage
-            const savedList = JSON.parse(localStorage.getItem('transactionList') || '[]');
-            const updatedList = [response, ...savedList];
-            localStorage.setItem('transactionList', JSON.stringify(updatedList));
+  try {
+    const response = await createTransaction(transactionData);
 
-            setNewestTransactionId(response.id);
-            setTransactionStatus('success');
+    const savedList = JSON.parse(localStorage.getItem('transactionList') || '[]');
+    const updatedList = [response, ...savedList];
+    localStorage.setItem('transactionList', JSON.stringify(updatedList));
 
-            // Reset status pembayaran untuk polling baru
-            setIsPaid(false);
-            setIsLoadingPayment(true); // Langsung set loading
+    setNewestTransactionId(response.id);
+    setTransactionStatus('success');
+    setIsPaid(false);
+    setIsLoadingPayment(true);
+    onResetCart();
+    setTransactionList(updatedList);
+    setExpandedTransactionId(response.id);
+    setCartPage(3); // 🔥 Langsung ke halaman pembayaran
+  } catch (error) {
+    console.error('Gagal membuat transaksi:', error);
+    setTransactionStatus('failure');
+    setCartPage(4);
+  } finally {
+    setIsCreatingTransaction(false); // 🔥 Selesai loading
+  }
+};
 
-            // ✅ tampilkan halaman pembayaran (page 3)
-            onResetCart();
-            setTransactionList(updatedList);
-            setExpandedTransactionId(response.id);
-            setCartPage(1);
-        } catch (error) {
-            console.error('Gagal membuat transaksi:', error);
-            setTransactionStatus('failure');
-            setCartPage(4);
-        }
-    };
 
 
     // ==============================
@@ -634,6 +637,8 @@ const CartFAB = ({ cart, onIncreaseQuantity, onDecreaseQuantity, onResetCart, is
                 buttonText="Pesan"
                 onSubmit={handleCreateTransaction}
                 onBack={() => setCartPage(1)}
+                                isLoading={isCreatingTransaction}
+
             />
         </div>
     );

@@ -8,30 +8,32 @@ import { useState } from 'react';
 import { RadialBar, RadialBarChart, ResponsiveContainer } from 'recharts';
 import { Title } from 'rizzui';
 
-const data = [
-  {
-    name: 'pesan Dari Meja',
-    patients: 1000,
-    fill: '#FFD66B',
-  },
-  {
-    name: 'Pesan Dari Kasir',
-    patients: 900,
-    fill: '#64CCC5',
-  },
-  {
-    name: 'Dentist',
-    patients: 800,
-    fill: '#2B7F75',
-  },
-];
+interface AppointmentDiseasesProps {
+  className?: string;
+  cashierInitiatedTransaction?: number;
+  customerInitiatedTransaction?: number;
+}
 
 export default function AppointmentDiseases({
   className,
-}: {
-  className?: string;
-}) {
+  cashierInitiatedTransaction,
+  customerInitiatedTransaction,
+}: AppointmentDiseasesProps) {
+  console.log('customerInitiatedTransaction:', customerInitiatedTransaction);
+  console.log('cashierInitiatedTransaction:', cashierInitiatedTransaction);
   const isMobile = useMedia('(max-width: 480px)', false);
+  const data = [
+    {
+      name: 'Pesan di meja',
+      patients: customerInitiatedTransaction ?? 0,
+      fill: '#FFD66B',
+    },
+    {
+      name: 'Pesan di kasir',
+      patients: cashierInitiatedTransaction ?? 0,
+      fill: '#64CCC5',
+    },
+  ];
   return (
     <WidgetCard
       title="Riwayat Pemesanan"
@@ -77,35 +79,45 @@ export default function AppointmentDiseases({
             </ResponsiveContainer>
           </div>
         </div>
-        <CustomLegend className="shrink-0 @sm:w-36" />
+        <CustomLegend className="shrink-0 @sm:w-36" data={data} />
       </div>
     </WidgetCard>
   );
 }
 
-function CustomLegend({ className }: { className?: string }) {
+interface CustomLegendProps {
+  className?: string;
+  data: {
+    name: string;
+    patients: number;
+    fill: string;
+  }[];
+}
+
+function CustomLegend({ className, data }: CustomLegendProps) {
   return (
-    <div
-      className={cn(
-        'flex flex-wrap gap-5 pt-5 @sm:flex-col @sm:pt-0 lg:gap-7',
-        className
-      )}
-    >
-      {data.map((item) => (
-        <div
-          key={item.name}
-          className="relative flex w-2/5 flex-col ps-6 text-gray-500"
-        >
-          <span
-            className="absolute start-0 top-1/2 h-3 w-3 -translate-y-1/2 rounded"
-            style={{ backgroundColor: item?.fill }}
-          />
-          {item.name}
-          <span className="font-inter text-xl font-semibold text-gray-900">
-            {item.patients}+
-          </span>
-        </div>
-      ))}
-    </div>
+    
+      <div
+        className={cn(
+          'flex flex-wrap gap-5 pt-5 @sm:flex-col @sm:pt-0 lg:gap-7',
+          className
+        )}
+      >
+        {data.map((item) => (
+          <div
+            key={item.name}
+            className="relative flex w-full flex-col ps-6 text-gray-500"
+          >
+            <span
+              className="absolute start-0 top-1/2 h-3 w-3 -translate-y-1/2 rounded"
+              style={{ backgroundColor: item?.fill }}
+            />
+            {item.name}
+            <span className="font-inter text-xl font-semibold text-gray-900">
+              {item.patients}+
+            </span>
+          </div>
+        ))}
+      </div>
   );
 }

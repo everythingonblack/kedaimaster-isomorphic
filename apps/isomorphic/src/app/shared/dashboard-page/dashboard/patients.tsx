@@ -45,13 +45,13 @@ export default function Patients({
   className?: string;
   dashboardData?: any;
 }) {
-  const topProducts = dashboardData?.current?.topProducts ?? [];
-  const totalAll = dashboardData?.current?.totalAll ?? 0;
+  const topProducts = dashboardData?.topProducts ?? [];
+  const totalAll = topProducts.reduce((sum: number, item: any) => sum + item.total, 0);
 
   const chartData = topProducts.map((item: any) => ({
     name: item.name,
     value: item.total,
-  percentage: item.percentage > 1 ? parseInt(item.percentage) : item.percentage
+    percentage: totalAll > 0 ? parseInt((item.total / totalAll) * 100) : 0,
   }));
 
   const [showAll, setShowAll] = useState(false);

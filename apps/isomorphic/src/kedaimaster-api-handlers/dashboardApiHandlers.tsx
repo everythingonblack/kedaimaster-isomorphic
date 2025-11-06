@@ -8,15 +8,57 @@ import { getDashboard, getDashboardAggregate } from '@/kedaimaster-api/dashboard
 export interface ProductData {
   id: string;
   name: string;
+  imageUrl: string | null;
   total: number;
   percentage?: string | number;
   [key: string]: any;
 }
 
+export interface MaterialData {
+  id: string;
+  name: string;
+  stock: number;
+}
+
+export interface StockInListData {
+  id: string;
+  material: MaterialData;
+  type: string;
+  qty: number;
+  unitPrice: number;
+  amount: number;
+  createdBy: string;
+  createdOn: string;
+}
+
+export interface FullDashboardResponse {
+  income: number;
+  outcome: number;
+  transaction: number;
+  topProducts: ProductData[];
+  topProductPrevious: ProductData[];
+  topProduct: ProductData | null;
+  stockInList: StockInListData[];
+  customerInitiatedTransaction: number;
+  cashierInitiatedTransaction: number;
+  incomeGrowth: number;
+  outcomeGrowth: number;
+  transactionGrowth: number;
+}
+
 export interface DashboardData {
+  income?: number;
+  outcome?: number;
+  transaction?: number;
   topProducts?: ProductData[];
   topProduct?: ProductData | null;
   totalAll?: number;
+  stockInList?: StockInListData[];
+  customerInitiatedTransaction?: number;
+  cashierInitiatedTransaction?: number;
+  incomeGrowth?: number;
+  outcomeGrowth?: number;
+  transactionGrowth?: number;
   [key: string]: any;
 }
 
@@ -90,85 +132,17 @@ export function getDateRanges(startDate: string, endDate: string, type?: string)
 // 📊 Main Dashboard Data
 // =======================
 
+
 export async function handleDashboardData(
   startDate: string,
   endDate: string,
   type?: string
-): Promise<{
-  current: DashboardData & { growthIncome?: number; growthOutcome?: number; growthTransaction?: number },
-  comparison: DashboardData
-}> {
+) {
   try {
-    // === Data utama ===
-    const { nowStart, nowEnd, cmpStart, cmpEnd } = getDateRanges(startDate, endDate, type);
-    const data: DashboardData = await getDashboard(nowStart, nowEnd);
-
-    const totalAll = data.topProducts?.reduce((sum, p) => sum + (p.total || 0), 0) || 0;
-    const topProductsWithPercent = data.topProducts?.map((p) => ({
-      ...p,
-      percentage: totalAll > 0 ? ((p.total / totalAll) * 100).toFixed(2) : 0,
-    }));
-
-    const topProduct = data.topProduct
-      ? {
-          ...data.topProduct,
-          percentage: totalAll > 0 ? ((data.topProduct.total / totalAll) * 100).toFixed(2) : 0,
-        }
-      : null;
-
-    const currentData: DashboardData = {
-      ...data,
-      topProducts: topProductsWithPercent,
-      topProduct,
-      totalAll,
-    };
-
-    // === Data pembanding ===
-    const cmpData: DashboardData = await getDashboard(cmpStart, cmpEnd);
-
-    const cmpTotalAll = cmpData.topProducts?.reduce((sum, p) => sum + (p.total || 0), 0) || 0;
-    const cmpTopProductsWithPercent = cmpData.topProducts?.map((p) => ({
-      ...p,
-      percentage: cmpTotalAll > 0 ? ((p.total / cmpTotalAll) * 100).toFixed(2) : 0,
-    }));
-
-    const cmpTopProduct = cmpData.topProduct
-      ? {
-          ...cmpData.topProduct,
-          percentage: cmpTotalAll > 0 ? ((cmpData.topProduct.total / cmpTotalAll) * 100).toFixed(2) : 0,
-        }
-      : null;
-
-    const comparisonData: DashboardData = {
-      ...cmpData,
-      topProducts: cmpTopProductsWithPercent,
-      topProduct: cmpTopProduct,
-      totalAll: cmpTotalAll,
-    };
-
-    // === Hitung growth income, outcome, transaction ===
-    const growthIncome =
-      cmpData.income && cmpData.income !== 0
-        ? (((data.income - cmpData.income) / Math.abs(cmpData.income)) * 100)
-        : undefined;
-    const growthOutcome =
-      cmpData.outcome && cmpData.outcome !== 0
-        ? (((data.outcome - cmpData.outcome) / Math.abs(cmpData.outcome)) * 100)
-        : undefined;
-    const growthTransaction =
-      cmpData.transaction && cmpData.transaction !== 0
-        ? (((data.transaction - cmpData.transaction) / Math.abs(cmpData.transaction)) * 100)
-        : undefined;
-
-    return {
-      current: {
-        ...currentData,
-        growthIncome,
-        growthOutcome,
-        growthTransaction,
-      },
-      comparison: comparisonData,
-    };
+    console.log(startDate,endDate)
+    // langsung panggil backend sekali, semua sudah termasuk comparison
+    const data = await getDashboard(startDate, endDate);
+    return data; // return langsung semua respon
   } catch (error) {
     console.error('❌ Error handleDashboardData:', error);
     throw error;

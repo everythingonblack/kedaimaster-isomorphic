@@ -17,10 +17,10 @@ const viewOptions = [
 
 export default function AppointmentTodo({
   className,
-  materialMutations,
+  stockInList,
 }: {
   className?: string;
-  materialMutations: any[];
+  stockInList: any; // Changed type to any for flexibility
 }) {
   const [filter, setFilter] = useState('All'); // State untuk filter
   const [showAll, setShowAll] = useState(false); // State untuk kontrol "Show All" dan "Show Less"
@@ -35,14 +35,17 @@ export default function AppointmentTodo({
     setShowAll((prev) => !prev);
   }
 
+  // Ensure stockInList is an array before filtering
+  const safeStockInList = Array.isArray(stockInList) ? stockInList : [];
+
   // Filter data berdasarkan opsi yang dipilih
   const filteredMutations =
     filter === 'All'
-      ? materialMutations
-      : materialMutations.filter((mutation) => mutation.type === filter.toUpperCase());
+      ? safeStockInList
+      : safeStockInList.filter((mutation: any) => mutation.type === filter.toUpperCase());
 
   // Batasi jumlah data yang ditampilkan jika "Show All" belum diaktifkan
-  const displayedMutations = showAll ? filteredMutations : filteredMutations.slice(0, 3);
+  const displayedMutations = showAll ? filteredMutations : (filteredMutations || []).slice(0, 3);
 
   return (
     <WidgetCard
@@ -82,12 +85,14 @@ export default function AppointmentTodo({
                       {mutation.material.name}
                     </strong>{' '}
                     <span className="inline-block rounded-2xl bg-[#2B7F75] px-2.5 font-medium text-white">
-                      {mutation.type}
+                      {mutation.type} + {mutation.qty}  @ {mutation.unitPrice.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}
                     </span>
                   </div>
-                  <div className="text-sm text-gray-500">{mutation.description}</div>
                   <div className="text-sm text-gray-500">
-                    {mutation.qty} {mutation.material.uom.name} {mutation.type != 'CREATE' && `(Sebelum: ${mutation.stockBefore}, Setelah: ${mutation.stockAfter})`}
+                    {mutation.amount.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}
+                  </div>
+                  <div className="text-sm text-gray-500">
+                    {mutation.createdBy}
                   </div>
                   <div className="flex flex-wrap items-center gap-1.5 pt-1.5">
                     <PiCalendarBlank className="shrink-0 text-base text-gray-400" />

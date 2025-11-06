@@ -14,6 +14,7 @@ const CartFormPage = ({
   onBack,
   buttonText = 'Lanjut',
   children,
+  isLoading = false,
 }) => {
   return (
     <div className={styles.cartFormPage}>
@@ -79,7 +80,10 @@ const CartFormPage = ({
         {children}
 
         <button type="submit" className={styles.cartActionButton}>
-          {buttonText}
+          {!isLoading ?      <div className={styles.loadingContainer}>
+        <div className={styles.spinner}></div>
+      </div>
+ : buttonText}
         </button>
       </form>
     </div>

@@ -3,15 +3,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Badge, ActionIcon } from 'rizzui';
-import { DatePicker } from '@core/ui/datepicker';
 import SmartDateSelector, { DateOption } from '@core/ui/SmartDateSelector';
-import MessagesDropdown from '@/layouts/messages-dropdown';
-import ProfileMenu from '@/layouts/profile-menu';
-import SettingsButton from '@/layouts/settings-button';
-import RingBellSolidIcon from '@core/components/icons/ring-bell-solid';
-import ChatSolidIcon from '@core/components/icons/chat-solid';
 import NotificationDropdown from './notification-dropdown';
-import DropdownAction from '@core/components/charts/dropdown-action';
+import ProfileMenu from '@/layouts/profile-menu';
+import RingBellSolidIcon from '@core/components/icons/ring-bell-solid';
 
 type HeaderMenuRightProps = {
   setDate: (start: Date | null, end: Date | null, type: string) => void;
@@ -19,153 +14,115 @@ type HeaderMenuRightProps = {
 
 const rangeOptions: DateOption[] = [
   {
-    label: "Harian",
+    label: "Hari ini",
     value: "harian",
+    compareLabel:"dibanding kemarin",
     getRange: () => {
       const now = new Date();
-      const start = new Date(now);
-      start.setHours(0, 0, 0, 0);
-      const end = new Date(now);
-      end.setHours(23, 59, 59, 999);
+      const start = new Date(now.setHours(0, 0, 0, 0)); // Set start to midnight
+      const end = new Date(now); // Keep end as current date (no specific time needed)
+      return { start, end };
+    },
+  },
+  {
+    label: "Kemarin",
+    value: "kemarin",
+        compareLabel:"dibanding kemarin lusa",
+
+    getRange: () => {
+      const now = new Date();
+      const yesterday = new Date(now.setDate(now.getDate() - 1));
+      const start = new Date(yesterday.setHours(0, 0, 0, 0)); // Start at midnight
+      const end = new Date(yesterday); // Keep end as current date (no time needed)
       return { start, end };
     },
   },
   {
     label: "Mingguan",
-    value: "mingguan",
+    value: "mingguan",    compareLabel:"dibanding minggu lalu",
+
     getRange: () => {
       const now = new Date();
       const day = now.getDay();
-      const start = new Date(now);
-      start.setDate(now.getDate() - day);
-      start.setHours(0, 0, 0, 0);
+      const start = new Date(now.setDate(now.getDate() - day)); // Start at the beginning of the week
+      start.setHours(0, 0, 0, 0); // Start at midnight
       const end = new Date(start);
-      end.setDate(start.getDate() + 6);
-      end.setHours(23, 59, 59, 999);
+      end.setDate(start.getDate() + 6); // Set end to 6 days later
+      end.setHours(23, 59, 59, 999); // End at the last millisecond of the day
       return { start, end };
     },
   },
   {
     label: "Bulanan",
-    value: "bulanan",
+    value: "bulanan",    compareLabel:"dibanding bulan lalu",
+
     getRange: () => {
       const now = new Date();
-      const start = new Date(now.getFullYear(), now.getMonth(), 1);
-      const end = new Date(
-        now.getFullYear(),
-        now.getMonth() + 1,
-        0,
-        23,
-        59,
-        59,
-        999
-      );
+      const start = new Date(now.getFullYear(), now.getMonth(), 1); // First day of the month
+      const end = new Date(now.getFullYear(), now.getMonth() + 1, 0); // Last day of the month
+      end.setHours(23, 59, 59, 999); // End at the last millisecond of the day
       return { start, end };
     },
   },
   {
     label: "Tahunan",
     value: "tahunan",
+        compareLabel:"dibanding tahun lalu",
+
     getRange: () => {
       const now = new Date();
-      const start = new Date(now.getFullYear(), 0, 1);
-      const end = new Date(now.getFullYear(), 11, 31, 23, 59, 59, 999);
+      const start = new Date(now.getFullYear(), 0, 1); // First day of the year
+      const end = new Date(now.getFullYear(), 11, 31); // Last day of the year
+      end.setHours(23, 59, 59, 999); // End at the last millisecond of the day
       return { start, end };
     },
   },
   {
     label: "Pilih Rentang Waktu",
-    value: "kustom", // tidak ada getRange -> datepicker muncul
+    value: "kustom", // For custom date picker
+    compareLabel:"dibanding sebelumnya",
   },
 ];
 
 export default function HeaderMenuRight({ setDate }: HeaderMenuRightProps) {
   const location = useLocation();
-const isDashboard = location.pathname === '/dashboard';
+  const isDashboard = location.pathname === '/dashboard';
 
-  const [viewType, setViewType] = useState<string>('Bulanan');
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
-  const [endDate, setEndDate] = useState<Date | null>(new Date());
+  // 🧠 Track the previous range to avoid unnecessary re-renders
+  const prevRange = useRef<{ start: Date | null; end: Date | null }>(null);
 
-  // 🧠 Simpan range sebelumnya agar tidak setDate terus-menerus
-  const prevRange = useRef<{ start: Date | null; end: Date | null }>({
-    start: null,
-    end: null,
-  });
+  const [viewType, setViewType] = useState<string>('harian');
 
-  // 🧮 Hitung otomatis berdasarkan viewType
   useEffect(() => {
-    const now = new Date();
-    let start = new Date(now);
-    let end = new Date(now);
+    const range = rangeOptions.find(option => option.value === viewType);
+    if (range) {
+      const { start, end } = range.getRange();
+      // Check if the range is different from the previous one
+      const isSame =
+        prevRange.current?.start?.getTime() === start.getTime() &&
+        prevRange.current?.end?.getTime() === end.getTime();
 
-    switch (viewType) {
-      case 'Harian':
-        start.setHours(0, 0, 0, 0);
-        end = start;
-        break;
-      case 'Mingguan': {
-        const day = now.getDay();
-        start.setDate(now.getDate() - day);
-        start.setHours(0, 0, 0, 0);
-        end = new Date(start);
-        end.setDate(start.getDate() + 6);
-        end.setHours(23, 59, 59, 999);
-        break;
+      if (!isSame) {
+        setDate(start, end, range.compareLabel);
+        prevRange.current = { start, end };
       }
-      case 'Bulanan':
-        start = new Date(now.getFullYear(), now.getMonth(), 1);
-        end = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
-        break;
-      case 'Tahunan':
-        start = new Date(now.getFullYear(), 0, 1);
-        end = new Date(now.getFullYear(), 11, 31, 23, 59, 59, 999);
-        break;
-      case 'Kustom':
-        return; // jangan ubah otomatis
-    }
-
-    setStartDate(start);
-    setEndDate(end);
-
-    // ✅ Cek apakah range berubah
-    const isSame =
-      prevRange.current.start?.getTime() === start.getTime() &&
-      prevRange.current.end?.getTime() === end.getTime();
-
-    if (!isSame) {
-      setDate(start, end, viewType);
-      prevRange.current = { start, end };
     }
   }, [viewType, setDate]);
 
-  // 🧠 Untuk viewType Kustom (ubah manual)
-  useEffect(() => {
-    if (viewType === 'Kustom' && startDate && endDate) {
-      const isSame =
-        prevRange.current.start?.getTime() === startDate.getTime() &&
-        prevRange.current.end?.getTime() === endDate.getTime();
-
-      if (!isSame) {
-        setDate(startDate, endDate, 'Kustom');
-        prevRange.current = { start: startDate, end: endDate };
-      }
-    }
-  }, [startDate, endDate, viewType, setDate]);
-
   return (
     <div className="ms-auto flex items-center gap-2 text-gray-700 xs:gap-3 xl:gap-4">
-      {isDashboard &&
-      
-    <SmartDateSelector
-      options={rangeOptions}
-      defaultValue='bulanan'
-      onChange={({ start, end, type }) => {
-        setDate(start, end, type);
-      }}
-    />}
+      {isDashboard && (
+        <SmartDateSelector
+          options={rangeOptions}
+          defaultValue={viewType}
+          onChange={({ start, end, compareLabel }) => {
+            setDate(start, end, compareLabel);
+            setViewType(type); // Set viewType on manual date range selection
+          }}
+        />
+      )}
 
-      {/* Notifikasi */}
+      {/* Notification */}
       <NotificationDropdown>
         <ActionIcon
           aria-label="Notification"
@@ -181,6 +138,7 @@ const isDashboard = location.pathname === '/dashboard';
           />
         </ActionIcon>
       </NotificationDropdown>
+
       <ProfileMenu />
     </div>
   );

@@ -4,9 +4,10 @@ import { Title, Text, Avatar, Button, Popover } from 'rizzui';
 import cn from '@core/utils/class-names';
 import { routes } from '@/config/routes';
 import { logOut } from '@/kedaimaster-api/authApi';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { getProfile } from '@/kedaimaster-api/authApi';
 
 export default function ProfileMenu({
   buttonClassName,
@@ -17,7 +18,12 @@ export default function ProfileMenu({
   avatarClassName?: string;
   username?: boolean;
 }) {
+  
+  const user = getProfile();
+  console.log(user)
+  
   return (
+    
     <ProfileMenuPopover>
       <Popover.Trigger>
         <button
@@ -28,12 +34,12 @@ export default function ProfileMenu({
         >
           <Avatar
             src="/avatar.webp"
-            name="John Doe"
+            name={user?.name || user?.email || 'User'}
             className={cn('!h-9 w-9 sm:!h-10 sm:!w-10', avatarClassName)}
           />
           {!!username && (
             <span className="username hidden text-gray-200 dark:text-gray-700 md:inline-flex">
-              Hi, Andry
+              Hi, {user?.name || user?.email || 'User'}
             </span>
           )}
         </button>
@@ -74,15 +80,19 @@ const menuItems = [
 ];
 
 function DropdownMenu() {
+  
+  const user = getProfile();
+  console.log(user)
+
   return (
     <div className="w-64 text-left rtl:text-right">
       <div className="flex items-center border-b border-gray-300 px-6 pb-5 pt-6">
-        <Avatar src="/avatar.webp" name="Albert Flores" />
+        <Avatar src="/avatar.webp" name={user?.name || user?.email || 'User'} />
         <div className="ms-3">
           <Title as="h6" className="font-semibold">
-            Albert Flores
+            {user?.name || 'User'}
           </Title>
-          <Text className="text-gray-600">flores@doe.io</Text>
+          <Text className="text-gray-600">{user?.email || 'N/A'}</Text>
         </div>
       </div>
       <div className="grid px-3.5 py-3.5 font-medium text-gray-700">

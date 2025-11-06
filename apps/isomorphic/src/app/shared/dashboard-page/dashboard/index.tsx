@@ -32,72 +32,31 @@ interface DashboardAggregate {
   [key: string]: any;
 }
 
-interface AppointmentDashboardProps {
-  dateRange: DateRange;
-  dashboardData: DashboardData | null;
-  dashboardAggregate: DashboardAggregate[];
-  fetchDashboardData: (start: Date | null, end: Date | null) => Promise<void>;
-  fetchDashboardAggregate: (date: Date, intervalHour?: number) => Promise<void>;
-  transactionGraph?: any; // Tambahkan ini
-  fetchTransactionGraph?: (start: Date | null, end: Date | null, type?: string) => Promise<void>; // Tambahkan ini
-}
-
 // =======================
 // 🧠 Component
 // =======================
 
-export default function AppointmentDashboard({
-  dateRange,
-}: {
-  dateRange: DateRange;
-}) {
+export default function AppointmentDashboard({ dateRange }: { dateRange: DateRange }) {
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
   const [dashboardAggregate, setDashboardAggregate] = useState<DashboardAggregate[]>([]);
   const [transactionGraph, setTransactionGraph] = useState<any>(null);
-  const [materialMutations, setMaterialMutations] = useState<any[]>([]); // State untuk mutasi material
-
+  const [materialMutations, setMaterialMutations] = useState<any[]>([]);
   // Fetch dashboard data
-  const fetchDashboardData = async (
-    start: Date | null,
-    end: Date | null,
-    type: string
-  ) => {
-    if (!start || !end) return;
-    const startStr = start.toISOString().slice(0, 10);
-    const endStr = end.toISOString().slice(0, 10);
+  const fetchDashboardData = async (start: Date, end: Date, type: string) => {
+    const startStr = `${start.getFullYear()}-${(start.getMonth() + 1).toString().padStart(2, '0')}-${start.getDate().toString().padStart(2, '0')}`;
+const endStr = `${end.getFullYear()}-${(end.getMonth() + 1).toString().padStart(2, '0')}-${end.getDate().toString().padStart(2, '0')}`;
+
+
+    console.log(startStr,endStr)
     const data = await handleDashboardData(startStr, endStr, type);
-    setDashboardData(data);
+    setDashboardData(data); // langsung set semua data
   };
 
-  // Fetch dashboard aggregate
-  const fetchDashboardAggregate = async (
-    date: Date,
-    type: string,
-    intervalHour = 2
-  ) => {
-    const dateStr = date.toISOString().slice(0, 10);
-    const { nowStart, nowEnd, cmpStart, cmpEnd } = getDateRanges(dateStr, dateStr, type);
-    const data = await handleDashboardAggregate(
-      nowStart,
-      nowEnd,
-      cmpStart,
-      cmpEnd,
-      type,
-      intervalHour
-    );
-    setDashboardAggregate(data.current);
-  };
 
   // Fetch transaction graph
-  const fetchTransactionGraph = async (
-    start: Date | null,
-    end: Date | null,
-    type?: string
-  ) => {
-    if (!start || !end) return;
+  const fetchTransactionGraph = async (start: Date, end: Date, type?: string) => {
     const startStr = start.toISOString().slice(0, 10);
     const endStr = end.toISOString().slice(0, 10);
-    console.log(type)
     const data = await getTransactionGraph(startStr, endStr, type as any);
     setTransactionGraph(data);
   };
@@ -111,46 +70,36 @@ export default function AppointmentDashboard({
   // Fetch all data when dateRange changes
   useEffect(() => {
     if (dateRange.start && dateRange.end) {
-      console.log('Fetching dashboard data with range:', dateRange);
       fetchDashboardData(dateRange.start, dateRange.end, dateRange.type);
       fetchTransactionGraph(dateRange.start, dateRange.end, dateRange.type);
-      fetchMaterialMutations(); // Panggil fetchMaterialMutations
+      fetchMaterialMutations();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dateRange.start, dateRange.end, dateRange.type]);
 
   return (
     <div className="grid grid-cols-12 gap-6 @container @[59rem]:gap-7 3xl:gap-8">
       {/* Statistik utama */}
-      <AppointmentStats
-        className="col-span-full order-1 @[59rem]:order-1 @[90rem]:order-1"
-        dashboardData={dashboardData}
-      />
+      <AppointmentStats className="col-span-full order-1 @[59rem]:order-1 @[90rem]:order-1" dashboardData={dashboardData} />
 
       {/* Total Appointment */}
       <TotalAppointment className="col-span-full order-2 @[59rem]:col-span-12 @[59rem]:order-2 @[90rem]:col-span-8 @[90rem]:order-2" />
 
       {/* Daftar todo dan patients */}
-      <AppointmentTodo
-        className="col-span-full order-3 @[59rem]:col-span-6 @[59rem]:order-3 @[90rem]:col-span-4 @[90rem]:order-3"
-        materialMutations={materialMutations} // Kirim data mutasi material ke AppointmentTodo
-      />
-      <Patients
-        className="col-span-full order-4 @[59rem]:col-span-6 @[59rem]:order-4 @[90rem]:col-span-4 @[90rem]:order-4"
-        dashboardData={dashboardData}
-      />
+      <AppointmentTodo className="col-span-full order-3 @[59rem]:col-span-6 @[59rem]:order-3 @[90rem]:col-span-4 @[90rem]:order-3" stockInList={dashboardData?.stockInList ?? []} />
+      <Patients className="col-span-full order-4 @[59rem]:col-span-6 @[59rem]:order-4 @[90rem]:col-span-4 @[90rem]:order-4" dashboardData={dashboardData} />
 
       {/* Department */}
       <Department className="col-span-full order-5 @[59rem]:col-span-6 @[59rem]:order-5 @[90rem]:col-span-8 @[90rem]:order-5" />
 
       {/* Appointment Patient */}
-      <PatientAppointment
-        className="col-span-full order-6 @[59rem]:col-span-full @[59rem]:order-7 @[90rem]:col-span-7 @[90rem]:order-6"
-        transactionGraph={transactionGraph}
-      />
+      <PatientAppointment className="col-span-full order-6 @[59rem]:col-span-full @[59rem]:order-7 @[90rem]:col-span-7 @[90rem]:order-6" transactionGraph={transactionGraph} />
 
       {/* Appointment Diseases */}
-      <AppointmentDiseases className="col-span-full order-7 @[59rem]:col-span-6 @[59rem]:order-6 @[90rem]:col-span-5 @[90rem]:order-7" />
+      <AppointmentDiseases
+        className="col-span-full order-7 @[59rem]:col-span-6 @[59rem]:order-6 @[90rem]:col-span-5 @[90rem]:order-7"
+        cashierInitiatedTransaction={dashboardData?.cashierInitiatedTransaction}
+        customerInitiatedTransaction={dashboardData?.customerInitiatedTransaction}
+      />
     </div>
   );
 }

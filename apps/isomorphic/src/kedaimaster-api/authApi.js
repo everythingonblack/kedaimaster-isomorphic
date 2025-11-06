@@ -192,20 +192,28 @@ export async function refreshTokenManually() {
   return apiRequest('/refreshToken', 'POST', { refreshToken });
 }
 
-export async function getProfile() {
-  // For now, return a mock user profile. In a real app, this would fetch from an API.
+import { jwtDecode } from 'jwt-decode'; // Make sure to install jwt-decode: npm install jwt-decode
+
+export function getProfile() {
   const { accessToken } = getTokens();
   if (!accessToken) {
     return null;
   }
 
-  // Simulate fetching a profile
-  return {
-    id: 'user-123',
-    email: 'user@example.com',
-    name: 'John Doe', // Added name for testing
-    role: 'user',
-  };
+  try {
+    const decodedToken = jwtDecode(accessToken);
+    console.log(decodedToken)
+    // Assuming the JWT payload has 'userId', 'email', and 'role'
+    return {
+      id: decodedToken.userId,
+      email: decodedToken.email,
+      name: decodedToken.sub, // Using 'sub' as name for now, adjust as needed
+      role: decodedToken.role,
+    };
+  } catch (error) {
+    console.error('Failed to decode access token:', error);
+    return null;
+  }
 }
 
 export function logOut() {

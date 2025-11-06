@@ -27,26 +27,28 @@ export type StatType = {
   amount: string;
   increased: boolean;
   percentage?: string;
-  lastMonth?: string;
+  lastData?: string;
   iconWrapperFill?: string;
   className?: string;
+  compareType?: string;
 };
 
 export type StatCardProps = {
   className?: string;
   transaction: StatType;
+  compareType?: string;
 };
 
-export default function AppointmentStats({ className, dashboardData }: AppointmentStatsType) {
+export default function AppointmentStats({ className, dashboardData, compareType }: AppointmentStatsType) {
   // Ambil data dari dashboardData
-  const transaction = dashboardData?.current?.transaction ?? 0;
-  const growthTransaction = dashboardData?.current?.growthTransaction ?? 0;
-  const topProduct = dashboardData?.current?.topProduct?.name ?? '-';
-  const cmpTopProduct = dashboardData?.comparison?.topProduct?.name ?? '-';
-  const income = dashboardData?.current?.income ?? 0;
-  const growthIncome = dashboardData?.current?.growthIncome ?? 0;
-  const outcome = dashboardData?.current?.outcome ?? 0;
-  const growthOutcome = dashboardData?.current?.growthOutcome ?? 0;
+  const transaction = dashboardData?.transaction ?? 0;
+  const growthTransaction = dashboardData?.transactionGrowth ?? 0;
+  const topProduct = dashboardData?.topProduct?.name ?? '-';
+  const cmpTopProduct = dashboardData?.topProductPrevious?.[0]?.name ?? '-';
+  const income = dashboardData?.income ?? 0;
+  const growthIncome = dashboardData?.incomeGrowth ?? 0;
+  const outcome = dashboardData?.outcome ?? 0;
+  const growthOutcome = dashboardData?.outcomeGrowth ?? 0;
 
   // Format angka dan persen
   const formatRupiah = (val: number) =>
@@ -64,13 +66,15 @@ export default function AppointmentStats({ className, dashboardData }: Appointme
       amount: transaction.toLocaleString('id-ID'),
       increased: growthTransaction >= 0,
       percentage: formatPercent(growthTransaction),
+      compareType: compareType,
       icon: PiCalendarCheck,
     },
     {
       title: 'Item Favorit',
       amount: topProduct,
       increased: true,
-      lastMonth: cmpTopProduct,
+      lastData: cmpTopProduct,
+      compareType: compareType,
       icon: PiCheckCircle,
     },
     {
@@ -78,6 +82,7 @@ export default function AppointmentStats({ className, dashboardData }: Appointme
       amount: formatRupiah(income),
       increased: growthIncome >= 0,
       percentage: formatPercent(growthIncome),
+      compareType: compareType,
       icon: PiClock,
     },
     {
@@ -85,6 +90,7 @@ export default function AppointmentStats({ className, dashboardData }: Appointme
       amount: formatRupiah(outcome),
       increased: growthOutcome >= 0,
       percentage: formatPercent(growthOutcome),
+      compareType: compareType,
       icon: PiPhoneSlash,
     },
   ];
@@ -146,8 +152,8 @@ export function StatGrid({ statData }: { statData: StatType[] }) {
   );
 }
 
-function StatCard({ className, transaction }: StatCardProps) {
-  const { icon, title, amount, increased, percentage, lastMonth } = transaction;
+function StatCard({ className, transaction, compareType }: StatCardProps) {
+  const { icon, title, amount, increased, percentage, lastData } = transaction;
   const Icon = icon;
 
   return (
@@ -178,7 +184,7 @@ function StatCard({ className, transaction }: StatCardProps) {
       {/* ✅ Ubah bagian bawah: khusus untuk Item Favorit tampil beda */}
       {title === 'Item Favorit' ? (
         <div className="text-gray-500 group-first:text-gray-100">
-          Bulan lalu: <span className="font-semibold">{lastMonth}</span>
+          {compareType} <span className="font-semibold">{lastData}</span>
         </div>
       ) : (
         <div className="flex items-center gap-1.5">
@@ -208,7 +214,7 @@ function StatCard({ className, transaction }: StatCardProps) {
             </span>
           </div>
           <span className="truncate leading-none text-gray-500 group-first:text-gray-100">
-            {increased ? 'Meningkat' : 'Menurun'}&nbsp;Dari Bulan Lalu
+            {increased ? 'Meningkat' : 'Menurun'}&nbsp;{compareType}
           </span>
         </div>
       )}
