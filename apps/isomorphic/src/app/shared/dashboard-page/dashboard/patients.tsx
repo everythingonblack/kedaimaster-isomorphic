@@ -46,12 +46,18 @@ export default function Patients({
   dashboardData?: any;
 }) {
   const topProducts = dashboardData?.topProducts ?? [];
-  const totalAll = topProducts.reduce((sum: number, item: any) => sum + item.total, 0);
+  const totalAll = topProducts.reduce(
+    (sum: number, item: any) => sum + item.total,
+    0
+  );
 
   const chartData = topProducts.map((item: any) => ({
     name: item.name,
     value: item.total,
-    percentage: totalAll > 0 ? parseInt(((item.total / totalAll) * 100).toString(), 10) : 0,
+    percentage:
+      totalAll > 0
+        ? parseInt(((item.total / totalAll) * 100).toString(), 10)
+        : 0,
   }));
 
   const [showAll, setShowAll] = useState(false);
@@ -67,7 +73,6 @@ export default function Patients({
 
   return (
     <WidgetCard className={cn('@container', className)}>
-      {/* ✅ Gunakan <style> biasa, tanpa jsx */}
       <style>{`
         .thin-scroll::-webkit-scrollbar {
           width: 4px;
@@ -177,7 +182,8 @@ function Detail({
         </span>
         <p className="text-gray-500">{text}</p>
       </div>
-      <span className="flex items-center">
+      {/* ✅ Tambahan agar persentase selalu lurus ke bawah */}
+      <span className="flex items-center justify-end w-[60px]">
         <span
           style={{ borderColor: color }}
           className="rounded-full border-2 px-2 font-semibold text-gray-700"
