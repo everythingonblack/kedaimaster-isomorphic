@@ -12,7 +12,7 @@ export default function Logo({ iconOnly = false, ...props }: IconProps) {
       />
       {!iconOnly && (
         <span className="ml-2 text-xl font-bold text-gray-900 dark:text-white">
-          KEDAI MASTER
+          KEDAIMASTER
         </span>
       )}
     </div>
