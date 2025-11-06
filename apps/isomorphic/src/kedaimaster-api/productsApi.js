@@ -105,16 +105,27 @@ export async function getProductById(id) {
  */
 function base64ToFile(base64, filename) {
   if (!base64 || typeof base64 !== 'string' || !base64.includes(',')) return null;
+
   const arr = base64.split(',');
-  const mime = arr[0].match(/:(.*?);/)[1];
+  const mimeMatch = arr[0].match(/:(.*?);/);
+
+  if (!mimeMatch) {
+    console.error('Invalid base64 header:', arr[0]);
+    return null;
+  }
+
+  const mime = mimeMatch[1];
   const bstr = atob(arr[1]);
   let n = bstr.length;
   const u8arr = new Uint8Array(n);
+
   while (n--) {
     u8arr[n] = bstr.charCodeAt(n);
   }
+
   return new File([u8arr], filename, { type: mime });
 }
+
 
 export async function createProduct(data) {
   if (!data?.name) throw new Error('Product name is required');
@@ -178,7 +189,7 @@ export async function updateProduct(id, data) {
   const formData = new FormData();
   if (data.name) formData.append('name', data.name);
   if (data.categoryId) formData.append('categoryId', data.categoryId);
-  if (data.material) formData.append('material', data.material);
+  if (data.material) formData.append('materialId', data.material);
 
   // Konversi base64 ke File jika ada dan valid
   if (data.image?.url && data.image?.name) {
