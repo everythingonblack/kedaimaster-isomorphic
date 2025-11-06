@@ -82,17 +82,21 @@ const endStr = `${end.getFullYear()}-${(end.getMonth() + 1).toString().padStart(
       <AppointmentStats className="col-span-full order-1 @[59rem]:order-1 @[90rem]:order-1" dashboardData={dashboardData} />
 
       {/* Total Appointment */}
-      <TotalAppointment className="col-span-full order-2 @[59rem]:col-span-12 @[59rem]:order-2 @[90rem]:col-span-8 @[90rem]:order-2" />
+      <TotalAppointment
+        className="col-span-full order-2 @[59rem]:col-span-12 @[59rem]:order-2 @[90rem]:col-span-8 @[90rem]:order-2"
+        currentWeekIncome={dashboardData?.currentWeekIncome ?? []}
+        previousWeekIncome={dashboardData?.previousWeekIncome ?? []}
+      />
 
       {/* Daftar todo dan patients */}
       <AppointmentTodo className="col-span-full order-3 @[59rem]:col-span-6 @[59rem]:order-3 @[90rem]:col-span-4 @[90rem]:order-3" stockInList={dashboardData?.stockInList ?? []} />
       <Patients className="col-span-full order-4 @[59rem]:col-span-6 @[59rem]:order-4 @[90rem]:col-span-4 @[90rem]:order-4" dashboardData={dashboardData} />
 
       {/* Department */}
-      <Department className="col-span-full order-5 @[59rem]:col-span-6 @[59rem]:order-5 @[90rem]:col-span-8 @[90rem]:order-5" />
+      {/* <Department className="col-span-full order-5 @[59rem]:col-span-6 @[59rem]:order-5 @[90rem]:col-span-8 @[90rem]:order-5" /> */}
 
       {/* Appointment Patient */}
-      <PatientAppointment className="col-span-full order-6 @[59rem]:col-span-full @[59rem]:order-7 @[90rem]:col-span-7 @[90rem]:order-6" transactionGraph={transactionGraph} />
+      {/* <PatientAppointment className="col-span-full order-6 @[59rem]:col-span-full @[59rem]:order-7 @[90rem]:col-span-7 @[90rem]:order-6" transactionGraph={transactionGraph} /> */}
 
       {/* Appointment Diseases */}
       <AppointmentDiseases
