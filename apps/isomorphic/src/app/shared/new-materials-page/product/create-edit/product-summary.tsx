@@ -8,9 +8,14 @@ import FormGroup from '@/app/shared/form-group';
 interface ProductSummaryProps {
   className?: string;
   categoryOptions: { value: string; label: string }[];
+  showUnitPrice?: boolean; // 👈 tambah prop baru
 }
 
-export default function ProductSummary({ className, categoryOptions }: ProductSummaryProps) {
+export default function ProductSummary({
+  className,
+  categoryOptions,
+  showUnitPrice,
+}: ProductSummaryProps) {
   const {
     register,
     control,
@@ -18,11 +23,7 @@ export default function ProductSummary({ className, categoryOptions }: ProductSu
   } = useFormContext();
 
   return (
-    <FormGroup
-      title=""
-      description=""
-      className={cn(className)}
-    >
+    <FormGroup title="" description="" className={cn(className)}>
       {/* Material Name */}
       <Input
         label="Name"
@@ -31,6 +32,7 @@ export default function ProductSummary({ className, categoryOptions }: ProductSu
         error={errors.name?.message as string}
       />
 
+  
       {/* Categories (Custom Select) */}
       <Controller
         name="categoryId"
@@ -65,15 +67,25 @@ export default function ProductSummary({ className, categoryOptions }: ProductSu
         )}
       />
 
-
       {/* Stock */}
       <Input
         label="Stock"
         type="number"
-        placeholder="Material stock"
+        placeholder="Stok sekarang"
         {...register('stock')}
         error={errors.stock?.message as string}
       />
+          {/* Tampilkan unitPrice hanya kalau stok naik */}
+      {showUnitPrice && (
+        <Input
+          label="Unit Price"
+          type="number"
+          placeholder="Harga per satuan (kosongkan jika hanya mengurangi stok)"
+          {...register('price')}
+          error={errors.unitPrice?.message as string}
+        />
+      )}
+
     </FormGroup>
   );
 }

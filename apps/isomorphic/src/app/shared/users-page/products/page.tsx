@@ -96,7 +96,7 @@ const userListColumns = [
 const pageHeader = {
   title: "Users",
   breadcrumb: [
-    { href: routes.dashboard.main, name: "E-Commerce" },
+    { href: routes.dashboard.main, name: "Dashboard" },
     { href: routes.dashboard.users, name: "Users" },
     { name: "List" },
   ],

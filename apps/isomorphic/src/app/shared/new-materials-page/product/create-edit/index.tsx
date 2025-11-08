@@ -36,6 +36,7 @@ export default function CreateEditMaterial({ className }: IndexProps) {
   const [categoryOptions, setCategoryOptions] = useState<
     { value: string; label: string }[]
   >([]);
+  const [initialStock, setInitialStock] = useState<number>(0);
 
   const pageHeader = {
     title: slug ? 'Edit Material' : 'Create Material',
@@ -56,6 +57,10 @@ export default function CreateEditMaterial({ className }: IndexProps) {
       image: undefined,
     },
   });
+
+  // 🧮 Watch stock & category changes
+  const watchStock = methods.watch('stock');
+  const watchCategoryId = methods.watch('categoryId');
 
   // ✅ Fetch UOM (Category)
   useEffect(() => {
@@ -86,6 +91,7 @@ export default function CreateEditMaterial({ className }: IndexProps) {
         const data = await fetchMaterialById(slug);
         if (data) {
           setMaterial(data);
+          setInitialStock(data.stock || 0); // simpan stok awal
           methods.reset(data);
         }
       } catch (error) {
@@ -98,13 +104,27 @@ export default function CreateEditMaterial({ className }: IndexProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
 
+  // 🧠 Logic perbedaan stok
+  const stockDifference = watchStock - initialStock;
+  const isStockIncreased = stockDifference > 0;
+
+  // 🏷️ Ambil nama kategori
+  const categoryName =
+    categoryOptions.find((opt) => opt.value === watchCategoryId)?.label || '';
+
   // ✅ Submit form
   const onSubmit: SubmitHandler<CreateMaterialInput> = async (data) => {
     setLoading(true);
     try {
+      const payload = {
+        ...data,
+        stockDifference,
+        isStockIncreased,
+      };
+
       if (slug) {
         // ✏️ UPDATE
-        const result = await updateMaterial(slug, data, material);
+        const result = await updateMaterial(slug, payload, material);
         if (result) {
           toast.success(<Text as="b">Material successfully updated</Text>);
         } else {
@@ -114,7 +134,7 @@ export default function CreateEditMaterial({ className }: IndexProps) {
         }
       } else {
         // ➕ CREATE
-        const result = await createMaterial(data);
+        const result = await createMaterial(payload);
         if (result) {
           toast.success(<Text as="b">Material successfully created</Text>);
         } else {
@@ -154,12 +174,22 @@ export default function CreateEditMaterial({ className }: IndexProps) {
           )}
         >
           <div className="mb-10 grid gap-7 divide-y divide-dashed divide-gray-200 @2xl:gap-9 @3xl:gap-11">
-            <ProductSummary className="" categoryOptions={categoryOptions} />
+            <ProductSummary
+              className=""
+              categoryOptions={categoryOptions}
+              showUnitPrice={isStockIncreased} // tampilkan unitPrice hanya jika stok naik
+            />
           </div>
 
           <FormFooter
             isLoading={isLoading}
-            submitBtnText={slug ? 'Update Material' : 'Create Material'}
+            submitBtnText={
+              slug
+                ? isStockIncreased
+                  ? `Update Penambahan (${stockDifference} ${categoryName})`
+                  : 'Update Material'
+                : 'Create Material'
+            }
           />
         </form>
       </FormProvider>

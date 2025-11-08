@@ -50,7 +50,7 @@ const data = [
 export default function Department({ className }: { className?: string }) {
   return (
     <WidgetCard
-      title="Bahan Baku"
+      title="Bahan Baku Paling Cepat Habis"
       titleClassName="text-gray-700 font-normal sm:text-sm font-inter"
       headerClassName="items-center"
       className={cn('@container', className)}

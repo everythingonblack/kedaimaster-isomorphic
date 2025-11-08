@@ -18,6 +18,7 @@ const MenuItem = ({ item, cartItem, onAddToCart, onIncreaseQuantity, onDecreaseQ
         <img
           src={item.image || '/kedaimaster-assets/noImage.png'}
           alt={item.name}
+          loading="lazy"
         />
         <div className={styles.menuItemDetails}>
           <h3>{item.name}</h3>

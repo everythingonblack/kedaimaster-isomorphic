@@ -36,11 +36,11 @@ export const menuItems = [
     href: routes.dashboard.products,
     icon: <PiSquaresFourDuotone />,
   },
-  {
-    name: 'Toko',
-    href: routes.dashboard.store,
-    icon: <PiMapPinLineDuotone />,
-  },
+  // {
+  //   name: 'Toko',
+  //   href: routes.dashboard.store,
+  //   icon: <PiMapPinLineDuotone />,
+  // },
   
   {
     name: 'Data Umum',
@@ -74,7 +74,7 @@ export const menuItems = [
 export const bottomMenuItems = [
   {
     name: 'Kunjungi Menu Utama',
-    href: '#', // You might want to change this to an actual link for the cafe
+    href: 'https://kedaimaster.com/ff1f9a4d-2876-44b1-8e57-7c6a5d425755/menu', // You might want to change this to an actual link for the cafe
     icon: <PiDoorOpenDuotone />,
   },
   {

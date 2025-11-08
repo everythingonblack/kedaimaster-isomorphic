@@ -8,7 +8,7 @@ import { routes } from '@/config/routes';
 const pageHeader = {
   title: 'Edit Product',
   breadcrumb: [
-    { href: routes.dashboard.main, name: 'E-Commerce' },
+    { href: routes.dashboard.main, name: 'Dashboard' },
     { href: routes.dashboard.products, name: 'Products' },
     { name: 'Edit' },
   ],

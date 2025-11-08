@@ -362,8 +362,8 @@ const CartFAB = ({ cart, onIncreaseQuantity, onDecreaseQuantity, onResetCart, is
 
                     <div className={styles.cartSummary} onClick={() => setIsCartExpanded(!isCartExpanded)}>
                         <span className={styles.cartItemsCount}>Transaksi saya</span>
-                        <div style={{ width: '60px' }}></div>
-                        {isCartExpanded && (
+                        {/* <div style={{ width: '60px' }}></div> */}
+                        {/* {isCartExpanded && (
                             <div
                                 style={{ lineHeight: '2.7', height: '35px', cursor: 'pointer' }}
                                 onClick={(e) => {
@@ -373,7 +373,7 @@ const CartFAB = ({ cart, onIncreaseQuantity, onDecreaseQuantity, onResetCart, is
                             >
                                 Lihat transaksi lain
                             </div>
-                        )}
+                        )} */}
                     </div>
 
                     {/* List Transaksi (Kode Anda yang sudah dimodifikasi) */}

@@ -20,7 +20,7 @@ export default function UserSummary({ className }: UserSummaryProps) {
     { value: 'Sistem Administrator', label: 'Sistem Administrator' },
     { value: 'CASHIER', label: 'Cashier' },
     { value: 'BUSSINESS_OWNER', label: 'Business Owner' },
-    { value: 'Supervisor', label: 'Supervisor' },
+    { value: 'SUPERVISOR', label: 'Supervisor' },
   ];
 
   return (

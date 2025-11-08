@@ -18,7 +18,7 @@ import uomApiHandlers, { Uom } from "@/kedaimaster-api-handlers/uomApiHandlers";
 const pageHeader = {
   title: "Satuan",
   breadcrumb: [
-    { href: routes.dashboard.main, name: "E-Commerce" },
+    { href: routes.dashboard.main, name: "Dashboard" },
     { href: routes.dashboard.main, name: "Satuan" },
     { name: "List" },
   ],

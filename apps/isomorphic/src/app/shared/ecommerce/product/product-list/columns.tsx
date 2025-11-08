@@ -46,7 +46,7 @@ export const productsListColumns = [
     id: 'name',
     size: 300,
     header: 'Product',
-    enableSorting: false,
+    enableSorting: true,
     cell: ({ row }) => (
       <AvatarCard
         src={row.original.image}
@@ -60,6 +60,18 @@ export const productsListColumns = [
       />
     ),
   }),
+
+   // ✅ Material
+  columnHelper.accessor('category', {
+    id: 'category',
+    size: 150,
+    header: 'Product Category',
+    enableSorting: true,
+    cell: ({ row }) => (
+      <Text className="font-medium text-gray-700">{row.original.category}</Text>
+    ),
+  }),
+
 
    // ✅ Material
   columnHelper.accessor('material', {

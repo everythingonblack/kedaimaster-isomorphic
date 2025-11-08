@@ -20,7 +20,7 @@ import productCategoriesApiHandlers, {
 const pageHeader = {
   title: "Product Categories",
   breadcrumb: [
-    { href: routes.dashboard.main, name: "E-Commerce" },
+    { href: routes.dashboard.main, name: "Dashboard" },
     { href: routes.dashboard.products, name: "Product Categories" },
     { name: "List" },
   ],

@@ -24,7 +24,7 @@ import toast from 'react-hot-toast';
 const pageHeader = {
   title: 'Materials',
   breadcrumb: [
-    { href: routes.dashboard.main, name: 'E-Commerce' },
+    { href: routes.dashboard.main, name: 'Dashboard' },
     { href: routes.dashboard.material, name: 'Materials' },
     { name: 'List' },
   ],

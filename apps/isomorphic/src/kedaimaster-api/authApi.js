@@ -1,6 +1,6 @@
 // src/utils/authApi.js
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://prod-api-v2.kedaimaster.com';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://kedaimaster-api.lab.kediritechnopark.com';
 const ACCESS_TOKEN_KEY = 'accessToken';
 const REFRESH_TOKEN_KEY = 'refreshToken';
 
@@ -71,6 +71,10 @@ export async function apiRequest(endpoint, method = 'POST', data = {}, retry = t
       const refreshed = await tryRefreshToken();
       if (refreshed) {
         return apiRequest(endpoint, method, data, false);
+      }
+      else {
+        clearTokens();
+        window.location.href = '/';
       }
     }
 

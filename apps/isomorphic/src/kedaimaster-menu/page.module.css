@@ -59,6 +59,8 @@
   justify-content: space-around;
   text-align: center;
   margin-bottom: 24px;
+  gap: 20px;
+  overflow: auto;
 }
 
 .categoryItem {
@@ -100,22 +102,6 @@
 .iconSnack {
   background-color: #ffe3e3;
   color: #dc2626;
-}
-
-.iconSemua::before {
-  content: '✨';
-}
-
-.iconCoffe::before {
-  content: '☕';
-}
-
-.iconDrink::before {
-  content: '🥤';
-}
-
-.iconSnack::before {
-  content: '🥨';
 }
 
 .sectionTitle {
@@ -647,7 +633,6 @@
   justify-content: center;
   align-items: center;
   z-index: 1100;
-  border-radius: 24px;
 }
 
 .cartModalContent {

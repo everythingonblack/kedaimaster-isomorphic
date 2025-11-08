@@ -229,6 +229,8 @@ const KedaiMasterPage = () => {
         console.log("Token valid, pengguna login:", profile);
         setIsAuthenticated(true);
         setUserData(profile);
+        window.location.href = "/dashboard"; // Redirect ke dashboard setelah validasi sukses
+        
       } catch (error: any) {
         console.error("Gagal memvalidasi token:", error.message);
         if (error.status === 401 || error.status === 403) {

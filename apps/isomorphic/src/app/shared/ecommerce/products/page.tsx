@@ -21,7 +21,7 @@ import cn from "@core/utils/class-names";
 const pageHeader = {
   title: "Products",
   breadcrumb: [
-    { href: routes.dashboard.main, name: "E-Commerce" },
+    { href: routes.dashboard.main, name: "Dashboard" },
     { href: routes.dashboard.products, name: "Products" },
     { name: "List" },
   ],

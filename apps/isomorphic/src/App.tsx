@@ -25,7 +25,9 @@ import UsersPage from '@/app/shared/users-page/products/page';
 import CreateUserPage from '@/app/shared/users-page/product/create-edit/index';
 import { useState } from 'react';
 import MenuPage from '@/kedaimaster-menu/page';
-``
+
+import ProtectedRoute from '@/app/ProtectedRoute';
+
 // Dummy pages
 const StorePage = () => <div>Store Page</div>;
 const DataPage = () => <div>Data Page</div>;
@@ -57,32 +59,34 @@ function App() {
         <Route path="/ff1f9a4d-2876-44b1-8e57-7c6a5d425755/menu" element={<MenuPage />} /> {/* ✅ Standalone */}
 
         {/* Halaman dengan layout */}
-        <Route element={<HydrogenLayout setDate={handleSetDate} />}>
-          <Route path="/dashboard" element={<DashboardPage dateRange={dateRange} />} />
 
-          <Route path="/materials" element={<MaterialsPage />} />
-          <Route path="/materials/create" element={<CreateMaterialPage />} />
-          <Route path="/materials/:slug/edit" element={<EditMaterialsPage />} />
+        <Route element={<ProtectedRoute />}>
+          <Route element={<HydrogenLayout setDate={handleSetDate} />}>
+            <Route path="/dashboard" element={<DashboardPage dateRange={dateRange} />} />
+            <Route path="/materials" element={<MaterialsPage />} />
+            <Route path="/materials/create" element={<CreateMaterialPage />} />
+            <Route path="/materials/:slug/edit" element={<EditMaterialsPage />} />
 
-          <Route path="/products" element={<ProductsPage />} />
-          <Route path="/products/create" element={<CreateProductPage />} />
-          <Route path="/products/:slug/edit" element={<EditProductPage />} />
+            <Route path="/products" element={<ProductsPage />} />
+            <Route path="/products/create" element={<CreateProductPage />} />
+            <Route path="/products/:slug/edit" element={<EditProductPage />} />
 
-          <Route path="/store" element={<StorePage />} />
-          <Route path="/uoms" element={<UomPage />} />
-          <Route path="/uoms/create" element={<CreateUomPage />} />
-          <Route path="/uoms/:slug/edit" element={<EditUomPage />} />
-          <Route path="/profile" element={<AccountSettings />} />
+            <Route path="/store" element={<StorePage />} />
+            <Route path="/uoms" element={<UomPage />} />
+            <Route path="/uoms/create" element={<CreateUomPage />} />
+            <Route path="/uoms/:slug/edit" element={<EditUomPage />} />
+            <Route path="/profile" element={<AccountSettings />} />
 
-          <Route path="/users" element={<UsersPage />} />
-          <Route path="/users/create" element={<CreateUserPage />} />
+            <Route path="/users" element={<UsersPage />} />
+            <Route path="/users/create" element={<CreateUserPage />} />
 
-          <Route path="/product-categories" element={<ProductCategoriesPage />} />
-          <Route path="/product-categories/create" element={<CreateProductCategoryPage />} />
-          <Route path="/product-categories/:slug/edit" element={<EditProductCategoryPage />} />
-          <Route path="/categories" element={<ProductCategoriesPage />} /> {/* Added route for /categories */}
-          <Route path="/categories/create" element={<CreateProductCategoryPage />} />
-          <Route path="/categories/:slug/edit" element={<EditProductCategoryPage />} />
+            <Route path="/product-categories" element={<ProductCategoriesPage />} />
+            <Route path="/product-categories/create" element={<CreateProductCategoryPage />} />
+            <Route path="/product-categories/:slug/edit" element={<EditProductCategoryPage />} />
+            <Route path="/categories" element={<ProductCategoriesPage />} />
+            <Route path="/categories/create" element={<CreateProductCategoryPage />} />
+            <Route path="/categories/:slug/edit" element={<EditProductCategoryPage />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>

@@ -75,6 +75,7 @@ export type ImageFormValue = {
 
 export type CreateMaterialInput = z.infer<typeof materialFormSchema> & {
   image?: ImageFormValue | undefined;
+  unitPrice?: number | undefined;
 };
 
 /**
