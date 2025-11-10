@@ -5,6 +5,7 @@ import {
   getTransactionGraph,
   getDateRanges,
 } from '@/kedaimaster-api-handlers/dashboardApiHandlers';
+import transactionsApiHandlers from '@/kedaimaster-api-handlers/transactionsApiHandlers';
 import { fetchMaterialMutationHistory } from '@/kedaimaster-api-handlers/materialApiHandlers';
 import AppointmentStats from '@/app/shared/dashboard-page/dashboard/appointment-stats';
 import AppointmentDiseases from '@/app/shared/dashboard-page/dashboard/appointment-diseases';
@@ -13,6 +14,7 @@ import TotalAppointment from '@/app/shared/dashboard-page/dashboard/total-appoin
 import Patients from '@/app/shared/dashboard-page/dashboard/patients';
 import PatientAppointment from '@/app/shared/dashboard-page/dashboard/patient-appointment';
 import AppointmentTodo from '@/app/shared/dashboard-page/dashboard/appointment-todo';
+import TransactionsHistory from '@/app/shared/dashboard-page/dashboard/transactions-history';
 
 // =======================
 // 🧩 Type Definitions
@@ -32,12 +34,16 @@ interface DashboardAggregate {
   [key: string]: any;
 }
 
+interface TransactionsData {
+  [key: string]: any;
+}
 // =======================
 // 🧠 Component
 // =======================
 
 export default function AppointmentDashboard({ dateRange }: { dateRange: DateRange }) {
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
+  const [transactionsData, setTransactionsData] = useState<TransactionsData | null>(null);
   const [dashboardAggregate, setDashboardAggregate] = useState<DashboardAggregate[]>([]);
   const [transactionGraph, setTransactionGraph] = useState<any>(null);
   const [materialMutations, setMaterialMutations] = useState<any[]>([]);
@@ -49,7 +55,12 @@ const endStr = `${end.getFullYear()}-${(end.getMonth() + 1).toString().padStart(
 
     console.log(startStr,endStr)
     const data = await handleDashboardData(startStr, endStr, type);
-    setDashboardData(data); // langsung set semua data
+    if(data) setDashboardData(data); // langsung set semua data
+
+    
+    const dataa = await transactionsApiHandlers.getByDateRange(startStr, endStr);
+    if(dataa) setTransactionsData(dataa);
+
   };
 
 
@@ -61,7 +72,8 @@ const endStr = `${end.getFullYear()}-${(end.getMonth() + 1).toString().padStart(
     setTransactionGraph(data);
   };
 
-  // Fetch material mutation history
+
+
   const fetchMaterialMutations = async () => {
     const data = await fetchMaterialMutationHistory();
     setMaterialMutations(data);
@@ -89,6 +101,7 @@ const endStr = `${end.getFullYear()}-${(end.getMonth() + 1).toString().padStart(
       />
 
       {/* Daftar todo dan patients */}
+            <TransactionsHistory className="col-span-full order-3 @[59rem]:col-span-6 @[59rem]:order-3 @[90rem]:col-span-4 @[90rem]:order-3" stockInList={transactionsData ?? []} />
       <AppointmentTodo className="col-span-full order-3 @[59rem]:col-span-6 @[59rem]:order-3 @[90rem]:col-span-4 @[90rem]:order-3" stockInList={dashboardData?.stockInList ?? []} />
       <Patients className="col-span-full order-4 @[59rem]:col-span-6 @[59rem]:order-4 @[90rem]:col-span-4 @[90rem]:order-4" dashboardData={dashboardData} />
 
