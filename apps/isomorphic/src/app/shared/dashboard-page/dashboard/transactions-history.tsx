@@ -132,7 +132,7 @@ export default function TransactionsData({
                   <ul className="mt-1 text-sm text-gray-600 list-disc list-inside">
                     {trx.transactionDetails.map((detail: any, i: number) => (
                       <li key={i}>
-                        {detail.product.name} × {detail.qty} @{' '}
+                        {detail?.product?.name || 'Item tidak diketahui'} × {detail.qty} @{' '}
                         {detail.unitPrice.toLocaleString('id-ID', {
                           style: 'currency',
                           currency: 'IDR',

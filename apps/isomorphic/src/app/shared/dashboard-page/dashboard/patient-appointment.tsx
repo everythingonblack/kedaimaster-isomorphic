@@ -273,7 +273,7 @@ function CustomLegend({ className }: { className?: string }) {
     >
       {patientLegend.map((item, index) => (
         <div
-          key={item.name}
+          key={item?.name || index}
           className="flex items-center gap-1.5 text-gray-500"
         >
           <span
@@ -284,7 +284,7 @@ function CustomLegend({ className }: { className?: string }) {
               },
             })}
           />
-          <span>{item.name}</span>
+          <span>{item?.name}</span>
         </div>
       ))}
     </div>

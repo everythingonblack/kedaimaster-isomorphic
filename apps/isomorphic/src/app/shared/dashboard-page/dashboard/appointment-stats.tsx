@@ -210,8 +210,7 @@ function StatCard({ className, transaction, compareType }: StatCardProps) {
               )}
             </span>
             <span className="font-semibold leading-none group-first:text-gray-0">
-              {increased ? '+' : '-'}
-              {percentage}%
+              {percentage}
             </span>
           </div>
           <span className="truncate leading-none text-gray-500 group-first:text-gray-100">
